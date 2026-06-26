@@ -90,6 +90,52 @@ body{font-family:'Hiragino Maru Gothic ProN','Hiragino Kaku Gothic ProN','Meiryo
 /* 学び記録ボタン */
 .log-btn{width:100%;padding:13px;border-radius:14px;border:none;background:linear-gradient(135deg,#A29BFE,#FF6BA8);color:white;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(162,155,254,.4);margin-bottom:14px;letter-spacing:.5px;}
 
+/* 学習要領カード */
+.curri-card{background:white;border-radius:var(--r);padding:16px 18px;box-shadow:0 4px 18px rgba(0,0,0,.07);margin-bottom:12px;}
+.curri-tabs{display:flex;gap:6px;margin-bottom:14px;}
+.curri-tab{flex:1;padding:8px;border-radius:12px;border:2px solid #eee;background:white;font-size:12px;font-weight:bold;cursor:pointer;font-family:inherit;color:var(--muted);transition:all .2s;}
+.curri-tab.on{border-color:#5CB87A;background:#F0FFF4;color:#3D7A5A;}
+.curri-unit{margin-bottom:14px;}
+.curri-unit-title{font-size:11px;font-weight:bold;color:var(--muted);margin-bottom:6px;padding-left:2px;}
+.curri-words{display:flex;flex-wrap:wrap;gap:6px;}
+.curri-word-btn{padding:6px 12px;border-radius:20px;border:2px solid #E0D8F0;background:white;font-size:12px;font-weight:bold;cursor:pointer;font-family:inherit;color:var(--text);transition:all .2s;}
+.curri-word-btn.added{border-color:#5CB87A;background:#F0FFF4;color:#3D7A5A;}
+.quiz-section{margin-top:14px;padding-top:14px;border-top:2px dashed #F0E8FF;}
+.quiz-start-btn{width:100%;padding:11px;border-radius:12px;border:none;background:linear-gradient(135deg,#5CB87A,#4ECDC4);color:white;font-size:13px;font-weight:900;cursor:pointer;font-family:inherit;}
+.quiz-card{background:linear-gradient(135deg,#F0FFF4,#E8F5FF);border-radius:14px;padding:18px;text-align:center;margin-bottom:10px;}
+.quiz-word{font-size:26px;font-weight:900;color:var(--text);margin-bottom:4px;}
+.quiz-unit{font-size:11px;color:var(--muted);margin-bottom:14px;}
+.quiz-answer{background:white;border-radius:10px;padding:12px 14px;font-size:13px;color:var(--text);line-height:1.6;margin-bottom:12px;display:none;}
+.quiz-answer.show{display:block;}
+.quiz-btns{display:flex;gap:8px;}
+.quiz-btn{flex:1;padding:10px;border-radius:12px;border:none;font-size:13px;font-weight:bold;cursor:pointer;font-family:inherit;}
+.quiz-btn.show-ans{background:#F0F6FF;color:#5B9BD5;}
+.quiz-btn.ok{background:#F0FFF4;color:#3D7A5A;}
+.quiz-btn.ng{background:#FFF0F4;color:#FF6BA8;}
+.quiz-progress{font-size:11px;color:var(--muted);text-align:center;margin-bottom:8px;}
+.quiz-done{text-align:center;padding:16px;font-size:15px;font-weight:bold;color:#3D7A5A;}
+
+/* おでかけ提案 */
+.outing-card{background:white;border-radius:var(--r);padding:16px 18px;box-shadow:0 4px 18px rgba(0,0,0,.07);margin-bottom:12px;}
+.outing-title{font-size:14px;font-weight:bold;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.outing-library{background:linear-gradient(135deg,#F0FFF4,#E8F5E9);border:2px solid #B5EAD7;border-radius:14px;padding:12px 14px;margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.outing-library-txt{flex:1;font-size:13px;font-weight:bold;color:#3D7A5A;}
+.outing-library-sub{font-size:11px;color:#7AAD8A;margin-top:2px;}
+.outing-library-btn{padding:6px 12px;border-radius:10px;border:none;background:#5CB87A;color:white;font-size:12px;font-weight:bold;cursor:pointer;font-family:inherit;white-space:nowrap;}
+.outing-section-label{font-size:11px;font-weight:bold;color:var(--muted);margin:8px 0 6px;}
+.outing-item{border-radius:12px;padding:11px 13px;margin-bottom:7px;border:1.5px solid #eee;display:flex;align-items:flex-start;gap:10px;background:white;}
+.outing-item.highlight{border-width:2px;}
+.outing-item-icon{font-size:20px;flex-shrink:0;line-height:1.3;}
+.outing-item-body{flex:1;min-width:0;}
+.outing-item-name{font-size:13px;font-weight:bold;color:var(--text);line-height:1.3;}
+.outing-item-genres{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;}
+.outing-item-genre{font-size:10px;padding:2px 6px;border-radius:8px;font-weight:bold;}
+.outing-item-hint{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4;}
+.outing-visited-btn{padding:6px 10px;border-radius:10px;border:none;font-size:11px;font-weight:bold;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0;}
+.outing-visited-btn.go{background:#FFE8F0;color:#FF6BA8;}
+.outing-visited-btn.done{background:#F0FFF4;color:#5CB87A;}
+.outing-show-more{width:100%;padding:9px;border-radius:12px;border:2px dashed #E0D8F0;background:transparent;color:var(--muted);font-size:12px;font-weight:bold;cursor:pointer;font-family:inherit;margin-top:4px;}
+
 /* 学びログモーダル */
 .mlog-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:none;align-items:flex-end;justify-content:center;}
 .mlog-overlay.open{display:flex;}
@@ -556,6 +602,26 @@ textarea.form-inp{resize:vertical;min-height:58px;}
     <div id="balance-bars"></div>
   </div>
 
+  <!-- 学校復習カード（ゆうきのみ） -->
+  <div class="curri-card" id="curri-section" style="display:none">
+    <div class="balance-title">📖 学校で習ったことば</div>
+    <div class="curri-tabs">
+      <button class="curri-tab on" onclick="selCurriTab('理科',this)">🔬 3年 理科</button>
+      <button class="curri-tab" onclick="selCurriTab('社会',this)">🗺️ 3年 社会</button>
+    </div>
+    <div id="curri-units"></div>
+    <div class="quiz-section">
+      <div id="curri-quiz-area"></div>
+    </div>
+  </div>
+
+  <!-- おでかけ提案 -->
+  <div class="outing-card">
+    <div class="outing-title">🗺️ おでかけ提案</div>
+    <div id="outing-library"></div>
+    <div id="outing-suggest"></div>
+  </div>
+
   <!-- 学びを記録ボタン -->
   <button class="log-btn" onclick="openManabiLog()">✏️ 学びを記録する</button>
 
@@ -694,7 +760,7 @@ textarea.form-inp{resize:vertical;min-height:58px;}
 // ===== データ =====
 const SK='natsu2026v8';
 let D=JSON.parse(localStorage.getItem(SK)||JSON.stringify({
-  events:{}, memos:[], goals:[], shukudai:[], keiko:[], manabi:{'1':{},'2':{}}, manabiLog:[],
+  events:{}, memos:[], goals:[], shukudai:[], keiko:[], manabi:{'1':{},'2':{}}, manabiLog:[], outings:{},
   schedule:{'起きる':'6:30','オンライン英会話':'7:00〜8:00','朝の運動':'8:00〜','朝ごはん':'8:30'},
   chk:{
     'all':{items:[
@@ -1323,6 +1389,23 @@ function chkMigrate(child,id,text){
 chkMigrate('1',104,'📖 英語の多読');
 chkMigrate('1',105,'🎓 英検サイト');
 chkMigrate('2',204,'📖 英語の多読');
+chkMigrate('1',106,'🔢 算数ドリル');
+chkMigrate('1',110,'📝 国語ドリル');
+chkMigrate('1',111,'📖 音読');
+chkMigrate('2',206,'🔢 算数ドリル');
+chkMigrate('2',210,'📝 国語ドリル');
+chkMigrate('2',211,'📖 音読');
+chkMigrate('1',107,'🧺 給食袋を出す');
+chkMigrate('2',207,'🧺 給食袋を出す');
+chkMigrate('1',108,'📨 お手紙を出す');
+chkMigrate('2',208,'📨 お手紙を出す');
+chkMigrate('1',109,'🎒 明日の準備');
+chkMigrate('2',209,'🎒 明日の準備');
+chkMigrate('2',212,'📒 七田式 かず');
+chkMigrate('2',213,'💡 七田式 ちえ');
+chkMigrate('2',214,'📝 七田式 ことば');
+if(!D.outings)D.outings={};
+if(!D.myWords)D.myWords=[];
 save();
 
 // 時間データがない、またはレッスン名が古いケイコデータはリセット
@@ -1845,9 +1928,382 @@ function saveManabiLog(){
 
 function renderManabiPage(){
   renderBalance();
+  renderCurriSection();
+  renderOutings();
   renderWordBank();
   renderManabiLogList();
   renderManabiCards();
+}
+
+// ===== 学習要領カード =====
+const CURRICULUM={
+  '理科':[
+    {unit:'🌱 植物の育ち方', words:[
+      {w:'子葉',h:'種が芽を出したときの最初の葉。栄養が入っている'},
+      {w:'本葉',h:'子葉の後に出てくる、ふつうの葉'},
+      {w:'発芽',h:'種から芽が出ること'},
+      {w:'根',h:'土の中にある。水や栄養を吸い上げる'},
+      {w:'茎',h:'葉や花を支える。水や栄養を運ぶ'},
+      {w:'花粉',h:'花の中にある粉。実になるのに必要'},
+      {w:'受粉',h:'花粉がめしべにつくこと。実や種ができる'},
+    ]},
+    {unit:'🐛 昆虫のからだ', words:[
+      {w:'頭',h:'目・口・触角がある。昆虫のからだの前の部分'},
+      {w:'胸',h:'6本の足と羽がついている。真ん中の部分'},
+      {w:'腹',h:'昆虫のからだの後ろの部分'},
+      {w:'触角',h:'頭にある細長いもの。においや空気を感じる'},
+      {w:'幼虫',h:'卵からかえったばかりの虫。まだ成虫じゃない'},
+      {w:'さなぎ',h:'幼虫から成虫になる途中の姿。動かない'},
+      {w:'成虫',h:'大人になった虫。卵を産める'},
+      {w:'完全変態',h:'卵→幼虫→さなぎ→成虫と変わること。チョウなど'},
+      {w:'不完全変態',h:'さなぎにならずに成虫になること。バッタなど'},
+    ]},
+    {unit:'☀️ 太陽と地面', words:[
+      {w:'日向',h:'太陽の光が当たっている場所。あたたかい'},
+      {w:'日陰',h:'太陽の光が当たっていない場所。すずしい'},
+      {w:'東西南北',h:'方位のこと。太陽は東から出て西に沈む'},
+      {w:'方位磁針',h:'北を指す針がついた道具。方位を調べる'},
+    ]},
+    {unit:'💡 光のせいしつ', words:[
+      {w:'反射',h:'光がはね返ること。鏡で光を曲げられる'},
+      {w:'集める',h:'鏡をたくさん使うと光を1か所に集められる'},
+    ]},
+    {unit:'🧲 磁石のせいしつ', words:[
+      {w:'N極',h:'磁石の北を指す方の端'},
+      {w:'S極',h:'磁石の南を指す方の端'},
+      {w:'引き合う',h:'N極とS極は引っ張り合う'},
+      {w:'しりぞける',h:'同じ極どうし（NとN、SとS）は反発する'},
+      {w:'磁力',h:'磁石が鉄を引きつける力'},
+    ]},
+    {unit:'🔌 電気の通り道', words:[
+      {w:'回路',h:'電気が流れる道のつながり。輪になっている'},
+      {w:'電池',h:'電気を起こすもの。＋と－がある'},
+      {w:'豆電球',h:'小さな電球。回路がつながると光る'},
+      {w:'導体',h:'電気を通すもの。金属など'},
+      {w:'絶縁体',h:'電気を通さないもの。プラスチック・ゴムなど'},
+      {w:'直列',h:'電池を縦につなぐ。明るくなる'},
+      {w:'並列',h:'電池を横に並べてつなぐ'},
+    ]},
+  ],
+  '社会':[
+    {unit:'🗺️ 地図・方位', words:[
+      {w:'方位',h:'東西南北のこと。地図では上が北'},
+      {w:'地図記号',h:'地図の中で場所や建物を表すマーク'},
+      {w:'縮尺',h:'実際の距離を縮めた割合。地図の右下にある'},
+      {w:'等高線',h:'同じ高さの場所を結んだ線'},
+    ]},
+    {unit:'🏙️ 市のようす', words:[
+      {w:'土地利用',h:'土地が何に使われているか。田・畑・住宅など'},
+      {w:'公共施設',h:'みんなが使う建物。図書館・市役所・公園など'},
+      {w:'市役所',h:'市のことを決めたり、住民のお世話をする場所'},
+    ]},
+    {unit:'🌾 農家のしごと', words:[
+      {w:'田植え',h:'田んぼに稲の苗を植えること。春〜初夏'},
+      {w:'収穫',h:'育てた作物をとること。秋が多い'},
+      {w:'用水路',h:'田んぼや畑に水を引くための水の通り道'},
+      {w:'農業協同組合',h:'農家が協力し合う組合。JAのこと'},
+    ]},
+    {unit:'🏭 工場のしごと', words:[
+      {w:'原料',h:'ものを作るときの材料。パンなら小麦粉など'},
+      {w:'加工',h:'原料に手を加えて製品にすること'},
+      {w:'製品',h:'工場で作られた完成品'},
+      {w:'出荷',h:'作った製品を送り出すこと'},
+    ]},
+    {unit:'🛒 商店のしごと', words:[
+      {w:'仕入れ',h:'お店が売る商品を買ってくること'},
+      {w:'販売',h:'商品をお客さんに売ること'},
+      {w:'産地',h:'食べ物や商品が作られた場所'},
+      {w:'消費者',h:'ものを買って使う人。わたしたちのこと'},
+    ]},
+    {unit:'🚒 消防・警察のしごと', words:[
+      {w:'消防署',h:'火事や救急の時に助けてくれる場所。119番'},
+      {w:'救急車',h:'けが人や病人を病院に運ぶ車'},
+      {w:'交番',h:'警察官がいる小さな建物。110番'},
+      {w:'防火',h:'火事が起きないようにすること'},
+    ]},
+  ],
+};
+
+let curriSubject='理科';
+let quizWords=[];
+let quizIdx=0;
+let quizAnsShown=false;
+let quizScore={ok:0,ng:0};
+
+function selCurriTab(subj,btn){
+  curriSubject=subj;
+  document.querySelectorAll('.curri-tab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderCurriUnits();
+  renderCurriQuizArea();
+}
+
+function toggleCurriWord(w){
+  if(!D.myWords)D.myWords=[];
+  const idx=D.myWords.findIndex(x=>x.w===w.w);
+  if(idx>=0) D.myWords.splice(idx,1);
+  else D.myWords.push({...w,addedAt:Date.now()});
+  save();
+  renderCurriUnits();
+  renderCurriQuizArea();
+}
+
+function renderCurriUnits(){
+  const el=document.getElementById('curri-units');
+  if(!el)return;
+  if(!D.myWords)D.myWords=[];
+  const units=CURRICULUM[curriSubject]||[];
+  el.innerHTML=units.map(u=>`
+    <div class="curri-unit">
+      <div class="curri-unit-title">${u.unit}</div>
+      <div class="curri-words">${u.words.map(w=>{
+        const added=D.myWords.some(x=>x.w===w.w);
+        return `<button class="curri-word-btn${added?' added':''}" onclick='toggleCurriWord(${JSON.stringify(w)})'>
+          ${added?'✅ ':'＋'}${w.w}
+        </button>`;
+      }).join('')}</div>
+    </div>
+  `).join('');
+}
+
+function renderCurriQuizArea(){
+  const el=document.getElementById('curri-quiz-area');
+  if(!el)return;
+  if(!D.myWords)D.myWords=[];
+  const subjectWords=D.myWords.filter(w=>{
+    const units=CURRICULUM[curriSubject]||[];
+    return units.some(u=>u.words.some(uw=>uw.w===w.w));
+  });
+  if(subjectWords.length===0){
+    el.innerHTML=`<div style="text-align:center;color:var(--muted);font-size:12px;padding:8px 0">ことばを追加するとクイズができるよ！</div>`;
+    return;
+  }
+  el.innerHTML=`<button class="quiz-start-btn" onclick="startCurriQuiz('${curriSubject}')">🎯 クイズする（${subjectWords.length}問）</button>`;
+}
+
+function startCurriQuiz(subj){
+  if(!D.myWords)D.myWords=[];
+  const units=CURRICULUM[subj]||[];
+  const allW=units.flatMap(u=>u.words.map(w=>w.w));
+  quizWords=[...D.myWords.filter(w=>allW.includes(w.w))].sort(()=>Math.random()-.5);
+  quizIdx=0;quizAnsShown=false;quizScore={ok:0,ng:0};
+  renderQuizCard();
+}
+
+function renderQuizCard(){
+  const el=document.getElementById('curri-quiz-area');
+  if(!el)return;
+  if(quizIdx>=quizWords.length){
+    const total=quizWords.length;
+    el.innerHTML=`<div class="quiz-done">
+      🎉 クイズおわり！<br>
+      <span style="font-size:22px;margin:8px 0;display:block">⭕️${quizScore.ok}問 ❌${quizScore.ng}問 / 全${total}問</span>
+      <button class="quiz-start-btn" onclick="startCurriQuiz('${curriSubject}')" style="margin-top:8px">もう一度！</button>
+    </div>`;
+    playCheckSound(quizScore.ng===0);
+    return;
+  }
+  const w=quizWords[quizIdx];
+  el.innerHTML=`
+    <div class="quiz-progress">${quizIdx+1} / ${quizWords.length}問</div>
+    <div class="quiz-card">
+      <div class="quiz-word">${w.w}</div>
+      <div class="quiz-unit">どんな意味だったかな？</div>
+      <div class="quiz-answer" id="quiz-ans">${w.h}</div>
+      <div class="quiz-btns" id="quiz-btns-1">
+        <button class="quiz-btn show-ans" onclick="showCurriAns()">💡 答えを見る</button>
+      </div>
+      <div class="quiz-btns" id="quiz-btns-2" style="display:none">
+        <button class="quiz-btn ng" onclick="nextCurriQ(false)">❌ まだ</button>
+        <button class="quiz-btn ok" onclick="nextCurriQ(true)">⭕️ わかった！</button>
+      </div>
+    </div>`;
+}
+
+function showCurriAns(){
+  document.getElementById('quiz-ans').classList.add('show');
+  document.getElementById('quiz-btns-1').style.display='none';
+  document.getElementById('quiz-btns-2').style.display='flex';
+}
+
+function nextCurriQ(ok){
+  if(ok){quizScore.ok++;playCheckSound(false);}
+  else quizScore.ng++;
+  quizIdx++;
+  renderQuizCard();
+}
+
+function renderCurriSection(){
+  const sec=document.getElementById('curri-section');
+  if(!sec)return;
+  sec.style.display=manabiChild==='1'?'block':'none';
+  if(manabiChild==='1'){
+    renderCurriUnits();
+    renderCurriQuizArea();
+  }
+}
+
+// ===== おでかけ提案 =====
+const OUTINGS=[
+  // 考える
+  {icon:'🔭',name:'プラネタリウム・科学館',genres:['考える','理科'],hint:'宇宙・物理・なぜ？を体感できる'},
+  {icon:'🧩',name:'謎解きカフェ・脱出ゲーム',genres:['考える'],hint:'論理的思考・チームワーク'},
+  {icon:'♟️',name:'将棋・チェス教室体験',genres:['考える'],hint:'先読み・戦略的思考'},
+  // ことば
+  {icon:'📚',name:'大きな本屋さん',genres:['ことば','英語'],hint:'気になる本を自分で選んでみよう'},
+  {icon:'🏛️',name:'市立図書館（特別コーナー）',genres:['ことば'],hint:'朗読会・読書スタンプラリーがあることも'},
+  {icon:'🎭',name:'子ども向け演劇・ミュージカル',genres:['ことば','こころ'],hint:'表現・感情・ことばのリズム'},
+  // 英語
+  {icon:'🌍',name:'外国語コーナーある図書館・施設',genres:['英語','ことば'],hint:'英語絵本・多言語紹介コーナー'},
+  {icon:'🗣️',name:'英語イベント・国際フェスティバル',genres:['英語','こころ'],hint:'世界の文化に触れる'},
+  // 理科
+  {icon:'🏭',name:'工場見学',genres:['理科','社会'],hint:'ものづくりのしくみを体感。無料工場も多い！'},
+  {icon:'💧',name:'ダム・発電所見学',genres:['理科','社会'],hint:'水の力・エネルギーのしくみ'},
+  {icon:'🌊',name:'水族館',genres:['理科'],hint:'海の生き物・水の中の世界'},
+  {icon:'🌿',name:'植物園・自然観察センター',genres:['理科','からだ'],hint:'季節の植物・昆虫・鳥の観察'},
+  {icon:'🦕',name:'自然史博物館・恐竜展',genres:['理科','考える'],hint:'地球の歴史・化石・進化'},
+  // 社会
+  {icon:'🏺',name:'歴史博物館・郷土資料館',genres:['社会','ことば'],hint:'地元の歴史・昔の道具・暮らし'},
+  {icon:'🏛️',name:'国会議事堂・市役所見学',genres:['社会'],hint:'政治のしくみ・見学無料'},
+  {icon:'🛒',name:'農産物直売所・朝市',genres:['社会','理科'],hint:'食べ物の旅・生産者との会話'},
+  {icon:'🚒',name:'消防署・警察署見学',genres:['社会'],hint:'はたらく人・地域を守るしくみ'},
+  {icon:'🏗️',name:'建設現場・橋・インフラ見学',genres:['社会','考える'],hint:'まちづくりのしくみ'},
+  // からだ
+  {icon:'🏕️',name:'キャンプ・自然体験',genres:['からだ','理科','こころ'],hint:'五感フル活用・自然の中でのびのび'},
+  {icon:'🛶',name:'川遊び・ハイキング',genres:['からだ','理科'],hint:'体を動かして自然を探検'},
+  {icon:'🧗',name:'ボルダリング体験',genres:['からだ','考える'],hint:'体と頭を同時に使うスポーツ'},
+  {icon:'🎿',name:'スキー・スノーボード体験',genres:['からだ'],hint:'冬の季節の楽しみ'},
+  // こころ
+  {icon:'🐕',name:'動物ふれあい施設・牧場',genres:['こころ','理科'],hint:'動物との関わり・いのちを感じる'},
+  {icon:'🎪',name:'子ども向け舞台・人形劇',genres:['こころ','ことば'],hint:'感情・共感・想像力'},
+  {icon:'🌄',name:'景色のよい場所でピクニック',genres:['こころ','からだ'],hint:'ゆったり過ごす時間も大切'},
+  // つくる
+  {icon:'🏺',name:'陶芸・ガラス工芸体験',genres:['つくる'],hint:'手を使って形をつくる楽しさ'},
+  {icon:'🍳',name:'料理・お菓子作り体験',genres:['つくる','理科'],hint:'計量・変化・プロセスを体験'},
+  {icon:'🎨',name:'美術館（子ども向け鑑賞プログラム）',genres:['つくる','ことば'],hint:'感じたことをことばにする'},
+  {icon:'🔨',name:'ものづくり体験工房・DIY',genres:['つくる','考える'],hint:'設計して作り上げる達成感'},
+];
+
+let outingShowAll=false;
+
+function getLastLibrary(){
+  return (D.outings&&D.outings.library)||null;
+}
+
+function recordLibrary(){
+  if(!D.outings)D.outings={};
+  D.outings.library=Date.now();
+  save();
+  renderOutings();
+}
+
+function recordOuting(idx){
+  if(!D.outings)D.outings={};
+  if(!D.outings.visited)D.outings.visited={};
+  const key=String(idx);
+  if(D.outings.visited[key]){
+    delete D.outings.visited[key];
+  } else {
+    D.outings.visited[key]=Date.now();
+  }
+  save();
+  renderOutings();
+}
+
+function renderOutings(){
+  // --- 図書館 ---
+  const libEl=document.getElementById('outing-library');
+  if(!libEl)return;
+  const last=getLastLibrary();
+  const now=Date.now();
+  const daysSince=last?Math.floor((now-last)/(1000*60*60*24)):null;
+  const needLib=!last||(daysSince>=12);
+  let libHTML='';
+  if(needLib){
+    const msg=!last?'そろそろ図書館に行こう！':'最後の図書館から'+daysSince+'日経ったよ📚';
+    libHTML=`<div class="outing-library">
+      <div style="font-size:22px">📚</div>
+      <div class="outing-library-txt">${msg}
+        <div class="outing-library-sub">2週間に1回ペースを目指そう</div>
+      </div>
+      <button class="outing-library-btn" onclick="recordLibrary()">行った！</button>
+    </div>`;
+  } else {
+    libHTML=`<div class="outing-library" style="background:#F8FFF8;border-color:#D0EDD0">
+      <div style="font-size:22px">📚</div>
+      <div class="outing-library-txt" style="color:#5A8A6A">図書館 行ったね！あと${14-daysSince}日後くらいにまた行こう
+        <div class="outing-library-sub" style="color:#7AAD8A">${Math.round(daysSince)}日前に行ったよ</div>
+      </div>
+      <button class="outing-library-btn" style="background:#B5EAD7;color:#3D7A5A" onclick="recordLibrary()">また行った</button>
+    </div>`;
+  }
+  libEl.innerHTML=libHTML;
+
+  // --- 提案 ---
+  const sugEl=document.getElementById('outing-suggest');
+  if(!sugEl)return;
+
+  // バランスから少ないジャンルを特定
+  const twoWeeksAgo=Date.now()-14*24*60*60*1000;
+  const logs=(D.manabiLog||[]).filter(l=>l.child===manabiChild&&l.date>=twoWeeksAgo);
+  const counts={};
+  MANABI_GENRES.forEach(g=>{counts[g.id]=0;});
+  logs.forEach(l=>{if(counts[l.subject]!==undefined)counts[l.subject]++;});
+  const avg=logs.length/MANABI_GENRES.length;
+  const lowGenres=new Set(MANABI_GENRES.filter(g=>counts[g.id]===0||(logs.length>2&&counts[g.id]<avg*0.6)).map(g=>g.id));
+
+  const visited=D.outings&&D.outings.visited||{};
+
+  // スコアリング：少ないジャンルに多くマッチするほど上
+  const scored=OUTINGS.map((o,idx)=>{
+    const match=o.genres.filter(g=>lowGenres.has(g)).length;
+    const wasVisited=!!visited[String(idx)];
+    return {...o,idx,match,wasVisited};
+  });
+  scored.sort((a,b)=>{
+    if(b.match!==a.match)return b.match-a.match;
+    if(a.wasVisited!==b.wasVisited)return a.wasVisited?1:-1;
+    return 0;
+  });
+
+  const showCount=outingShowAll?scored.length:5;
+  const toShow=scored.slice(0,showCount);
+
+  const highlighted=toShow.filter(o=>o.match>0);
+  const normal=toShow.filter(o=>o.match===0);
+
+  function outingItemHTML(o){
+    const visited=o.wasVisited;
+    const genreTagsHTML=o.genres.map(gid=>{
+      const g=MANABI_GENRES.find(x=>x.id===gid);
+      return g?`<span class="outing-item-genre" style="background:${g.bg};color:${g.color};border:1px solid ${g.border}">${g.icon}${g.id}</span>`:'';
+    }).join('');
+    const borderG=o.match>0?(MANABI_GENRES.find(x=>x.id===o.genres[0])||{border:'#eee'}).border:'#eee';
+    const bgStyle=o.match>0?`background:${(MANABI_GENRES.find(x=>x.id===o.genres[0])||{bg:'white'}).bg};`:'';
+    return `<div class="outing-item${o.match>0?' highlight':''}" style="border-color:${borderG};${bgStyle}">
+      <div class="outing-item-icon">${o.icon}</div>
+      <div class="outing-item-body">
+        <div class="outing-item-name">${o.name}${o.match>0?'  <span style="font-size:10px;background:#FFE8F0;color:#FF6BA8;padding:1px 6px;border-radius:8px;font-weight:bold">おすすめ</span>':''}</div>
+        <div class="outing-item-genres">${genreTagsHTML}</div>
+        <div class="outing-item-hint">${o.hint}</div>
+      </div>
+      <button class="outing-visited-btn ${visited?'done':'go'}" onclick="recordOuting(${o.idx})">${visited?'✅行った':'行きたい'}</button>
+    </div>`;
+  }
+
+  let html='';
+  if(highlighted.length){
+    html+=`<div class="outing-section-label">✨ 最近少ないジャンルにぴったり</div>`;
+    html+=highlighted.map(outingItemHTML).join('');
+  }
+  if(normal.length){
+    if(highlighted.length)html+=`<div class="outing-section-label" style="margin-top:8px">その他のおすすめ</div>`;
+    html+=normal.map(outingItemHTML).join('');
+  }
+  if(!outingShowAll&&scored.length>5){
+    html+=`<button class="outing-show-more" onclick="outingShowAll=true;renderOutings()">もっと見る（あと${scored.length-5}件）</button>`;
+  }
+  sugEl.innerHTML=html;
 }
 
 // ===== 単語バンク =====
