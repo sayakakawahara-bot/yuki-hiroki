@@ -1,0 +1,2066 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌱 ゆうきひろきの成長記録</title>
+<style>
+:root {
+  --pink:#FFB7C5; --mint:#B5EAD7; --lav:#C7CEEA; --yellow:#FFDAC1; --sky:#AED8F0;
+  --text:#3D3250; --muted:#9B8FB0; --r:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Hiragino Maru Gothic ProN','Hiragino Kaku Gothic ProN','Meiryo',sans-serif;
+  background:linear-gradient(160deg,#FFF0F8 0%,#FFF8E7 40%,#F0F8FF 100%);min-height:100vh;color:var(--text);}
+
+/* ヘッダー */
+.hd{padding:22px 20px 14px;text-align:center;}
+.hd-clouds{font-size:32px;letter-spacing:8px;margin-bottom:4px;animation:float 4s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.hd h1{font-size:clamp(22px,5vw,40px);background:linear-gradient(135deg,#FF6BA8,#FFB347,#4ECDC4);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  letter-spacing:3px;font-weight:900;line-height:1.1;}
+.hd-sub{margin-top:5px;font-size:13px;color:var(--muted);}
+.hd-sub b{color:#FF6BA8;}
+
+/* ナビ */
+.nav{display:flex;justify-content:center;gap:6px;padding:0 12px 14px;flex-wrap:wrap;}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 14px;
+  border:2.5px solid transparent;border-radius:18px;background:white;cursor:pointer;
+  font-size:11px;font-weight:bold;color:var(--muted);transition:all .2s;font-family:inherit;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.nav-btn .ni{font-size:20px;}
+.nav-btn.on{color:var(--text);transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.1);}
+.nav-btn[data-t="cal"].on{border-color:#FFB347;background:#FFF8EE;}
+.nav-btn[data-t="mainichi"].on{border-color:#4ECDC4;background:#EDFAF8;}
+.nav-btn[data-t="shukudai"].on{border-color:#A29BFE;background:#F3F0FF;}
+.nav-btn[data-t="memo"].on{border-color:#FF6BA8;background:#FFF0F6;}
+.nav-btn[data-t="manabi"].on{border-color:#FFB347;background:#FFFBF0;}
+
+/* タイムライン */
+.timeline{display:flex;flex-direction:column;gap:0;padding:4px 0 8px;}
+.tl-item{display:flex;align-items:flex-start;gap:10px;padding:5px 0;position:relative;}
+.tl-item:not(:last-child)::before{content:'';position:absolute;left:35px;top:22px;bottom:-5px;width:2px;background:#F0E8FF;}
+.tl-time{font-size:12px;font-weight:bold;color:var(--muted);min-width:36px;text-align:right;padding-top:3px;flex-shrink:0;}
+.tl-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;margin-top:5px;box-shadow:0 2px 6px rgba(0,0,0,.15);}
+.tl-body{flex:1;min-width:0;}
+.tl-name{font-size:13px;font-weight:bold;color:var(--text);line-height:1.3;}
+.tl-sub{font-size:11px;color:var(--muted);margin-top:1px;}
+.tl-now{display:flex;align-items:center;gap:8px;padding:4px 0;margin:2px 0;}
+.tl-now-line{flex:1;height:2px;background:#FF4D94;}
+.tl-now-label{font-size:11px;font-weight:bold;color:#FF4D94;white-space:nowrap;}
+
+/* まなびページ */
+.manabi-genre-card{background:white;border-radius:var(--r);padding:16px 18px;box-shadow:0 4px 18px rgba(0,0,0,.07);margin-bottom:12px;border-left:5px solid #ddd;}
+.manabi-genre-head{display:flex;align-items:center;gap:8px;margin-bottom:12px;cursor:pointer;}
+.manabi-genre-icon{font-size:22px;}
+.manabi-genre-title{font-size:16px;font-weight:900;flex:1;}
+.manabi-year-wrap{margin-bottom:12px;}
+.manabi-year-label{font-size:11px;font-weight:bold;color:var(--muted);margin-bottom:4px;}
+.manabi-year-inp{width:100%;border:2px solid #F0E8FF;border-radius:12px;padding:8px 12px;font-size:13px;font-family:inherit;color:var(--text);outline:none;transition:border-color .2s;}
+.manabi-year-inp:focus{border-color:#A29BFE;}
+.manabi-week-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.manabi-week-title{font-size:12px;font-weight:bold;color:var(--muted);}
+.manabi-week-badge{font-size:11px;font-weight:bold;padding:2px 8px;border-radius:20px;background:#F0E8FF;color:#7B68EE;}
+.manabi-week-prog{height:6px;border-radius:10px;background:#F0E8FF;overflow:hidden;margin-bottom:8px;}
+.manabi-week-bar{height:100%;border-radius:10px;transition:width .4s;}
+.manabi-task-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #F8F4FF;}
+.manabi-task-item:last-of-type{border-bottom:none;}
+.manabi-task-circle{width:20px;height:20px;border-radius:50%;border:2.5px solid #ddd;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:11px;transition:all .2s;}
+.manabi-task-circle.done{background:#A29BFE;border-color:#A29BFE;color:white;}
+.manabi-task-text{flex:1;font-size:13px;color:var(--text);}
+.manabi-task-text.done{text-decoration:line-through;color:var(--muted);}
+.manabi-task-del{background:none;border:none;color:#ccc;cursor:pointer;font-size:14px;padding:0 2px;}
+.manabi-add-row{display:flex;gap:6px;margin-top:8px;}
+.manabi-add-inp{flex:1;border:2px solid #F0E8FF;border-radius:10px;padding:7px 10px;font-size:12px;font-family:inherit;outline:none;}
+.manabi-add-inp:focus{border-color:#A29BFE;}
+.manabi-add-btn{padding:7px 14px;border-radius:10px;border:none;background:#A29BFE;color:white;font-size:12px;font-weight:bold;cursor:pointer;font-family:inherit;}
+
+/* バランスグラフ */
+.balance-card{background:white;border-radius:var(--r);padding:16px 18px;box-shadow:0 4px 18px rgba(0,0,0,.07);margin-bottom:12px;}
+.balance-title{font-size:14px;font-weight:bold;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.balance-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+.balance-label{font-size:12px;width:52px;flex-shrink:0;display:flex;align-items:center;gap:3px;}
+.balance-track{flex:1;height:10px;background:#F0EAF8;border-radius:10px;overflow:hidden;}
+.balance-fill{height:100%;border-radius:10px;transition:width .5s;}
+.balance-count{font-size:11px;color:var(--muted);min-width:24px;text-align:right;}
+.balance-alert{background:linear-gradient(135deg,#FFF8E7,#FFF0F4);border:1.5px solid #FFD3DE;border-radius:12px;padding:10px 14px;margin-bottom:12px;font-size:12px;line-height:1.6;}
+.balance-alert b{color:#FF6BA8;}
+
+/* 学び記録ボタン */
+.log-btn{width:100%;padding:13px;border-radius:14px;border:none;background:linear-gradient(135deg,#A29BFE,#FF6BA8);color:white;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(162,155,254,.4);margin-bottom:14px;letter-spacing:.5px;}
+
+/* 学びログモーダル */
+.mlog-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:none;align-items:flex-end;justify-content:center;}
+.mlog-overlay.open{display:flex;}
+.mlog-modal{background:white;border-radius:24px 24px 0 0;padding:20px 18px 36px;width:100%;max-width:600px;max-height:90vh;overflow-y:auto;}
+.mlog-handle{width:36px;height:4px;background:#E0D8F0;border-radius:4px;margin:0 auto 16px;}
+.mlog-title{font-size:16px;font-weight:900;margin-bottom:14px;color:var(--text);}
+.mlog-genre-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px;}
+.mlog-genre-btn{padding:8px 4px;border-radius:10px;border:2px solid #eee;background:white;cursor:pointer;font-size:11px;font-weight:bold;font-family:inherit;text-align:center;transition:all .2s;color:var(--text);}
+.mlog-genre-btn.on{border-width:2.5px;color:white;}
+.mlog-section{font-size:11px;font-weight:bold;color:var(--muted);margin:12px 0 6px;}
+.mlog-textarea{width:100%;border:2px solid #F0E8FF;border-radius:12px;padding:10px 12px;font-size:13px;font-family:inherit;resize:none;outline:none;color:var(--text);}
+.mlog-textarea:focus{border-color:#A29BFE;}
+.mlog-voice-row{display:flex;gap:8px;margin-top:6px;}
+.mlog-voice-btn{padding:8px 14px;border-radius:10px;border:none;cursor:pointer;font-size:12px;font-weight:bold;font-family:inherit;display:flex;align-items:center;gap:4px;}
+.mlog-voice-btn.ja{background:#FFF0F4;color:#FF6BA8;}
+.mlog-voice-btn.en{background:#F0F6FF;color:#5B9BD5;}
+.mlog-voice-btn.listening{animation:pulse-mic .8s ease-in-out infinite;}
+@keyframes pulse-mic{0%,100%{opacity:1}50%{opacity:.5}}
+.kw-row{display:flex;gap:6px;margin-bottom:6px;align-items:center;}
+.kw-inp{flex:1;border:2px solid #F0E8FF;border-radius:10px;padding:7px 10px;font-size:12px;font-family:inherit;outline:none;}
+.kw-inp:focus{border-color:#A29BFE;}
+.kw-speak{padding:6px 10px;border-radius:8px;border:none;background:#F0F6FF;cursor:pointer;font-size:14px;}
+.kw-del{padding:6px 8px;border-radius:8px;border:none;background:#FFF0F4;color:#FF85A2;cursor:pointer;font-size:13px;}
+.kw-chip{display:inline-flex;align-items:center;gap:4px;background:#F3F0FF;border-radius:20px;padding:3px 8px 3px 10px;font-size:12px;margin:2px;}
+.kw-chip button{background:none;border:none;cursor:pointer;font-size:11px;color:#A29BFE;padding:0 2px;}
+.mlog-save-btn{width:100%;padding:13px;border-radius:14px;border:none;background:linear-gradient(135deg,#A29BFE,#FF6BA8);color:white;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;margin-top:14px;}
+
+/* 単語バンク */
+.wordbank-card{background:white;border-radius:var(--r);padding:16px 18px;box-shadow:0 4px 18px rgba(0,0,0,.07);margin-bottom:12px;}
+.wordbank-item{border-bottom:1px solid #F0EAF8;padding:10px 0;display:flex;align-items:flex-start;gap:10px;}
+.wordbank-item:last-child{border-bottom:none;}
+.wb-words{flex:1;}
+.wb-ja{font-size:13px;font-weight:bold;color:var(--text);}
+.wb-en{font-size:14px;color:#8B6FD4;font-weight:bold;margin-top:2px;}
+.wb-ctx{font-size:11px;color:var(--muted);margin-top:2px;}
+.wb-speak{padding:6px 12px;border-radius:20px;border:none;background:#F3F0FF;color:#8B6FD4;font-size:13px;cursor:pointer;font-weight:bold;flex-shrink:0;}
+.log-item{border-bottom:1px solid #F0EAF8;padding:10px 0;font-size:13px;}
+.log-item:last-child{border-bottom:none;}
+.log-item-head{display:flex;align-items:center;gap:6px;margin-bottom:3px;}
+.log-genre-tag{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:bold;color:white;}
+
+/* ページ */
+.page{display:none;max-width:1000px;margin:0 auto;padding:0 12px 70px;}
+.page.on{display:block;}
+
+/* カード */
+.card{background:white;border-radius:var(--r);padding:18px 20px;box-shadow:0 4px 20px rgba(0,0,0,.07);margin-bottom:14px;}
+.card-title{font-size:16px;font-weight:bold;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+
+/* 子どもセレクター */
+.child-row{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap;}
+.cb{padding:7px 16px;border-radius:30px;border:2px solid #eee;background:white;cursor:pointer;
+  font-size:12px;font-weight:bold;font-family:inherit;transition:all .2s;color:var(--text);}
+.cb.on[data-c="all"]{background:var(--lav);border-color:var(--lav);color:#3D3250;}
+.cb.on[data-c="1"]{background:var(--pink);border-color:var(--pink);color:#6D2745;}
+.cb.on[data-c="2"]{background:var(--mint);border-color:var(--mint);color:#1B5E45;}
+
+/* カレンダー */
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.cal-nav button{width:34px;height:34px;border-radius:50%;border:none;background:var(--yellow);
+  font-size:15px;cursor:pointer;transition:transform .15s;font-family:inherit;}
+.cal-nav button:hover{transform:scale(1.12);}
+.cal-title{font-size:19px;font-weight:bold;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+.cal-dlbl{text-align:center;font-size:11px;font-weight:bold;padding:5px 0;border-radius:6px;}
+.cal-dlbl:nth-child(1){color:#E85D75;} .cal-dlbl:nth-child(7){color:#6B7FD4;}
+.cal-cell{min-height:72px;border:2px solid #F5F0FF;border-radius:12px;padding:5px 4px;
+  cursor:pointer;transition:all .15s;background:#FAFAFE;overflow:hidden;}
+.cal-cell:hover{border-color:#C7CEEA;background:#F7F4FF;transform:scale(1.03);}
+.cal-cell.today{border-color:#FFB347;background:#FFFBF0;}
+.cal-cell.empty{background:transparent;border-color:transparent;cursor:default;pointer-events:none;}
+.cal-cell.sun .dn{color:#E85D75;} .cal-cell.sat .dn{color:#6B7FD4;}
+.dn{font-size:12px;font-weight:bold;margin-bottom:2px;position:relative;}
+.today-badge{font-size:8px;background:#FFB347;color:white;border-radius:5px;padding:1px 3px;
+  margin-left:2px;vertical-align:middle;}
+.ev-chip{display:block;font-size:9px;font-weight:bold;padding:2px 4px;border-radius:5px;
+  margin:1px 0;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.4;}
+.ev-chip.has-m::after{content:'✦';margin-left:1px;font-size:7px;}
+
+/* ドロワー */
+.drawer-overlay{display:none;position:fixed;inset:0;background:rgba(61,50,80,.38);z-index:200;
+  align-items:flex-end;justify-content:center;}
+.drawer-overlay.open{display:flex;}
+.drawer{background:white;border-radius:28px 28px 0 0;padding:22px 20px 36px;width:100%;
+  max-width:560px;max-height:88vh;overflow-y:auto;animation:slideUp .25s ease;}
+@keyframes slideUp{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
+.drawer-handle{width:40px;height:4px;background:#E0DAEE;border-radius:4px;margin:0 auto 16px;}
+.drawer h2{font-size:17px;margin-bottom:12px;}
+.form-lbl{font-size:11px;font-weight:bold;color:var(--muted);margin:10px 0 4px;display:block;}
+.form-inp{width:100%;padding:10px 13px;border:2px solid #EEE9FF;border-radius:11px;font-size:14px;
+  font-family:inherit;color:var(--text);transition:border-color .2s;background:white;}
+.form-inp:focus{outline:none;border-color:var(--lav);}
+textarea.form-inp{resize:vertical;min-height:58px;}
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.cat-btn{padding:8px 5px;border:2px solid #EEE;border-radius:11px;text-align:center;
+  font-size:11px;font-weight:bold;cursor:pointer;transition:all .15s;background:white;
+  font-family:inherit;color:var(--text);}
+.cat-btn.on{transform:scale(1.05);}
+.manabu-box{background:linear-gradient(135deg,#EDFAF8,#EEF4FF);border-radius:13px;padding:13px;margin-top:5px;}
+.manabu-box h4{font-size:12px;color:#2D8C7C;margin-bottom:8px;}
+.hints-wrap{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;}
+.hint-chip{padding:4px 9px;border-radius:18px;font-size:11px;font-weight:bold;cursor:pointer;
+  border:1.5px solid transparent;transition:all .15s;background:white;color:var(--text);}
+.hint-chip.on{border-color:#4ECDC4;background:#EDFAF8;color:#2D8C7C;}
+.manabu-inp{width:100%;padding:8px 11px;border:2px solid #C5F0EB;border-radius:9px;
+  font-size:12px;font-family:inherit;color:var(--text);background:white;}
+.manabu-inp:focus{outline:none;border-color:#4ECDC4;}
+.drawer-actions{display:flex;gap:8px;margin-top:16px;}
+.btn-ok{flex:1;padding:12px;border:none;border-radius:14px;
+  background:linear-gradient(135deg,#FF6BA8,#FFB347);color:white;font-size:15px;
+  font-weight:bold;cursor:pointer;font-family:inherit;transition:transform .1s;}
+.btn-ok:hover{transform:scale(1.02);}
+.btn-ng{padding:12px 16px;border:none;border-radius:14px;background:#F3F0FA;
+  color:var(--muted);font-size:14px;cursor:pointer;font-family:inherit;}
+
+/* デイ詳細 */
+.ev-row{display:flex;align-items:flex-start;gap:9px;padding:9px 11px;border-radius:11px;
+  margin-bottom:5px;background:#FAFAFE;border:1.5px solid #F0EAF8;}
+.ev-dot{width:9px;height:9px;border-radius:50%;margin-top:5px;flex-shrink:0;}
+.ev-info{flex:1;min-width:0;}
+.ev-name{font-size:13px;font-weight:bold;}
+.ev-m{font-size:11px;background:#EDFAF8;color:#2D8C7C;border-radius:7px;padding:2px 6px;
+  margin-top:2px;display:inline-block;font-weight:bold;}
+.ev-del{color:#DDD;cursor:pointer;font-size:15px;padding:2px;background:none;border:none;
+  font-family:inherit;flex-shrink:0;transition:color .15s;}
+.ev-del:hover{color:#FF6BA8;}
+
+/* ===== まいにちページ ===== */
+.section-head{font-size:15px;font-weight:bold;margin-bottom:12px;padding-left:10px;
+  border-left:4px solid;}
+
+/* タイムスケジュール */
+.time-grid{display:flex;flex-direction:column;gap:5px;}
+.time-slot{display:flex;align-items:center;gap:10px;padding:9px 12px;background:#FAFAFE;
+  border-radius:12px;border:1.5px solid #F0EAF8;}
+.time-label{font-size:12px;font-weight:bold;color:var(--muted);white-space:nowrap;min-width:52px;}
+.time-inp{flex:1;border:none;background:transparent;font-size:13px;font-family:inherit;
+  color:var(--text);outline:none;padding:2px 0;}
+.time-inp::placeholder{color:#CCC;}
+
+/* 習い事 */
+.keiko-row{display:flex;align-items:center;gap:8px;padding:9px 11px;background:#FAFAFE;
+  border-radius:11px;margin-bottom:6px;border:1.5px solid #F0EAF8;}
+.keiko-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.keiko-name{flex:1;font-size:13px;font-weight:bold;}
+.keiko-days{display:flex;gap:3px;}
+.day-badge{padding:2px 6px;border-radius:6px;font-size:10px;font-weight:bold;}
+.keiko-del{color:#DDD;cursor:pointer;font-size:15px;background:none;border:none;
+  font-family:inherit;transition:color .15s;}
+.keiko-del:hover{color:#FF6BA8;}
+.add-row{display:flex;gap:7px;margin-top:8px;flex-wrap:wrap;}
+.add-inp{flex:1;min-width:120px;padding:8px 12px;border:2px solid #EEE9FF;border-radius:10px;
+  font-size:13px;font-family:inherit;color:var(--text);background:white;}
+.add-inp:focus{outline:none;border-color:var(--lav);}
+.day-check-row{display:flex;gap:5px;flex-wrap:wrap;}
+.day-check{padding:5px 9px;border-radius:8px;font-size:11px;font-weight:bold;cursor:pointer;
+  border:2px solid #EEE;background:white;font-family:inherit;transition:all .15s;color:var(--text);}
+.day-check.on{background:var(--mint);border-color:var(--mint);color:#1B5E45;}
+.btn-sm{padding:8px 14px;border:none;border-radius:10px;background:var(--mint);color:#1B5E45;
+  font-size:13px;font-weight:bold;cursor:pointer;font-family:inherit;transition:transform .1s;white-space:nowrap;}
+.btn-sm:hover{transform:scale(1.05);}
+
+/* チェックリスト */
+.chk-item{display:flex;align-items:center;gap:10px;padding:9px 12px;background:#FAFAFE;
+  border-radius:11px;margin-bottom:5px;border:1.5px solid #F0EAF8;transition:all .2s;}
+.chk-circle{width:22px;height:22px;border-radius:50%;border:2.5px solid #DDD;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;
+  transition:all .15s;}
+.chk-circle.done{background:#4ECDC4;border-color:#4ECDC4;color:white;}
+.chk-text{flex:1;font-size:13px;}
+.chk-text.done{text-decoration:line-through;color:#BBB;}
+.chk-del{color:#DDD;cursor:pointer;font-size:14px;background:none;border:none;font-family:inherit;transition:color .15s;}
+.chk-del:hover{color:#FF6BA8;}
+
+/* ===== しゅくだいページ ===== */
+/* 目標 */
+.goal-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:8px;}
+.goal-card{border-radius:14px;padding:14px;position:relative;overflow:hidden;}
+.goal-card::before{content:'';position:absolute;top:-20px;right:-20px;width:60px;height:60px;
+  border-radius:50%;background:rgba(255,255,255,.2);}
+.goal-emoji{font-size:26px;margin-bottom:6px;}
+.goal-who{font-size:10px;opacity:.8;margin-bottom:3px;}
+.goal-text{font-size:13px;font-weight:bold;color:white;line-height:1.4;}
+.goal-del{position:absolute;top:8px;right:10px;color:rgba(255,255,255,.5);cursor:pointer;
+  background:none;border:none;font-size:15px;font-family:inherit;transition:color .15s;}
+.goal-del:hover{color:white;}
+.goal-add{display:flex;gap:7px;flex-wrap:wrap;align-items:flex-end;}
+.goal-add .form-inp{margin:0;}
+.goal-emoji-row{display:flex;gap:5px;flex-wrap:wrap;margin:6px 0;}
+.ge{font-size:20px;padding:4px;border-radius:8px;border:2px solid #EEE;cursor:pointer;
+  background:white;transition:all .15s;line-height:1;}
+.ge:hover{transform:scale(1.1);}
+.ge.on{border-color:#FFB347;background:#FFF8EE;transform:scale(1.08);}
+
+/* 宿題リスト */
+.shukudai-cats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.sc-btn{padding:6px 13px;border-radius:20px;border:2px solid #EEE;background:white;
+  cursor:pointer;font-size:12px;font-weight:bold;font-family:inherit;transition:all .15s;color:var(--text);}
+.sc-btn.on{background:var(--lav);border-color:var(--lav);color:#3D3250;}
+.shukudai-item{display:flex;align-items:center;gap:10px;padding:11px 13px;background:#FAFAFE;
+  border-radius:12px;margin-bottom:6px;border:1.5px solid #F0EAF8;}
+.si-check{width:24px;height:24px;border-radius:50%;border:2.5px solid #DDD;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;transition:all .15s;}
+.si-check.done{background:#A29BFE;border-color:#A29BFE;color:white;}
+.si-body{flex:1;min-width:0;}
+.si-name{font-size:13px;font-weight:bold;}
+.si-name.done{text-decoration:line-through;color:#BBB;}
+.si-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.si-prog{display:flex;align-items:center;gap:6px;margin-top:5px;}
+.si-prog-track{flex:1;height:8px;background:#EEE;border-radius:6px;overflow:hidden;cursor:pointer;}
+.si-prog-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,#A29BFE,#6C5CE7);transition:width .3s;}
+.si-prog-pct{font-size:11px;color:var(--muted);white-space:nowrap;min-width:28px;}
+.si-del{color:#DDD;cursor:pointer;font-size:14px;background:none;border:none;font-family:inherit;transition:color .15s;}
+.si-del:hover{color:#FF6BA8;}
+
+/* 進捗サマリー */
+.prog-section{background:linear-gradient(135deg,#A29BFE,#6C5CE7);border-radius:16px;
+  padding:18px;color:white;margin-bottom:14px;}
+.prog-section h3{font-size:15px;margin-bottom:10px;opacity:.9;}
+.prog-track{background:rgba(255,255,255,.25);border-radius:20px;height:13px;overflow:hidden;margin-bottom:5px;}
+.prog-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#FFD700,#FF6B35);transition:width .5s;}
+.prog-lbl{font-size:12px;opacity:.85;}
+
+/* ===== おもいで ===== */
+.stamp-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.stamp{font-size:20px;padding:5px;border-radius:9px;border:2.5px solid #EEE;cursor:pointer;
+  transition:all .15s;background:white;line-height:1;}
+.stamp:hover{transform:scale(1.15);}
+.stamp.on{border-color:#FFB347;background:#FFF8EE;transform:scale(1.1);}
+.memo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;}
+.memo-card{border-radius:16px;padding:16px;position:relative;box-shadow:0 4px 16px rgba(0,0,0,.08);}
+.mc-stamp{font-size:32px;margin-bottom:6px;}
+.mc-date{font-size:10px;color:rgba(255,255,255,.75);margin-bottom:3px;}
+.mc-title{font-size:14px;font-weight:bold;color:white;margin-bottom:5px;}
+.mc-body{font-size:12px;color:rgba(255,255,255,.88);line-height:1.6;}
+.mc-del{position:absolute;top:10px;right:12px;color:rgba(255,255,255,.5);cursor:pointer;
+  background:none;border:none;font-family:inherit;font-size:16px;transition:color .15s;}
+.mc-del:hover{color:white;}
+
+/* 今日のようす */
+.today-view{background:linear-gradient(135deg,#FFF8EE,#FFF0F8);border-radius:var(--r);
+  padding:18px 20px;margin-bottom:14px;border:2px solid #FFE0B2;}
+.today-date-big{font-size:22px;font-weight:900;color:#FF6BA8;margin-bottom:12px;}
+.today-items{display:flex;flex-direction:column;gap:7px;}
+.today-item{display:flex;align-items:center;gap:10px;padding:9px 12px;background:white;
+  border-radius:11px;border:1.5px solid #F5F0FF;}
+.ti-time{font-size:12px;font-weight:bold;color:var(--muted);min-width:48px;}
+.ti-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.ti-name{font-size:13px;font-weight:bold;flex:1;}
+.ti-m{font-size:11px;color:#2D8C7C;margin-left:4px;}
+.today-empty{font-size:12px;color:var(--muted);padding:6px 0;}
+
+/* 英語まとめモーダル */
+.eng-overlay{display:none;position:fixed;inset:0;background:rgba(61,50,80,.45);z-index:300;
+  align-items:center;justify-content:center;}
+.eng-overlay.open{display:flex;}
+.eng-modal{background:white;border-radius:24px;padding:24px 22px;width:92%;max-width:540px;
+  max-height:85vh;overflow-y:auto;animation:slideUp .25s ease;}
+.eng-modal h2{font-size:18px;margin-bottom:14px;}
+.eng-text{background:#F7F4FF;border-radius:14px;padding:16px;font-size:13px;line-height:1.9;
+  color:var(--text);white-space:pre-wrap;border:1.5px solid #E0DAEE;margin-bottom:12px;}
+.eng-actions{display:flex;gap:8px;}
+.btn-copy{flex:1;padding:11px;border:none;border-radius:12px;
+  background:linear-gradient(135deg,#4ECDC4,#44AF9A);color:white;font-size:14px;
+  font-weight:bold;cursor:pointer;font-family:inherit;}
+.btn-close-eng{padding:11px 16px;border:none;border-radius:12px;background:#F3F0FA;
+  color:var(--muted);font-size:14px;cursor:pointer;font-family:inherit;}
+.copy-ok{font-size:12px;color:#4ECDC4;text-align:center;margin-top:6px;display:none;}
+
+/* FAB */
+.data-menu{position:fixed;bottom:22px;left:16px;display:flex;flex-direction:column;gap:7px;z-index:100;}
+.data-btn{padding:8px 14px;border-radius:30px;border:none;font-size:12px;font-weight:bold;cursor:pointer;font-family:inherit;box-shadow:0 3px 10px rgba(0,0,0,.12);white-space:nowrap;}
+.data-btn.exp{background:#F3F0FF;color:#A29BFE;}
+.data-btn.imp{background:#FFF0F4;color:#FF6BA8;}
+.fab{position:fixed;bottom:22px;right:22px;width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(135deg,#FF6BA8,#FFB347);color:white;font-size:26px;border:none;
+  cursor:pointer;box-shadow:0 6px 20px rgba(255,107,168,.4);display:flex;align-items:center;
+  justify-content:center;z-index:100;transition:transform .15s;font-family:inherit;}
+.fab:hover{transform:scale(1.1) rotate(90deg);}
+
+@media(max-width:580px){
+  .cal-grid{gap:3px;} .cal-cell{min-height:56px;padding:3px;} .dn{font-size:11px;}
+  .ev-chip{font-size:8px;padding:1px 3px;}
+}
+</style>
+</head>
+<body>
+
+<div class="hd">
+  <div class="hd-clouds">☀️ ⛅ 🌈</div>
+  <h1>ゆうきひろきの 成長記録</h1>
+  <p class="hd-sub" id="hd-sub">2026年の夏をたのしくまなぼう</p>
+</div>
+
+<nav class="nav">
+  <button class="nav-btn on" data-t="cal" onclick="showPage('cal',this)"><span class="ni">📅</span>よてい</button>
+  <button class="nav-btn" data-t="mainichi" onclick="showPage('mainichi',this)"><span class="ni">☀️</span>まいにち</button>
+  <button class="nav-btn" data-t="shukudai" onclick="showPage('shukudai',this)"><span class="ni">📚</span>しゅくだい</button>
+  <button class="nav-btn" data-t="memo" onclick="showPage('memo',this)"><span class="ni">📸</span>おもいで</button>
+  <button class="nav-btn" data-t="manabi" onclick="showPage('manabi',this)"><span class="ni">🌱</span>まなび</button>
+</nav>
+
+<!-- ===== よていページ ===== -->
+<div id="page-cal" class="page on">
+  <div class="child-row" id="cal-child-row">
+    <button class="cb on" data-c="all" onclick="selCalChild('all',this)">🌈 みんな</button>
+    <button class="cb" data-c="1" onclick="selCalChild('1',this)">🌸 ゆうき</button>
+    <button class="cb" data-c="2" onclick="selCalChild('2',this)">🌻 ひろき</button>
+  </div>
+  <div class="card">
+    <div class="cal-nav">
+      <button onclick="chMonth(-1)">◀</button>
+      <div class="cal-title" id="cal-title"></div>
+      <button onclick="chMonth(1)">▶</button>
+    </div>
+    <div class="cal-grid" id="cal-grid">
+      <div class="cal-dlbl">日</div><div class="cal-dlbl">月</div><div class="cal-dlbl">火</div>
+      <div class="cal-dlbl">水</div><div class="cal-dlbl">木</div><div class="cal-dlbl">金</div>
+      <div class="cal-dlbl" style="color:#6B7FD4">土</div>
+    </div>
+  </div>
+  <div class="card" id="day-detail" style="display:none">
+    <div id="day-detail-title" style="font-size:16px;font-weight:bold;margin-bottom:10px"></div>
+    <div class="ev-list" id="ev-list"></div>
+    <button class="btn-ok" style="width:100%;margin-top:8px;padding:10px" onclick="openDrawer(currentDateKey)">＋ よていを追加</button>
+  </div>
+</div>
+
+<!-- ===== まいにちページ ===== -->
+<div id="page-mainichi" class="page">
+
+  <!-- 今日のようす -->
+  <div class="today-view" id="today-view">
+    <div class="today-date-big" id="today-date-big"></div>
+    <!-- 子ども切り替え -->
+    <div class="child-row" id="today-child-row" style="justify-content:center;margin:6px 0 10px">
+      <button class="cb on" onclick="selTodayChild('1',this)">🌸 ゆうき</button>
+      <button class="cb"    onclick="selTodayChild('2',this)">🌻 ひろき</button>
+    </div>
+    <div class="timeline" id="today-timeline"></div>
+  </div>
+
+  <!-- 毎日チェックリスト -->
+  <div class="card">
+    <div class="section-head" style="border-color:#4ECDC4;">✅ まいにちチェック</div>
+    <div class="child-row" id="chk-child-row">
+      <button class="cb on" data-c="all" onclick="selChkChild('all',this)">🌈 みんな</button>
+      <button class="cb" data-c="1" onclick="selChkChild('1',this)">🌸 ゆうき</button>
+      <button class="cb" data-c="2" onclick="selChkChild('2',this)">🌻 ひろき</button>
+    </div>
+    <div id="chk-list"></div>
+    <div class="add-row" style="margin-top:8px">
+      <input class="add-inp" id="chk-inp" placeholder="チェック項目を追加…" onkeydown="if(event.key==='Enter')addChk()">
+      <button class="btn-sm" onclick="addChk()">＋ 追加</button>
+    </div>
+  </div>
+
+  <!-- 毎日のスケジュール -->
+  <div class="card">
+    <div class="section-head" style="border-color:#FFB347;">🕐 いちにちのながれ</div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:10px">クリックして入力できます</p>
+    <div class="time-grid" id="time-grid"></div>
+  </div>
+
+  <!-- 習い事 -->
+  <div class="card">
+    <div class="section-head" style="border-color:#FF6BA8;">🎵 ならいごと</div>
+    <p style="font-size:11px;color:var(--muted);margin-bottom:8px">※お盆の週（8/11〜）はお休みになる場合があります</p>
+    <div id="keiko-list"></div>
+    <details style="margin-top:10px">
+      <summary style="font-size:12px;color:var(--muted);cursor:pointer;padding:6px 0">＋ ならいごとを追加</summary>
+      <div style="margin-top:8px">
+        <div class="add-row">
+          <input class="add-inp" id="keiko-name-inp" placeholder="ならいごとのなまえ">
+          <select class="add-inp" id="keiko-who" style="max-width:110px">
+            <option value="all">みんな</option>
+            <option value="1">🌸 ゆうき</option>
+            <option value="2">🌻 ひろき</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:7px;margin:6px 0;flex-wrap:wrap">
+          <input class="add-inp" id="keiko-time" type="time" style="max-width:110px" placeholder="開始時間">
+          <input class="add-inp" id="keiko-time-end" type="time" style="max-width:110px" placeholder="終了時間">
+        </div>
+        <div class="day-check-row" id="keiko-days" style="margin:6px 0">
+          <button class="day-check" data-d="0">日</button><button class="day-check" data-d="1">月</button>
+          <button class="day-check" data-d="2">火</button><button class="day-check" data-d="3">水</button>
+          <button class="day-check" data-d="4">木</button><button class="day-check" data-d="5">金</button>
+          <button class="day-check" data-d="6">土</button>
+        </div>
+        <button class="btn-sm" onclick="addKeiko()">＋ 追加</button>
+      </div>
+    </details>
+  </div>
+
+</div>
+
+<!-- ===== しゅくだいページ ===== -->
+<div id="page-shukudai" class="page">
+
+  <!-- 目標 -->
+  <div class="card">
+    <div class="section-head" style="border-color:#FF6BA8;">🌟 もくひょう</div>
+    <div class="child-row" id="goal-child-row">
+      <button class="cb on" onclick="selGoalChild('1',this)">🌸 ゆうき</button>
+      <button class="cb"    onclick="selGoalChild('2',this)">🌻 ひろき</button>
+    </div>
+    <div class="goal-cards" id="goal-cards"></div>
+    <div id="goal-add-form">
+      <div class="goal-emoji-row" id="goal-emoji-row"></div>
+      <div class="goal-add">
+        <div style="flex:1;min-width:160px">
+          <input class="form-inp" id="goal-inp" placeholder="もくひょうを入れよう！">
+        </div>
+        <button class="btn-ok" style="width:auto;padding:10px 18px;align-self:flex-end" onclick="addGoal()">追加</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 進捗 -->
+  <div class="prog-section" id="shukudai-prog"></div>
+
+  <!-- 宿題リスト -->
+  <div class="card">
+    <div class="section-head" style="border-color:#A29BFE;">📋 しゅくだいリスト</div>
+    <div class="shukudai-cats" id="sd-cats"></div>
+    <div id="sd-list"></div>
+    <div style="margin-top:10px;border-top:1px solid #F0EAF8;padding-top:12px">
+      <div class="add-row" style="flex-wrap:wrap">
+        <input class="add-inp" id="sd-name-inp" placeholder="宿題のなまえ" style="min-width:140px">
+        <select class="add-inp" id="sd-cat-inp" style="max-width:130px">
+          <option value="音読">📖 音読</option>
+          <option value="計算">🔢 計算ドリル</option>
+          <option value="読書">📚 読書</option>
+          <option value="自由研究">🔬 自由研究</option>
+          <option value="工作">✂️ 工作</option>
+          <option value="絵日記">🖍️ 絵日記</option>
+          <option value="その他">📝 その他</option>
+        </select>
+        <select class="add-inp" id="sd-who-inp" style="max-width:110px">
+          <option value="all">みんな</option>
+          <option value="1">🌸 ゆうき</option>
+          <option value="2">🌻 ひろき</option>
+        </select>
+        <input class="add-inp" id="sd-total-inp" type="number" min="1" placeholder="ページ数(任意)" style="max-width:120px">
+      </div>
+      <button class="btn-sm" style="margin-top:8px;background:var(--lav);color:#3D3250" onclick="addShukudai()">＋ 追加</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== まなびページ ===== -->
+<div id="page-manabi" class="page">
+  <div class="child-row" id="manabi-child-row" style="justify-content:center;margin-bottom:14px">
+    <button class="cb on" onclick="selManabiChild('1',this)">🌸 ゆうき</button>
+    <button class="cb"    onclick="selManabiChild('2',this)">🌻 ひろき</button>
+  </div>
+
+  <!-- バランスグラフ -->
+  <div class="balance-card">
+    <div class="balance-title">📊 最近2週間のバランス</div>
+    <div id="balance-alert"></div>
+    <div id="balance-bars"></div>
+  </div>
+
+  <!-- 学びを記録ボタン -->
+  <button class="log-btn" onclick="openManabiLog()">✏️ 学びを記録する</button>
+
+  <!-- 単語バンク -->
+  <div class="wordbank-card" id="wordbank-wrap" style="display:none">
+    <div class="balance-title">🗝️ 英語単語バンク</div>
+    <div id="wordbank-list"></div>
+  </div>
+
+  <!-- 学びログ -->
+  <div class="balance-card" id="manabilog-wrap" style="display:none">
+    <div class="balance-title">📒 学びログ</div>
+    <div id="manabilog-list"></div>
+  </div>
+
+  <!-- 週次タスクカード -->
+  <div id="manabi-cards"></div>
+</div>
+
+<!-- 学び記録モーダル -->
+<div class="mlog-overlay" id="mlog-overlay" onclick="if(event.target===this)closeManabiLog()">
+  <div class="mlog-modal">
+    <div class="mlog-handle"></div>
+    <div class="mlog-title">✏️ 学びを記録する</div>
+
+    <div class="mlog-section">だれ？</div>
+    <div class="child-row" id="mlog-child-row" style="margin-bottom:0">
+      <button class="cb on" onclick="selMlogChild('1',this)">🌸 ゆうき</button>
+      <button class="cb"    onclick="selMlogChild('2',this)">🌻 ひろき</button>
+    </div>
+
+    <div class="mlog-section">ジャンル</div>
+    <div class="mlog-genre-grid" id="mlog-genre-grid"></div>
+
+    <div class="mlog-section">今日学んだこと・やったこと</div>
+    <textarea class="mlog-textarea" id="mlog-text" rows="3" placeholder="例：光合成について学んだ。植物は光でエネルギーを作る！"></textarea>
+    <div class="mlog-voice-row">
+      <button class="mlog-voice-btn ja" id="mlog-mic-ja" onclick="startVoice('ja-JP','mlog-text')">🎤 日本語で話す</button>
+      <button class="mlog-voice-btn en" id="mlog-mic-en" onclick="startVoice('en-US','mlog-text')">🎤 English</button>
+    </div>
+
+    <div class="mlog-section">🔑 キーワードを英語にしよう</div>
+    <div id="mlog-kw-chips"></div>
+    <div class="kw-row">
+      <input class="kw-inp" id="mlog-kw-ja" placeholder="日本語（例：光合成）">
+      <input class="kw-inp" id="mlog-kw-en" placeholder="English (photosynthesis)">
+      <button class="mlog-voice-btn en" style="padding:6px 10px" onclick="startVoice('en-US','mlog-kw-en')">🎤</button>
+      <button class="kw-speak" onclick="speakWord(document.getElementById('mlog-kw-en').value)">🔊</button>
+    </div>
+    <button class="btn-sm" style="background:#F3F0FF;color:#A29BFE" onclick="addKeyword()">＋ キーワードを追加</button>
+
+    <div class="mlog-section">📝 英語クイズにしよう（任意）</div>
+    <input class="mlog-textarea" id="mlog-quiz-q" placeholder="Q: What is photosynthesis?" style="margin-bottom:6px;display:block;width:100%;padding:8px 12px;border:2px solid #F0E8FF;border-radius:10px;font-size:13px;font-family:inherit;outline:none;">
+    <input class="mlog-textarea" id="mlog-quiz-a" placeholder="A: 光合成！植物が光でエネルギーを作ること" style="display:block;width:100%;padding:8px 12px;border:2px solid #F0E8FF;border-radius:10px;font-size:13px;font-family:inherit;outline:none;">
+
+    <button class="mlog-save-btn" onclick="saveManabiLog()">💾 記録する</button>
+  </div>
+</div>
+
+<!-- ===== おもいでページ ===== -->
+<div id="page-memo" class="page">
+  <div class="card">
+    <div class="section-head" style="border-color:#FF6BA8;">📸 おもいでをかこう</div>
+    <div class="stamp-row" id="stamp-row"></div>
+    <div style="display:flex;gap:7px;margin-bottom:7px;flex-wrap:wrap">
+      <input type="text" class="form-inp" id="memo-title" placeholder="タイトル（例：海水浴！）">
+      <input type="date" class="form-inp" id="memo-date" style="max-width:155px">
+    </div>
+    <select class="form-inp" id="memo-child" style="max-width:140px;margin-bottom:7px">
+      <option value="all">みんな</option><option value="1">🌸 ゆうき</option><option value="2">🌻 ひろき</option>
+    </select>
+    <textarea class="form-inp" id="memo-body" placeholder="たのしかったこと、はっけんしたこと、なんでも！" rows="3" style="margin-bottom:8px"></textarea>
+    <button class="btn-ok" style="width:100%" onclick="addMemo()">📝 きろくする</button>
+  </div>
+  <div class="memo-grid" id="memo-grid"></div>
+
+  <!-- 英語まとめボタン -->
+  <div style="text-align:center;padding:16px 0 4px">
+    <button class="btn-ok" style="width:auto;padding:12px 28px;background:linear-gradient(135deg,#4ECDC4,#6C5CE7)" onclick="openEngModal()">
+      🇬🇧 英語でまとめる
+    </button>
+    <p style="font-size:11px;color:var(--muted);margin-top:6px">カレンダーとおもいでから自動でつくるよ</p>
+  </div>
+</div>
+
+<!-- 英語まとめモーダル -->
+<div class="eng-overlay" id="eng-overlay" onclick="if(event.target===this)closeEngModal()">
+  <div class="eng-modal">
+    <h2>🇬🇧 Summer Story in English</h2>
+    <div class="eng-text" id="eng-text"></div>
+    <div class="copy-ok" id="copy-ok">✓ コピーしました！</div>
+    <div class="eng-actions">
+      <button class="btn-close-eng" onclick="closeEngModal()">閉じる</button>
+      <button class="btn-copy" onclick="copyEngText()">📋 コピーする</button>
+    </div>
+  </div>
+</div>
+
+<!-- ドロワー -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="overlayClick(event)">
+  <div class="drawer">
+    <div class="drawer-handle"></div>
+    <h2 id="drawer-title">📅 よていを追加</h2>
+    <label class="form-lbl">よていのなまえ</label>
+    <input class="form-inp" id="ev-name" placeholder="例：プールにいく！">
+    <label class="form-lbl">カテゴリー</label>
+    <div class="cat-grid" id="cat-grid"></div>
+    <label class="form-lbl">だれ？</label>
+    <select class="form-inp" id="ev-child">
+      <option value="all">🌈 みんな</option>
+      <option value="1">🌸 ゆうき</option>
+      <option value="2">🌻 ひろき</option>
+    </select>
+    <label class="form-lbl">🔭 ここでまなべること（おでかけのとき）</label>
+    <div class="manabu-box">
+      <h4>💡 ヒントをえらんでね</h4>
+      <div class="hints-wrap" id="manabu-hints"></div>
+      <input class="manabu-inp" id="manabu-custom" placeholder="自分でかいてもいいよ ✏️">
+    </div>
+    <div class="drawer-actions">
+      <button class="btn-ng" onclick="closeDrawer()">キャンセル</button>
+      <button class="btn-ok" onclick="saveEvent()">✅ 追加する</button>
+    </div>
+  </div>
+</div>
+
+<button class="fab" id="fab" onclick="openDrawer(currentDateKey||todayKey())">＋</button>
+
+<div class="data-menu">
+  <button class="data-btn exp" onclick="exportData()">📤 データを保存</button>
+  <button class="data-btn imp" onclick="document.getElementById('import-file').click()">📥 データを読み込む</button>
+  <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
+</div>
+
+<script>
+// ===== データ =====
+const SK='natsu2026v8';
+let D=JSON.parse(localStorage.getItem(SK)||JSON.stringify({
+  events:{}, memos:[], goals:[], shukudai:[], keiko:[], manabi:{'1':{},'2':{}}, manabiLog:[],
+  schedule:{'起きる':'6:30','オンライン英会話':'7:00〜8:00','朝の運動':'8:00〜','朝ごはん':'8:30'},
+  chk:{
+    'all':{items:[
+      {text:'🧠 センサリープレイ（週1）',id:4},
+    ],done:{}},
+    '1':{items:[
+      {text:'💻 オンライン英会話',id:101},
+      {text:'🏃 朝の運動',id:102},
+      {text:'📖 英語の多読',id:104},
+      {text:'🎓 英検サイト',id:105},
+      {text:'💧 庭での水遊び（週1）',id:103},
+    ],done:{}},
+    '2':{items:[
+      {text:'💻 オンライン英会話',id:201},
+      {text:'🏃 朝の運動',id:202},
+      {text:'📖 英語の多読',id:204},
+      {text:'💧 庭での水遊び（週1）',id:203},
+    ],done:{}}
+  }
+}));
+function save(){localStorage.setItem(SK,JSON.stringify(D));}
+
+// ===== カテゴリー =====
+const CATS=[
+  {id:'beach',icon:'🏖️',name:'海・川',color:'#4ECDC4'},
+  {id:'pool',icon:'🏊',name:'プール',color:'#45B7D1'},
+  {id:'trip',icon:'🚗',name:'おでかけ',color:'#FF6B6B'},
+  {id:'nature',icon:'🌿',name:'しぜん',color:'#5DBB63'},
+  {id:'study',icon:'📚',name:'べんきょう',color:'#A29BFE'},
+  {id:'event',icon:'🎆',name:'イベント',color:'#FFB347'},
+  {id:'sport',icon:'⚽',name:'スポーツ',color:'#FF9F43'},
+  {id:'cook',icon:'🍳',name:'りょうり',color:'#FD79A8'},
+  {id:'other',icon:'✨',name:'その他',color:'#FDCB6E'},
+];
+const MANABU_DB={
+  beach:['なぜ海水はしょっぱいの？','波はどこからくるの？','貝がらで図鑑をつくろう','砂の中の生き物をさがそう'],
+  pool:['なぜ水に浮くの？（浮力）','何m泳いだか計算しよう','タイムを測ってグラフに'],
+  trip:['地図でどこにあるか見てみよう','お土産の値段で計算練習','旅の日記を書こう','その地方の食べ物をしらべよう'],
+  nature:['虫を観察して記録しよう','植物の名前をしらべよう','空の雲の種類をしらべよう'],
+  study:['読んだ本の感想を書こう','好きなテーマで調べ学習'],
+  event:['花火の色はなぜちがうの？','祭りの由来をしらべよう','見たことを絵日記に'],
+  sport:['記録をつけてグラフにしよう','目標を決めて練習計画をたてよう','体のどこを使うか考えよう'],
+  cook:['計量カップで算数練習','食材の産地を地図でしらべよう','レシピを自分でかいてみよう'],
+  other:['やったことを日記に書こう','感想を絵に描こう'],
+};
+
+// ===== 目標絵文字 =====
+const GOAL_EMOJIS=['🌟','🏆','💪','🎯','🚀','🌈','🦋','🐬','🌺','🎵','⚽','🎨','📖','🔬','🍉'];
+const GOAL_COLORS=[
+  'linear-gradient(135deg,#FF6BA8,#FFB347)',
+  'linear-gradient(135deg,#4ECDC4,#44AF9A)',
+  'linear-gradient(135deg,#A29BFE,#6C5CE7)',
+  'linear-gradient(135deg,#FD79A8,#E17055)',
+  'linear-gradient(135deg,#74B9FF,#0984E3)',
+  'linear-gradient(135deg,#55EFC4,#00B894)',
+];
+
+// ===== カレンダー =====
+let curY=2026,curM=7,calChild='all',currentDateKey=null;
+function todayKey(){const t=new Date();return `${t.getFullYear()}-${pad(t.getMonth()+1)}-${pad(t.getDate())}`;}
+function pad(n){return String(n).padStart(2,'0');}
+
+function chMonth(d){curM+=d;if(curM>12){curM=1;curY++;}if(curM<1){curM=12;curY--;}renderCal();}
+
+function renderCal(){
+  document.getElementById('cal-title').textContent=`${curY}年 ${curM}月`;
+  const grid=document.getElementById('cal-grid');
+  while(grid.children.length>7)grid.removeChild(grid.lastChild);
+  const first=new Date(curY,curM-1,1).getDay();
+  const days=new Date(curY,curM,0).getDate();
+  const today=new Date();
+  for(let i=0;i<first;i++){const el=document.createElement('div');el.className='cal-cell empty';grid.appendChild(el);}
+  for(let d=1;d<=days;d++){
+    const dow=(first+d-1)%7;
+    const el=document.createElement('div');
+    el.className='cal-cell'+(dow===0?' sun':dow===6?' sat':'');
+    const dk=`${curY}-${pad(curM)}-${pad(d)}`;
+    const isToday=(today.getFullYear()===curY&&today.getMonth()+1===curM&&today.getDate()===d);
+    if(isToday)el.classList.add('today');
+    let html=`<div class="dn">${d}${isToday?'<span class="today-badge">今日</span>':''}</div>`;
+    const evs=(D.events[dk]||[]).filter(e=>calChild==='all'||e.child==='all'||e.child===calChild);
+    // 習い事をカレンダーに表示
+    const keikoToday=(D.keiko||[]).filter(k=>{
+      if(calChild!=='all'&&k.child!=='all'&&k.child!==calChild)return false;
+      return(k.days||[]).includes(String(dow));
+    });
+    const allEvs=[...evs,...keikoToday.map(k=>({name:k.name,cat:'other',color:'#C7CEEA',_keiko:true}))];
+    allEvs.slice(0,2).forEach(e=>{
+      const cat=CATS.find(c=>c.id===e.cat)||CATS[8];
+      html+=`<span class="ev-chip${e.manabu?' has-m':''}" style="background:${e._keiko?'#C7CEEA':cat.color}">${e._keiko?'🎵':''}${e.name}</span>`;
+    });
+    if(allEvs.length>2)html+=`<span style="font-size:8px;color:var(--muted);padding:0 3px">+${allEvs.length-2}</span>`;
+    el.innerHTML=html;
+    el.addEventListener('click',()=>showDayDetail(dk));
+    grid.appendChild(el);
+  }
+}
+
+function selCalChild(c,btn){
+  calChild=c;
+  document.querySelectorAll('#cal-child-row .cb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderCal();
+  if(currentDateKey)showDayDetail(currentDateKey);
+}
+
+function showDayDetail(dk){
+  currentDateKey=dk;
+  const[,m,d]=dk.split('-');
+  document.getElementById('day-detail').style.display='block';
+  document.getElementById('day-detail-title').textContent=`📅 ${parseInt(m)}月${parseInt(d)}日のよてい`;
+  const list=document.getElementById('ev-list');
+  const evs=(D.events[dk]||[]).filter(e=>calChild==='all'||e.child==='all'||e.child===calChild);
+  const dow=new Date(dk).getDay();
+  const keikoToday=(D.keiko||[]).filter(k=>{
+    if(calChild!=='all'&&k.child!=='all'&&k.child!==calChild)return false;
+    return(k.days||[]).includes(String(dow));
+  });
+  if(!evs.length&&!keikoToday.length){
+    list.innerHTML='<p style="font-size:12px;color:var(--muted);padding:5px 0">まだよていがありません ✨</p>';
+  } else {
+    list.innerHTML='';
+    keikoToday.forEach(k=>{
+      const el=document.createElement('div');
+      el.className='ev-row';
+      el.innerHTML=`<div class="ev-dot" style="background:#C7CEEA"></div>
+        <div class="ev-info"><div class="ev-name">🎵 ${k.name}</div></div>
+        <span style="font-size:11px;color:var(--muted)">ならいごと</span>`;
+      list.appendChild(el);
+    });
+    evs.forEach((e,i)=>{
+      const cat=CATS.find(c=>c.id===e.cat)||CATS[8];
+      const el=document.createElement('div');
+      el.className='ev-row';
+      el.innerHTML=`<div class="ev-dot" style="background:${cat.color}"></div>
+        <div class="ev-info">
+          <div class="ev-name">${cat.icon} ${e.name}</div>
+          ${e.manabu?`<div class="ev-m">✦ ${e.manabu}</div>`:''}
+        </div>
+        ${e._fixed?'<span style="font-size:10px;color:var(--muted)">★</span>':
+        `<button class="ev-del" onclick="delEvent('${dk}',${i})">✕</button>`}`;
+      list.appendChild(el);
+    });
+  }
+  document.getElementById('day-detail').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function delEvent(dk,i){
+  D.events[dk].splice(i,1);save();renderCal();showDayDetail(dk);
+}
+
+// ===== ドロワー =====
+let selCat='beach',pickedHints=new Set();
+function openDrawer(dk){
+  currentDateKey=dk;if(!dk)return;
+  const[,m,d]=dk.split('-');
+  document.getElementById('drawer-title').textContent=`📅 ${parseInt(m)}月${parseInt(d)}日のよてい`;
+  document.getElementById('ev-name').value='';
+  document.getElementById('manabu-custom').value='';
+  selCat='beach';pickedHints=new Set();
+  buildCatGrid();buildHints();
+  document.getElementById('ev-child').value=calChild==='all'?'all':calChild;
+  document.getElementById('drawer-overlay').classList.add('open');
+  setTimeout(()=>document.getElementById('ev-name').focus(),200);
+}
+function closeDrawer(){document.getElementById('drawer-overlay').classList.remove('open');}
+function overlayClick(e){if(e.target===document.getElementById('drawer-overlay'))closeDrawer();}
+
+function buildCatGrid(){
+  const g=document.getElementById('cat-grid');g.innerHTML='';
+  CATS.forEach(c=>{
+    const b=document.createElement('button');
+    b.className='cat-btn'+(c.id===selCat?' on':'');
+    b.style.borderColor=c.id===selCat?c.color:'#EEE';
+    b.style.background=c.id===selCat?c.color+'22':'white';
+    b.innerHTML=`${c.icon}<br>${c.name}`;
+    b.onclick=()=>{selCat=c.id;pickedHints=new Set();buildCatGrid();buildHints();};
+    g.appendChild(b);
+  });
+}
+function buildHints(){
+  const g=document.getElementById('manabu-hints');g.innerHTML='';
+  (MANABU_DB[selCat]||[]).forEach(h=>{
+    const btn=document.createElement('button');
+    btn.className='hint-chip'+(pickedHints.has(h)?' on':'');
+    btn.textContent=h;
+    btn.onclick=()=>{pickedHints.has(h)?pickedHints.delete(h):pickedHints.add(h);buildHints();};
+    g.appendChild(btn);
+  });
+}
+function saveEvent(){
+  const name=document.getElementById('ev-name').value.trim();
+  if(!name){document.getElementById('ev-name').focus();return;}
+  const custom=document.getElementById('manabu-custom').value.trim();
+  const manabus=[...pickedHints];if(custom)manabus.push(custom);
+  if(!D.events[currentDateKey])D.events[currentDateKey]=[];
+  D.events[currentDateKey].push({name,cat:selCat,child:document.getElementById('ev-child').value,manabu:manabus.join(' / ')||''});
+  save();renderCal();showDayDetail(currentDateKey);closeDrawer();
+}
+
+// ===== まいにち：チェックリスト =====
+let chkChild='all';
+function selChkChild(c,btn){
+  chkChild=c;
+  document.querySelectorAll('#chk-child-row .cb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');renderChk();
+}
+function getChkBucket(key){
+  if(!D.chk[key]||Array.isArray(D.chk[key]))D.chk[key]={items:[],done:{}};
+  return D.chk[key];
+}
+function getChkData(){return getChkBucket(chkChild);}
+
+// 表示アイテムを返す（子どもタブでは自分のアイテム＋みんなアイテムを合わせる）
+function getMergedItems(){
+  const today=todayKey();
+  const own=getChkBucket(chkChild);
+  if(chkChild==='all'){
+    return own.items.map(it=>({...it,src:'all',done:(own.done[today]||[]).includes(it.id)}));
+  }
+  const shared=getChkBucket('all');
+  const ownItems=own.items.map(it=>({...it,src:chkChild,done:(own.done[today]||[]).includes(it.id)}));
+  const sharedItems=shared.items.map(it=>({...it,src:'all',done:(shared.done[today]||[]).includes(it.id),shared:true}));
+  return [...ownItems,...sharedItems];
+}
+
+function renderChk(){
+  const today=todayKey();
+  const merged=getMergedItems();
+  const list=document.getElementById('chk-list');
+
+  const doneCount=merged.filter(it=>it.done).length;
+  const pct=merged.length?Math.round(doneCount/merged.length*100):0;
+  const allDone=merged.length>0&&doneCount===merged.length;
+  list.innerHTML=`
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <div style="flex:1;background:#F0EAF8;border-radius:20px;height:10px;overflow:hidden">
+        <div style="height:100%;border-radius:20px;background:linear-gradient(90deg,#4ECDC4,#A29BFE);
+          width:${pct}%;transition:width .4s"></div>
+      </div>
+      <span style="font-size:12px;font-weight:bold;color:var(--muted);white-space:nowrap">${doneCount}/${merged.length}</span>
+      ${allDone?'<span style="font-size:18px">🌟</span>':''}
+    </div>`;
+
+  if(!merged.length){
+    list.innerHTML+='<p style="font-size:12px;color:var(--muted);padding:4px 0">＋ からやることを追加してね</p>';
+  } else {
+    merged.forEach(item=>{
+      const el=document.createElement('div');el.className='chk-item';
+      el.style.opacity=item.done?'.6':'1';
+      const sharedBadge=item.shared?'<span style="font-size:9px;background:#E8E0FF;color:#7B68EE;border-radius:8px;padding:1px 5px;margin-left:4px">みんな</span>':'';
+      el.innerHTML=`
+        <div class="chk-circle${item.done?' done':''}" onclick="toggleChk(${item.id},'${item.src}')">${item.done?'✓':''}</div>
+        <div class="chk-text${item.done?' done':''}" style="flex:1">${item.text}${sharedBadge}</div>
+        ${!item.shared?`<button class="chk-del" onclick="delChk(${item.id},'${item.src}')">✕</button>`:''}`;
+      list.appendChild(el);
+    });
+  }
+
+  const [y,m,d]=today.split('-');
+  const note=document.createElement('p');
+  note.style='font-size:10px;color:var(--muted);text-align:right;margin-top:6px';
+  note.textContent=`${parseInt(m)}月${parseInt(d)}日のチェック（毎日リセット）`;
+  list.appendChild(note);
+}
+function addChk(){
+  const inp=document.getElementById('chk-inp');
+  const text=inp.value.trim();if(!text)return;
+  // 「みんな」タブでは shared に追加、子どもタブではその子に追加
+  const bucket=getChkBucket(chkChild);
+  bucket.items.push({text,id:Date.now()});
+  inp.value='';save();renderChk();
+}
+function playCheckSound(allDone){
+  try{
+    const ac=new(window.AudioContext||window.webkitAudioContext)();
+    if(allDone){
+      // 全完了：きらきらファンファーレ
+      [[523,0],[659,.1],[784,.2],[1047,.35]].forEach(([f,t])=>{
+        const o=ac.createOscillator(),g=ac.createGain();
+        o.connect(g);g.connect(ac.destination);
+        o.frequency.value=f;o.type='sine';
+        g.gain.setValueAtTime(0,ac.currentTime+t);
+        g.gain.linearRampToValueAtTime(.18,ac.currentTime+t+.04);
+        g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+t+.35);
+        o.start(ac.currentTime+t);o.stop(ac.currentTime+t+.35);
+      });
+    } else {
+      // 通常チェック：やわらかなポン♪
+      const o=ac.createOscillator(),g=ac.createGain();
+      o.connect(g);g.connect(ac.destination);
+      o.type='sine';o.frequency.setValueAtTime(600,ac.currentTime);
+      o.frequency.exponentialRampToValueAtTime(900,ac.currentTime+.08);
+      g.gain.setValueAtTime(.15,ac.currentTime);
+      g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.25);
+      o.start();o.stop(ac.currentTime+.25);
+    }
+  }catch(e){}
+}
+
+function toggleChk(id,src){
+  const today=todayKey();
+  const bucket=getChkBucket(src||chkChild);
+  if(!bucket.done[today])bucket.done[today]=[];
+  const idx=bucket.done[today].indexOf(id);
+  const checking=idx<0;
+  if(idx>=0)bucket.done[today].splice(idx,1);
+  else bucket.done[today].push(id);
+  save();renderChk();
+  if(checking){
+    const merged=getMergedItems();
+    const allDone=merged.every(it=>(getChkBucket(it.src).done[today]||[]).includes(it.id));
+    playCheckSound(allDone);
+  }
+}
+function delChk(id,src){
+  const bucket=getChkBucket(src||chkChild);
+  bucket.items=bucket.items.filter(i=>i.id!==id);
+  save();renderChk();
+}
+
+// ===== まいにち：スケジュール =====
+const TIME_SLOTS=['起きる','オンライン英会話','朝の運動','朝ごはん'];
+const SLOT_ICONS={'起きる':'🌅','オンライン英会話':'💻','朝の運動':'🏃','朝ごはん':'🍚'};
+function renderSchedule(){
+  const g=document.getElementById('time-grid');g.innerHTML='';
+  TIME_SLOTS.forEach(slot=>{
+    const el=document.createElement('div');el.className='time-slot';
+    const val=D.schedule[slot]||'';
+    el.innerHTML=`<span class="time-label">${SLOT_ICONS[slot]||'•'} ${slot}</span>
+      <input class="time-inp" value="${val}" placeholder="時間やメモ"
+        onchange="D.schedule['${slot}']=this.value;save()">`;
+    g.appendChild(el);
+  });
+}
+
+// ===== まいにち：習い事 =====
+const DAY_NAMES=['日','月','火','水','木','金','土'];
+const KEIKO_COLORS=['#FFB7C5','#B5EAD7','#C7CEEA','#FFDAC1','#AED8F0','#FFD7BA','#D4F0C0'];
+const DAY_BG=['#FDECEA','#FFF3E0','#E8F5E9','#E3F2FD','#F3E5F5','#FFF8E1','#E0F7FA'];
+
+function renderKeiko(){
+  const list=document.getElementById('keiko-list');
+  if(!D.keiko||!D.keiko.length){
+    list.innerHTML='<p style="font-size:12px;color:var(--muted);padding:4px 0">ならいごとを追加してね</p>';return;
+  }
+  list.innerHTML='';
+  // 曜日ごとにグループ化
+  const byDay={};
+  D.keiko.forEach((k,i)=>{
+    (k.days||[]).forEach(d=>{
+      if(!byDay[d])byDay[d]=[];
+      byDay[d].push({...k,_idx:i});
+    });
+  });
+  [1,2,3,4,5,6,0].filter(d=>byDay[d]).forEach(d=>{
+    const dayWrap=document.createElement('div');
+    dayWrap.style=`margin-bottom:10px`;
+    const dayLbl=document.createElement('div');
+    dayLbl.style=`font-size:11px;font-weight:bold;color:var(--muted);margin-bottom:5px;
+      padding:3px 8px;background:${DAY_BG[d]||'#F5F0FF'};border-radius:6px;display:inline-block`;
+    dayLbl.textContent=`${DAY_NAMES[d]}曜日`;
+    dayWrap.appendChild(dayLbl);
+    // 時間順ソート
+    byDay[d].sort((a,b)=>(a.time||'99:99').localeCompare(b.time||'99:99'));
+    byDay[d].forEach(k=>{
+      const el=document.createElement('div');el.className='keiko-row';
+      const who=k.child==='1'?'🌸 ゆうき':k.child==='2'?'🌻 ひろき':'🌈 ふたり';
+      const timeStr=k.time?(k.timeEnd?`${k.time}〜${k.timeEnd}`:k.time):'';
+      el.innerHTML=`
+        <div class="keiko-dot" style="background:${KEIKO_COLORS[k._idx%KEIKO_COLORS.length]}"></div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:6px">
+            <span style="font-size:12px;font-weight:bold;color:#FF6BA8;min-width:88px">${timeStr}</span>
+            <span style="font-size:13px;font-weight:bold">${k.name}</span>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:1px">${who}</div>
+        </div>
+        <button class="keiko-del" onclick="delKeiko(${k._idx})">✕</button>`;
+      dayWrap.appendChild(el);
+    });
+    list.appendChild(dayWrap);
+  });
+}
+function addKeiko(){
+  const name=document.getElementById('keiko-name-inp').value.trim();
+  if(!name)return;
+  const days=[...document.querySelectorAll('#keiko-days .day-check.on')].map(b=>b.dataset.d);
+  D.keiko.push({
+    name,days,child:document.getElementById('keiko-who').value,
+    time:document.getElementById('keiko-time').value,
+    timeEnd:document.getElementById('keiko-time-end').value,
+  });
+  document.getElementById('keiko-name-inp').value='';
+  document.getElementById('keiko-time').value='';
+  document.getElementById('keiko-time-end').value='';
+  document.querySelectorAll('#keiko-days .day-check').forEach(b=>b.classList.remove('on'));
+  save();renderKeiko();renderCal();
+}
+function delKeiko(i){D.keiko.splice(i,1);save();renderKeiko();renderCal();}
+document.querySelectorAll('#keiko-days .day-check').forEach(b=>{
+  b.onclick=()=>b.classList.toggle('on');
+});
+
+// ===== しゅくだい：目標 =====
+let selGoalEmoji='🌟';
+function buildGoalEmojiRow(){
+  const r=document.getElementById('goal-emoji-row');r.innerHTML='';
+  GOAL_EMOJIS.forEach(e=>{
+    const b=document.createElement('button');b.className='ge'+(e===selGoalEmoji?' on':'');
+    b.textContent=e;b.onclick=()=>{selGoalEmoji=e;buildGoalEmojiRow();};
+    r.appendChild(b);
+  });
+}
+let goalChild='1';
+function selGoalChild(c,btn){
+  goalChild=c;
+  document.querySelectorAll('#goal-child-row .cb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');renderGoals();
+}
+function renderGoals(){
+  const g=document.getElementById('goal-cards');
+  const filtered=(D.goals||[]).filter(goal=>goal.child===goalChild);
+  if(!filtered.length){
+    const name=goalChild==='1'?'ゆうき':'ひろき';
+    g.innerHTML=`<p style="font-size:12px;color:var(--muted);grid-column:1/-1">${name}のもくひょうをいれてみよう！</p>`;
+    return;
+  }
+  g.innerHTML='';
+  filtered.forEach(goal=>{
+    const i=D.goals.indexOf(goal);
+    const el=document.createElement('div');el.className='goal-card';
+    el.style.background=GOAL_COLORS[i%GOAL_COLORS.length];
+    el.innerHTML=`<button class="goal-del" onclick="delGoal(${i})">✕</button>
+      <div class="goal-emoji">${goal.emoji||'🌟'}</div>
+      <div class="goal-text">${goal.text}</div>`;
+    g.appendChild(el);
+  });
+}
+function addGoal(){
+  const text=document.getElementById('goal-inp').value.trim();if(!text)return;
+  D.goals.push({text,emoji:selGoalEmoji,child:goalChild});
+  document.getElementById('goal-inp').value='';save();renderGoals();
+}
+function delGoal(i){D.goals.splice(i,1);save();renderGoals();}
+
+// ===== しゅくだい：宿題 =====
+let sdFilter='all';
+const SD_CATS_LIST=['all','音読','計算','読書','自由研究','工作','絵日記','その他'];
+const SD_CAT_ICONS={'all':'📋','音読':'📖','計算':'🔢','読書':'📚','自由研究':'🔬','工作':'✂️','絵日記':'🖍️','その他':'📝'};
+
+function renderSdCats(){
+  const g=document.getElementById('sd-cats');g.innerHTML='';
+  SD_CATS_LIST.forEach(c=>{
+    const b=document.createElement('button');b.className='sc-btn'+(c===sdFilter?' on':'');
+    b.textContent=`${SD_CAT_ICONS[c]||''} ${c==='all'?'すべて':c}`;
+    b.onclick=()=>{sdFilter=c;renderSdCats();renderShukudai();};
+    g.appendChild(b);
+  });
+}
+function renderShukudai(){
+  const list=document.getElementById('sd-list');
+  const items=(D.shukudai||[]).filter(s=>sdFilter==='all'||s.cat===sdFilter);
+  if(!items.length){
+    list.innerHTML='<p style="font-size:12px;color:var(--muted);padding:6px 0">この種類の宿題はまだありません</p>';
+  } else {
+    list.innerHTML='';
+    items.forEach((s,i)=>{
+      const realIdx=D.shukudai.indexOf(s);
+      const pct=s.total?Math.round((s.done_count||0)/s.total*100):s.done?100:0;
+      const who=s.child==='1'?'🌸':s.child==='2'?'🌻':'🌈';
+      const el=document.createElement('div');el.className='shukudai-item';
+      el.innerHTML=`
+        <div class="si-check${s.done?' done':''}" onclick="toggleSd(${realIdx})">${s.done?'✓':''}</div>
+        <div class="si-body">
+          <div class="si-name${s.done?' done':''}">${SD_CAT_ICONS[s.cat]||''} ${who} ${s.name}</div>
+          ${s.total?`<div class="si-prog">
+            <div class="si-prog-track" onclick="editSdProg(${realIdx},event)">
+              <div class="si-prog-fill" style="width:${pct}%"></div>
+            </div>
+            <span class="si-prog-pct">${s.done_count||0}/${s.total}</span>
+          </div>`:
+          `<div class="si-sub">${s.cat}</div>`}
+        </div>
+        <button class="si-del" onclick="delSd(${realIdx})">✕</button>`;
+      list.appendChild(el);
+    });
+  }
+  // 進捗バー更新
+  const all=D.shukudai||[];
+  const done=all.filter(s=>s.done).length;
+  const pct=all.length?Math.round(done/all.length*100):0;
+  document.getElementById('shukudai-prog').innerHTML=`
+    <h3>📋 しゅくだいのすすみぐあい</h3>
+    <div class="prog-track"><div class="prog-fill" style="width:${pct}%"></div></div>
+    <div class="prog-lbl">${all.length}こ中 ${done}こ おわった！ (${pct}%)</div>`;
+}
+function toggleSd(i){D.shukudai[i].done=!D.shukudai[i].done;save();renderShukudai();}
+function delSd(i){D.shukudai.splice(i,1);save();renderShukudai();}
+function editSdProg(i,ev){
+  const track=ev.currentTarget;
+  const rect=track.getBoundingClientRect();
+  const ratio=(ev.clientX-rect.left)/rect.width;
+  const total=D.shukudai[i].total;
+  D.shukudai[i].done_count=Math.round(ratio*total);
+  if(D.shukudai[i].done_count>=total)D.shukudai[i].done=true;
+  save();renderShukudai();
+}
+function addShukudai(){
+  const name=document.getElementById('sd-name-inp').value.trim();if(!name)return;
+  const total=parseInt(document.getElementById('sd-total-inp').value)||0;
+  D.shukudai.push({
+    name,cat:document.getElementById('sd-cat-inp').value,
+    child:document.getElementById('sd-who-inp').value,
+    done:false,total:total||0,done_count:0
+  });
+  document.getElementById('sd-name-inp').value='';
+  document.getElementById('sd-total-inp').value='';
+  save();renderSdCats();renderShukudai();
+}
+
+// ===== おもいで =====
+const STAMPS=['🏖️','🌊','🍉','🎆','⛩️','🌻','🐚','🦀','🌺','🍦','🎋','⭐'];
+const MEMO_COLORS=['linear-gradient(135deg,#FF6BA8,#FFB347)','linear-gradient(135deg,#4ECDC4,#44AF9A)',
+  'linear-gradient(135deg,#A29BFE,#6C5CE7)','linear-gradient(135deg,#FD79A8,#E17055)',
+  'linear-gradient(135deg,#74B9FF,#0984E3)','linear-gradient(135deg,#55EFC4,#00B894)'];
+let selStamp='🏖️';
+function buildStamps(){
+  const r=document.getElementById('stamp-row');r.innerHTML='';
+  STAMPS.forEach(s=>{
+    const b=document.createElement('button');b.className='stamp'+(s===selStamp?' on':'');
+    b.textContent=s;b.onclick=()=>{selStamp=s;buildStamps();};r.appendChild(b);
+  });
+}
+function addMemo(){
+  const title=document.getElementById('memo-title').value.trim();
+  const body=document.getElementById('memo-body').value.trim();
+  if(!title&&!body)return;
+  const date=document.getElementById('memo-date').value||new Date().toISOString().split('T')[0];
+  D.memos.unshift({title,body,date,stamp:selStamp,id:Date.now()});
+  document.getElementById('memo-title').value='';
+  document.getElementById('memo-body').value='';
+  save();renderMemos();
+}
+function renderMemos(){
+  const g=document.getElementById('memo-grid');
+  if(!D.memos.length){g.innerHTML='<p style="color:var(--muted);font-size:12px;text-align:center;padding:24px;grid-column:1/-1">まだおもいでがないよ。いっぱい書いてね！🌟</p>';return;}
+  g.innerHTML='';
+  D.memos.forEach((m,i)=>{
+    const el=document.createElement('div');el.className='memo-card';
+    el.style.background=MEMO_COLORS[i%MEMO_COLORS.length];
+    el.innerHTML=`<button class="mc-del" onclick="delMemo(${m.id})">✕</button>
+      <div class="mc-stamp">${m.stamp||'🌟'}</div>
+      <div class="mc-date">${m.date.replace(/-/g,'/')}</div>
+      <div class="mc-title">${m.title||'…'}</div>
+      <div class="mc-body">${(m.body||'').replace(/\n/g,'<br>')}</div>`;
+    g.appendChild(el);
+  });
+}
+function delMemo(id){D.memos=D.memos.filter(m=>m.id!==id);save();renderMemos();}
+
+// ===== タブ =====
+function showPage(name,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'));
+  document.getElementById('page-'+name).classList.add('on');
+  btn.classList.add('on');
+  const fab=document.getElementById('fab');
+  fab.style.display=name==='cal'?'flex':'none';
+  if(name==='mainichi'){renderTodayView();renderChk();renderSchedule();renderKeiko();}
+  if(name==='shukudai'){renderGoals();renderSdCats();renderShukudai();}
+  if(name==='manabi'){renderManabiPage();}
+  if(name==='memo')renderMemos();
+}
+
+// ===== カレンダーから読み取ったイベント一括登録 =====
+const PRESET_EVENTS = {
+  '2026-07-17':[{name:'終業式🎒',cat:'event',child:'all',manabu:'',_fixed:true}],
+  '2026-07-20':[{name:'海の日🌊',cat:'event',child:'all',manabu:'',_fixed:true}],
+  '2026-07-22':[{name:'夏季水泳指導🏊',cat:'pool',child:'all',manabu:'なぜ水に浮くの？',_fixed:true}],
+  '2026-07-23':[{name:'あかりちゃんと千葉旅行🌴1日め',cat:'trip',child:'all',manabu:'地図で千葉を見てみよう',_fixed:true}],
+  '2026-07-24':[{name:'あかりちゃんと千葉旅行🌴2日め',cat:'trip',child:'all',manabu:'旅の日記を書こう',_fixed:true}],
+  '2026-07-25':[{name:'SDGsの海のワークショップ🌊 12:30〜',cat:'beach',child:'all',manabu:'海のごみ問題・SDGsを話そう',_fixed:true}],
+  '2026-07-26':[{name:'上板橋科学館 草鞋すごろく🔬 10:00〜',cat:'study',child:'all',manabu:'草鞋ってどうやって作るの？昔の知恵を調べよう',_fixed:true}],
+  '2026-07-27':[{name:'家族で海🏖️（泊まり1日め）',cat:'beach',child:'all',manabu:'砂浜の生き物を観察しよう',_fixed:true}],
+  '2026-07-28':[{name:'家族で海🏖️（泊まり2日め）',cat:'beach',child:'all',manabu:'海でいちばん好きだったことを日記に',_fixed:true}],
+  '2026-07-30':[{name:'おじいちゃんおばあちゃんと芦ヶ久保 川遊び🌿',cat:'nature',child:'all',manabu:'川の生き物をさがそう・石の形を観察しよう',_fixed:true}],
+  '2026-08-06':[
+    {name:'おばあちゃんが来てくれる👵',cat:'event',child:'all',manabu:'',_fixed:true},
+    {name:'自由研究ワークショップ🔬（お昼〜）',cat:'study',child:'all',manabu:'自由研究のテーマを決めよう！',_fixed:true},
+  ],
+  '2026-08-07':[{name:'ExPLORE夏合宿⛺1日め',cat:'event',child:'all',manabu:'',_fixed:true}],
+  '2026-08-08':[{name:'ExPLORE夏合宿⛺2日め',cat:'event',child:'all',manabu:'合宿で学んだこと日記に書こう',_fixed:true}],
+  '2026-08-11':[{name:'山の日🏔️',cat:'event',child:'all',manabu:'',_fixed:true}],
+  '2026-08-14':[{name:'みっちゃん（おじいちゃん）と遊ぶ👴',cat:'event',child:'all',manabu:'',_fixed:true}],
+  '2026-08-15':[{name:'蓮沼ウォーターガーデン🌊 いぶファミリーと',cat:'pool',child:'all',manabu:'水の深さ・速さを比べてみよう',_fixed:true}],
+  '2026-08-17':[{name:'マルベリーサマースクール🍓 9:30〜14:00 1日め',cat:'study',child:'all',manabu:'',_fixed:true}],
+  '2026-08-18':[{name:'マルベリーサマースクール🍓 9:30〜14:00 2日め',cat:'study',child:'all',manabu:'',_fixed:true}],
+  '2026-08-19':[{name:'マルベリーサマースクール🍓 9:30〜14:00 3日め',cat:'study',child:'all',manabu:'',_fixed:true}],
+  '2026-08-20':[{name:'パパ病院でおやすみ🏥',cat:'other',child:'all',manabu:'',_fixed:true}],
+  '2026-08-21':[{name:'マルベリーサマースクール🍓 9:30〜14:00 最終日',cat:'study',child:'all',manabu:'学んだことを英語でまとめよう',_fixed:true}],
+  '2026-08-24':[{name:'夏期講習📖 10:00〜12:00',cat:'study',child:'1',manabu:'',_fixed:true}],
+  '2026-08-25':[{name:'夏期講習📖 10:00〜12:00',cat:'study',child:'1',manabu:'',_fixed:true}],
+  '2026-08-26':[{name:'夏期講習📖 10:00〜12:00',cat:'study',child:'1',manabu:'',_fixed:true}],
+  '2026-08-27':[
+    {name:'夏期講習📖 10:00〜12:00',cat:'study',child:'1',manabu:'',_fixed:true},
+    {name:'幼稚園 夏祭り🎆 9:00〜',cat:'event',child:'2',manabu:'夏祭りで楽しかったことを日記に',_fixed:true},
+  ],
+  '2026-08-28':[{name:'夏期講習📖 10:00〜12:00',cat:'study',child:'1',manabu:'',_fixed:true}],
+  '2026-08-30':[{name:'ドルフィン🐬',cat:'pool',child:'all',manabu:'',_fixed:true}],
+  '2026-08-31':[
+    {name:'ドルフィンのお友達とナンジャタウン🎡',cat:'event',child:'all',manabu:'どんなアトラクションが好きだった？英語で話してみよう',_fixed:true},
+    {name:'なつやすみ最終日🌻',cat:'event',child:'all',manabu:'',_fixed:true},
+  ],
+};
+Object.entries(PRESET_EVENTS).forEach(([dk,evs])=>{
+  if(!D.events[dk])D.events[dk]=[];
+  evs.forEach(ev=>{if(!D.events[dk].some(e=>e._fixed&&e.name.startsWith(ev.name.slice(0,4))))D.events[dk].unshift(ev);});
+});
+
+// チェックリストに新アイテムを追加（既存データのマイグレーション）
+function chkMigrate(child,id,text){
+  if(!D.chk[child])D.chk[child]={items:[],done:{}};
+  if(!D.chk[child].items.some(i=>i.id===id))D.chk[child].items.push({text,id});
+}
+chkMigrate('1',104,'📖 英語の多読');
+chkMigrate('1',105,'🎓 英検サイト');
+chkMigrate('2',204,'📖 英語の多読');
+save();
+
+// 時間データがない、またはレッスン名が古いケイコデータはリセット
+if(!D.keiko||D.keiko.length===0||!D.keiko.some(k=>k.time)||D.keiko.some(k=>k.name==='ExPLORE レッスン'||k.name==='ExPLORE grammar')){
+  D.keiko=[
+    // 月曜
+    {name:'ピアノ',          days:['1'],child:'1', time:'15:30',timeEnd:'16:10'},
+    {name:'ExPLORE Play with Phonics',days:['1'],child:'2', time:'17:30',timeEnd:'18:00'},
+    {name:'ExPLORE Project',         days:['1'],child:'all',time:'18:00',timeEnd:'18:30'},
+    {name:'ExPLORE 時代シリーズ',days:['1'],child:'all',time:'18:30',timeEnd:''},
+    // 火曜
+    {name:'スイミング',      days:['2'],child:'2', time:'16:30',timeEnd:'17:30'},
+    {name:'スイミング',      days:['2'],child:'1', time:'17:30',timeEnd:'18:30'},
+    // 水曜
+    {name:'体操教室',        days:['3'],child:'2', time:'16:30',timeEnd:'17:30'},
+    {name:'体操教室',        days:['3'],child:'1', time:'17:30',timeEnd:'18:30'},
+    {name:'ExPLORE ブッククラブ',days:['3'],child:'1',time:'19:15',timeEnd:''},
+    // 木曜
+    {name:'ExPLORE ブッククラブ',days:['4'],child:'2',time:'18:30',timeEnd:''},
+    // 金曜
+    {name:'ExPLORE Grow',    days:['5'],child:'1', time:'17:00',timeEnd:''},
+    // 土日
+    {name:'ExPLORE weekend', days:['6','0'],child:'all',time:'9:00',timeEnd:''},
+  ];
+}
+save();
+
+// ===== 今日のようす =====
+const SLOT_TIMES={'起きる':'6:30','オンライン英会話':'7:00','朝の運動':'8:00','朝ごはん':'8:30','ねる':'20:00'};
+
+function parseTimeStr(s){if(!s)return null;const m=s.match(/(\d{1,2}):(\d{2})/);return m?{h:parseInt(m[1]),m:parseInt(m[2])}:null;}
+function isNightH(h){return h>=20||h<6;}
+function toDecH(t){return t.h+t.m/60;}
+
+// 子ども切り替え（時計・今日リスト用）
+let todayChild='1';
+function selTodayChild(c,btn){
+  todayChild=c;
+  document.querySelectorAll('#today-child-row .cb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  requestAnimationFrame(drawClock);
+  renderTodayList();
+}
+
+function getTodayActivities(dow,dk){
+  const acts=[];
+  // 朝ルーティン（固定・全員）
+  const morning=[
+    {label:'🌅 起きる',   hS:6,mS:30,hE:null,mE:null,color:'#FFAA33'},
+    {label:'💻 英会話',   hS:7,mS:0, hE:8,  mE:0,  color:'#FFAA33'},
+    {label:'🏃 朝の運動', hS:8,mS:0, hE:8,  mE:30, color:'#FFAA33'},
+    {label:'🍚 朝ごはん', hS:8,mS:30,hE:9,  mE:0,  color:'#FFAA33'},
+    {label:'🌙 おやすみ', hS:20,mS:0,hE:null,mE:null,color:'#6677CC'},
+  ];
+  acts.push(...morning);
+  // 習い事（子どもフィルタ）
+  (D.keiko||[]).filter(k=>{
+    if(!(k.days||[]).includes(String(dow)))return false;
+    if(k.child==='all')return true;
+    return k.child===todayChild;
+  }).forEach(k=>{
+    const s=parseTimeStr(k.time);const e=parseTimeStr(k.timeEnd);
+    if(!s)return;
+    const col=k.child==='1'?'#FF85A2':k.child==='2'?'#7EC58D':'#A78FD4';
+    acts.push({label:'🎵 '+k.name,hS:s.h,mS:s.m,hE:e?e.h:null,mE:e?e.m:null,color:col,keiko:k});
+  });
+  // 今日のイベント
+  (D.events[dk]||[]).forEach(e=>{
+    const s=parseTimeStr(e.name);
+    const cat=CATS.find(c=>c.id===e.cat)||CATS[8];
+    if(s)acts.push({label:cat.icon+' '+e.name,hS:s.h,mS:s.m,hE:null,mE:null,color:cat.color,event:e});
+    else acts.push({label:cat.icon+' '+e.name,hS:null,mS:null,hE:null,mE:null,color:cat.color,event:e});
+  });
+  return acts;
+}
+
+function drawClock(){
+  // 旧キャンバス時計 - 削除済み（タイムラインに置換）
+  return;
+  const parent=canvas.parentElement;
+  const S=Math.min(parent.clientWidth-8,280);
+  if(S<=0)return;
+  const dpr=window.devicePixelRatio||1;
+  canvas.width=S*dpr; canvas.height=S*dpr;
+  canvas.style.width=S+'px'; canvas.style.height=S+'px';
+  const ctx=canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+
+  const cx=S/2,cy=S/2;
+  const Ro=S/2-2;       // 最外（tick外端）
+  const Rti=Ro*.878;    // tick内端（major）
+  const Rn=Ro*.808;     // 数字ラベル
+  const Rb=Ro*.745;     // 昼夜帯外端
+  const Rc=Ro*.375;     // 中央白円
+  const Rarcout=Rb-2;   // アクティビティアーク外端
+  const Rarcin=Rc+2;    // アクティビティアーク内端
+  const ARCTH=(Rarcout-Rarcin)/3.2; // アーク厚み（3層）
+
+  const t2a=(h,m=0)=>((h+m/60)/24)*Math.PI*2-Math.PI/2;
+
+  ctx.clearRect(0,0,S,S);
+
+  // ── 昼夜ベース帯 ──
+  ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,Rb,t2a(20),t2a(6));ctx.closePath();
+  ctx.fillStyle='#1B2462';ctx.fill();
+  ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,Rb,t2a(6),t2a(20));ctx.closePath();
+  ctx.fillStyle='#FFF3CC';ctx.fill();
+
+  // ── アクティビティアーク ──
+  const now=new Date();const dow=now.getDay();
+  const dk=`${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
+  const acts=getTodayActivities(dow,dk).filter(a=>a.hS!==null);
+
+  // アーク用ユーティリティ
+  function drawArc(hS,mS,hE,mE,color,trackIdx){
+    const durMin=(hE!=null)?((hE-hS)*60+(mE-mS)):15;
+    const aS=t2a(hS,mS);
+    const aE=t2a(hS,mS+Math.max(durMin,12));
+    const ro=Rarcout-trackIdx*ARCTH;
+    const ri=ro-ARCTH+1.5;
+    ctx.beginPath();
+    ctx.arc(cx,cy,ro,aS,aE);
+    ctx.arc(cx,cy,ri,aE,aS,true);
+    ctx.closePath();
+    ctx.fillStyle=color+'CC';
+    ctx.fill();
+    // 開始点ドット
+    const amid=(aS+aE)/2;
+    ctx.beginPath();ctx.arc(cx+Math.cos(aS)*((ro+ri)/2),cy+Math.sin(aS)*((ro+ri)/2),2.5,0,Math.PI*2);
+    ctx.fillStyle=color;ctx.fill();
+  }
+
+  // 層を分ける：朝ルーティン=0, 習い事=1, イベント=2
+  acts.forEach(a=>{
+    const track=a.keiko?(a.keiko.child==='all'?1:1):a.event?2:0;
+    drawArc(a.hS,a.mS,a.hE,a.mE,a.color,track);
+  });
+
+  // ── 中央白円 ──
+  ctx.beginPath();ctx.arc(cx,cy,Rc,0,Math.PI*2);
+  ctx.fillStyle='#FFFFFF';ctx.fill();
+  ctx.strokeStyle='#E8E0FF';ctx.lineWidth=1.5;ctx.stroke();
+
+  // ── tick / 数字 ──
+  for(let h=0;h<24;h++){
+    const a=t2a(h);const major=h%3===0;
+    ctx.beginPath();
+    ctx.moveTo(cx+Math.cos(a)*(major?Rti:Rti+(Ro-Rti)*.4),cy+Math.sin(a)*(major?Rti:Rti+(Ro-Rti)*.4));
+    ctx.lineTo(cx+Math.cos(a)*Ro,cy+Math.sin(a)*Ro);
+    ctx.strokeStyle=major?'#999':'#ccc';ctx.lineWidth=major?1.5:.7;ctx.stroke();
+  }
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  for(let h=0;h<24;h+=3){
+    const a=t2a(h);
+    ctx.fillStyle=isNightH(h)?'#8899DD':'#888';
+    ctx.font=`${S*.041}px sans-serif`;
+    ctx.fillText(h,cx+Math.cos(a)*Rn,cy+Math.sin(a)*Rn);
+  }
+
+  // ── 現在時刻の針 ──
+  const curH=now.getHours()+now.getMinutes()/60;
+  const ha=t2a(curH);
+  ctx.save();
+  ctx.beginPath();ctx.moveTo(cx,cy);
+  ctx.lineTo(cx+Math.cos(ha)*Rb*.9,cy+Math.sin(ha)*Rb*.9);
+  ctx.strokeStyle='#FF4D94';ctx.lineWidth=3;ctx.lineCap='round';
+  ctx.shadowColor='rgba(255,77,148,.6)';ctx.shadowBlur=8;
+  ctx.stroke();ctx.restore();
+  ctx.beginPath();ctx.arc(cx,cy,5,0,Math.PI*2);
+  ctx.fillStyle='#FF4D94';ctx.fill();
+
+  // ── 中央：時刻 + 子ども名 ──
+  const hh=String(now.getHours()).padStart(2,'0');
+  const mm=String(now.getMinutes()).padStart(2,'0');
+  const isAM=now.getHours()<12;
+  const childName=todayChild==='1'?'ゆうき':'ひろき';
+  const childEmoji=todayChild==='1'?'🌸':'🌻';
+
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillStyle='#3D3250';
+  ctx.font=`900 ${S*.092}px sans-serif`;
+  ctx.fillText(`${hh}:${mm}`,cx,cy-S*.032);
+
+  ctx.font=`${S*.04}px 'Hiragino Maru Gothic ProN',sans-serif`;
+  ctx.fillStyle=isAM?'#FF9F43':'#4A5AB0';
+  ctx.fillText(isAM?'午前☀️':'午後🌙',cx,cy+S*.038);
+
+  ctx.font=`bold ${S*.042}px 'Hiragino Maru Gothic ProN',sans-serif`;
+  ctx.fillStyle='#888';
+  ctx.fillText(`${childEmoji}${childName}`,cx,cy+S*.088);
+}
+
+function renderTimeline(){
+  const now=new Date();
+  const dk=`${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
+  const dow=now.getDay();
+  const wrap=document.getElementById('today-timeline');
+  wrap.innerHTML='';
+
+  // アイテム収集
+  const items=[];
+  const isWeekday=dow>=1&&dow<=5;
+  // 朝ルーティン（平日・休日で分岐、子ども別）
+  if(isWeekday){
+    // 平日共通
+    items.push({sort:'06:40',time:'6:40',   label:'🍚 朝ごはん',       color:'#FFAA33'});
+    items.push({sort:'08:00',time:'8:00',   label:'🚪 出発',            color:'#FF9F43'});
+    items.push({sort:'20:00',time:'20:00',  label:'🌙 おやすみ',        color:'#6677CC'});
+    if(todayChild==='1'){
+      // ゆうき：7:00〜7:25 英会話、7:30〜 着替え・身支度・朝のワーク
+      items.push({sort:'07:00',time:'7:00〜7:25',label:'💻 オンライン英会話',color:'#FFAA33'});
+      items.push({sort:'07:30',time:'7:30',      label:'👕 着替え・身支度・朝のワーク',color:'#7EC58D'});
+    } else {
+      // ひろき：7:00〜 着替え・身支度・朝のワーク、7:30〜7:55 英会話
+      items.push({sort:'07:00',time:'7:00',      label:'👕 着替え・身支度・朝のワーク',color:'#7EC58D'});
+      items.push({sort:'07:30',time:'7:30〜7:55',label:'💻 オンライン英会話',color:'#FFAA33'});
+    }
+  } else {
+    // 休日
+    items.push({sort:'06:30',time:'6:30',  label:'🌅 起きる',          color:'#FFAA33'});
+    items.push({sort:'08:30',time:'8:30',  label:'🍚 朝ごはん',        color:'#FFAA33'});
+    items.push({sort:'20:00',time:'20:00', label:'🌙 おやすみ',        color:'#6677CC'});
+  }
+
+  // 習い事（子どもフィルタ）
+  (D.keiko||[]).filter(k=>{
+    if(!(k.days||[]).includes(String(dow)))return false;
+    return k.child==='all'||k.child===todayChild;
+  }).forEach(k=>{
+    const col=k.child==='1'?'#FF85A2':k.child==='2'?'#7EC58D':'#A78FD4';
+    const who=k.child==='all'?'🌈 ふたり':k.child==='1'?'🌸 ゆうき':'🌻 ひろき';
+    items.push({sort:k.time||'23:59',time:k.time+(k.timeEnd?'〜'+k.timeEnd:''),
+      label:'🎵 '+k.name,sub:who,color:col});
+  });
+
+  // 今日のイベント
+  (D.events[dk]||[]).forEach(e=>{
+    const t=parseTimeStr(e.name);
+    const cat=CATS.find(c=>c.id===e.cat)||CATS[8];
+    items.push({sort:t?`${pad(t.h)}:${pad(t.m)}`:'06:00',
+      time:t?`${t.h}:${pad(t.m)}`:'',label:cat.icon+' '+e.name,
+      manabu:e.manabu,color:cat.color});
+  });
+
+  items.sort((a,b)=>a.sort.localeCompare(b.sort));
+
+  // 現在時刻（HH:MM文字列）
+  const nowStr=`${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  let nowInserted=false;
+
+  items.forEach(item=>{
+    // 現在時刻マーカーを挿入
+    if(!nowInserted && item.sort>nowStr){
+      nowInserted=true;
+      const nowEl=document.createElement('div');
+      nowEl.className='tl-now';
+      nowEl.innerHTML=`<div class="tl-now-line"></div><div class="tl-now-label">▶ 今 ${nowStr}</div><div class="tl-now-line"></div>`;
+      wrap.appendChild(nowEl);
+    }
+    const el=document.createElement('div');
+    el.className='tl-item';
+    const isPast=item.sort<nowStr;
+    el.style.opacity=isPast?'0.45':'1';
+    el.innerHTML=`
+      <div class="tl-time">${item.time||''}</div>
+      <div class="tl-dot" style="background:${item.color}"></div>
+      <div class="tl-body">
+        <div class="tl-name">${item.label}</div>
+        ${item.sub?`<div class="tl-sub">${item.sub}</div>`:''}
+        ${item.manabu?`<div class="tl-sub" style="color:#A29BFE">✦ ${item.manabu}</div>`:''}
+      </div>`;
+    wrap.appendChild(el);
+  });
+  if(!nowInserted){
+    const nowEl=document.createElement('div');
+    nowEl.className='tl-now';
+    nowEl.innerHTML=`<div class="tl-now-line"></div><div class="tl-now-label">▶ 今 ${nowStr}</div><div class="tl-now-line"></div>`;
+    wrap.appendChild(nowEl);
+  }
+}
+
+let tlTimer=null;
+function renderTodayView(){
+  const now=new Date();
+  const wdays=['日','月','火','水','木','金','土'];
+  document.getElementById('today-date-big').textContent=
+    `${now.getMonth()+1}月${now.getDate()}日（${wdays[now.getDay()]}） ☀️`;
+  renderTimeline();
+  if(tlTimer)clearInterval(tlTimer);
+  tlTimer=setInterval(()=>{
+    if(document.getElementById('page-mainichi').classList.contains('on'))renderTimeline();
+  },60000);
+}
+
+function selTodayChild(c,btn){
+  todayChild=c;
+  document.querySelectorAll('#today-child-row .cb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderTimeline();
+}
+
+// ===== まなび =====
+const MANABI_GENRES=[
+  {id:'考える', icon:'🧠', color:'#5B9BD5', bg:'#F0F6FF', border:'#AED8F0'},
+  {id:'ことば', icon:'📝', color:'#E8A020', bg:'#FFFBF0', border:'#FFDAC1'},
+  {id:'英語',   icon:'🌍', color:'#8B6FD4', bg:'#F8F0FF', border:'#C7CEEA'},
+  {id:'理科',   icon:'🔬', color:'#5CB87A', bg:'#F0FFF4', border:'#B5EAD7'},
+  {id:'社会',   icon:'🗺️', color:'#FF9F43', bg:'#FFF8EE', border:'#FFDAC1'},
+  {id:'からだ', icon:'💪', color:'#FF6BA8', bg:'#FFF0F6', border:'#FFB7C5'},
+  {id:'こころ', icon:'💗', color:'#FF85A2', bg:'#FFF0F4', border:'#FFD3DE'},
+  {id:'つくる', icon:'🎨', color:'#A29BFE', bg:'#F3F0FF', border:'#C7CEEA'},
+];
+
+let manabiChild='1';
+function selManabiChild(c,btn){
+  manabiChild=c;
+  document.querySelectorAll('#manabi-child-row .cb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderManabiPage();
+}
+
+function isoWeekKey(){
+  const d=new Date();
+  const jan4=new Date(d.getFullYear(),0,4);
+  const w=Math.ceil(((d-jan4)/86400000+jan4.getDay()+1)/7);
+  return `${d.getFullYear()}-W${String(w).padStart(2,'0')}`;
+}
+
+function getManabiData(genre){
+  if(!D.manabi)D.manabi={'1':{},'2':{}};
+  if(!D.manabi[manabiChild])D.manabi[manabiChild]={};
+  if(!D.manabi[manabiChild][genre])D.manabi[manabiChild][genre]={year:'',tasks:[],done:{}};
+  return D.manabi[manabiChild][genre];
+}
+
+function renderManabiCards(){
+  const wrap=document.getElementById('manabi-cards');
+  wrap.innerHTML='';
+  const week=isoWeekKey();
+  MANABI_GENRES.forEach(g=>{
+    const data=getManabiData(g.id);
+    const tasks=data.tasks||[];
+    const doneThis=(data.done[week]||[]);
+    const doneCount=tasks.filter(t=>doneThis.includes(t.id)).length;
+    const pct=tasks.length?Math.round(doneCount/tasks.length*100):0;
+
+    const card=document.createElement('div');
+    card.className='manabi-genre-card';
+    card.style.borderLeftColor=g.color;
+    card.style.background=g.bg;
+
+    // タスクHTML
+    const tasksHTML=tasks.length?tasks.map(t=>{
+      const done=doneThis.includes(t.id);
+      return `<div class="manabi-task-item">
+        <div class="manabi-task-circle${done?' done':''}" onclick="toggleManabiTask('${g.id}',${t.id})">${done?'✓':''}</div>
+        <div class="manabi-task-text${done?' done':''}">${t.text}</div>
+        <button class="manabi-task-del" onclick="delManabiTask('${g.id}',${t.id})">✕</button>
+      </div>`;
+    }).join('')
+    :'<p style="font-size:12px;color:var(--muted);padding:4px 0">＋ 今週やることを追加してね</p>';
+
+    card.innerHTML=`
+      <div class="manabi-genre-head">
+        <span class="manabi-genre-icon">${g.icon}</span>
+        <span class="manabi-genre-title" style="color:${g.color}">${g.id}</span>
+      </div>
+      <div class="manabi-year-wrap">
+        <div class="manabi-year-label">🎯 今年のもくひょう</div>
+        <input class="manabi-year-inp" placeholder="例：本を20冊よむ" value="${data.year||''}"
+          oninput="saveManabiYear('${g.id}',this.value)">
+      </div>
+      <div class="manabi-week-head">
+        <span class="manabi-week-title">📋 今週のやること</span>
+        <span class="manabi-week-badge" style="background:${g.border};color:${g.color}">${doneCount}/${tasks.length}</span>
+      </div>
+      <div class="manabi-week-prog"><div class="manabi-week-bar" style="width:${pct}%;background:${g.color}"></div></div>
+      ${tasksHTML}
+      <div class="manabi-add-row">
+        <input class="manabi-add-inp" id="manabi-inp-${g.id}" placeholder="やることを追加…"
+          onkeydown="if(event.key==='Enter')addManabiTask('${g.id}')">
+        <button class="manabi-add-btn" style="background:${g.color}" onclick="addManabiTask('${g.id}')">＋</button>
+      </div>`;
+    wrap.appendChild(card);
+  });
+}
+
+function saveManabiYear(genre,val){
+  getManabiData(genre).year=val;
+  save();
+}
+function addManabiTask(genre){
+  const inp=document.getElementById(`manabi-inp-${genre}`);
+  const text=inp.value.trim();if(!text)return;
+  const data=getManabiData(genre);
+  data.tasks.push({text,id:Date.now()});
+  inp.value='';save();renderManabiCards();
+}
+function toggleManabiTask(genre,id){
+  const week=isoWeekKey();
+  const data=getManabiData(genre);
+  if(!data.done[week])data.done[week]=[];
+  const idx=data.done[week].indexOf(id);
+  if(idx>=0)data.done[week].splice(idx,1);
+  else data.done[week].push(id);
+  save();renderManabiCards();
+}
+function delManabiTask(genre,id){
+  const data=getManabiData(genre);
+  data.tasks=data.tasks.filter(t=>t.id!==id);
+  save();renderManabiCards();
+}
+
+// ===== バランスグラフ =====
+function renderBalance(){
+  if(!document.getElementById('balance-bars'))return;
+  const twoWeeksAgo=Date.now()-14*24*60*60*1000;
+  const logs=(D.manabiLog||[]).filter(l=>l.child===manabiChild&&l.date>=twoWeeksAgo);
+  const counts={};
+  MANABI_GENRES.forEach(g=>{counts[g.id]=0;});
+  logs.forEach(l=>{if(counts[l.subject]!==undefined)counts[l.subject]++;});
+  const max=Math.max(...Object.values(counts),1);
+
+  // 少ないジャンル検出（0件 or 平均以下）
+  const avg=logs.length/MANABI_GENRES.length;
+  const low=MANABI_GENRES.filter(g=>counts[g.id]===0||(logs.length>3&&counts[g.id]<avg*.5));
+  const alertEl=document.getElementById('balance-alert');
+  if(low.length){
+    const tips={'考える':'算数パズルや謎解きを試してみよう！','ことば':'日記や音読、本の感想を話してみよう！',
+      '英語':'英語の歌や絵本を楽しんでみよう！','理科':'お料理で実験、虫や植物を観察してみよう！',
+      '社会':'お買い物でお金の話をしてみよう！','からだ':'外遊び・お散歩・踊ってみよう！',
+      'こころ':'友達のこと、感じたことを話してみよう！','つくる':'絵を描いたり、料理・工作をしてみよう！'};
+    alertEl.innerHTML=low.slice(0,2).map(g=>
+      `<div class="balance-alert">${g.icon} <b>${g.id}</b> が最近少ないかも💡<br><span style="color:var(--muted)">${tips[g.id]||''}</span></div>`
+    ).join('');
+  } else {
+    alertEl.innerHTML=logs.length?'<div class="balance-alert" style="background:#F0FFF4;border-color:#B5EAD7"><b>🌈 バランスよく学んでいます！すごい！</b></div>':'';
+  }
+
+  const barsEl=document.getElementById('balance-bars');
+  barsEl.innerHTML=MANABI_GENRES.map(g=>`
+    <div class="balance-row">
+      <div class="balance-label">${g.icon} ${g.id}</div>
+      <div class="balance-track"><div class="balance-fill" style="width:${Math.round(counts[g.id]/max*100)}%;background:${g.color}"></div></div>
+      <div class="balance-count">${counts[g.id]}</div>
+    </div>`).join('');
+}
+
+// ===== 学びログモーダル =====
+let mlogChild='1';
+let mlogGenre=null;
+let mlogKeywords=[];
+
+function openManabiLog(){
+  mlogChild=manabiChild;
+  mlogGenre=null;
+  mlogKeywords=[];
+  // 子ども初期化
+  document.querySelectorAll('#mlog-child-row .cb').forEach((b,i)=>{
+    b.classList.toggle('on',i===0?(mlogChild==='1'):mlogChild==='2');
+  });
+  // ジャンルボタン生成
+  const grid=document.getElementById('mlog-genre-grid');
+  grid.innerHTML=MANABI_GENRES.map(g=>
+    `<button class="mlog-genre-btn" style="border-color:${g.border}" onclick="selMlogGenre('${g.id}',this)">${g.icon}<br>${g.id}</button>`
+  ).join('');
+  document.getElementById('mlog-text').value='';
+  document.getElementById('mlog-kw-ja').value='';
+  document.getElementById('mlog-kw-en').value='';
+  document.getElementById('mlog-quiz-q').value='';
+  document.getElementById('mlog-quiz-a').value='';
+  document.getElementById('mlog-kw-chips').innerHTML='';
+  document.getElementById('mlog-overlay').classList.add('open');
+}
+function closeManabiLog(){document.getElementById('mlog-overlay').classList.remove('open');}
+
+function selMlogChild(c,btn){
+  mlogChild=c;
+  document.querySelectorAll('#mlog-child-row .cb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+}
+function selMlogGenre(id,btn){
+  mlogGenre=id;
+  const g=MANABI_GENRES.find(x=>x.id===id);
+  document.querySelectorAll('.mlog-genre-btn').forEach(b=>{b.classList.remove('on');b.style.background='white';b.style.color='';});
+  btn.classList.add('on');btn.style.background=g.color;btn.style.color='white';
+}
+
+function renderKwChips(){
+  document.getElementById('mlog-kw-chips').innerHTML=mlogKeywords.map((kw,i)=>
+    `<span class="kw-chip">${kw.ja} → <b>${kw.en}</b>
+      <button onclick="speakWord('${kw.en.replace(/'/g,"\\'")}')">🔊</button>
+      <button onclick="removeKeyword(${i})">✕</button></span>`
+  ).join('');
+}
+function addKeyword(){
+  const ja=document.getElementById('mlog-kw-ja').value.trim();
+  const en=document.getElementById('mlog-kw-en').value.trim();
+  if(!ja&&!en)return;
+  mlogKeywords.push({ja,en});
+  document.getElementById('mlog-kw-ja').value='';
+  document.getElementById('mlog-kw-en').value='';
+  renderKwChips();
+}
+function removeKeyword(i){mlogKeywords.splice(i,1);renderKwChips();}
+
+function saveManabiLog(){
+  const text=document.getElementById('mlog-text').value.trim();
+  if(!text&&!mlogKeywords.length){alert('学んだことを入力してね！');return;}
+  if(!mlogGenre){alert('ジャンルを選んでね！');return;}
+  const quizQ=document.getElementById('mlog-quiz-q').value.trim();
+  const quizA=document.getElementById('mlog-quiz-a').value.trim();
+  if(!D.manabiLog)D.manabiLog=[];
+  D.manabiLog.unshift({id:Date.now(),date:Date.now(),child:mlogChild,subject:mlogGenre,
+    text,keywords:[...mlogKeywords],quiz:quizQ?{q:quizQ,a:quizA}:null});
+  save();
+  closeManabiLog();
+  renderManabiPage();
+}
+
+function renderManabiPage(){
+  renderBalance();
+  renderWordBank();
+  renderManabiLogList();
+  renderManabiCards();
+}
+
+// ===== 単語バンク =====
+function renderWordBank(){
+  const logs=(D.manabiLog||[]).filter(l=>l.child===manabiChild&&(l.keywords||[]).length);
+  const wrap=document.getElementById('wordbank-wrap');
+  const list=document.getElementById('wordbank-list');
+  if(!logs.length){wrap.style.display='none';return;}
+  wrap.style.display='block';
+  const allKws=[];
+  logs.forEach(l=>(l.keywords||[]).forEach(kw=>allKws.push({...kw,ctx:l.text,subject:l.subject})));
+  list.innerHTML=allKws.map(kw=>{
+    const g=MANABI_GENRES.find(x=>x.id===kw.subject)||MANABI_GENRES[0];
+    return `<div class="wordbank-item">
+      <div class="wb-words">
+        <div class="wb-ja">${kw.ja}</div>
+        <div class="wb-en">${kw.en}</div>
+        <div class="wb-ctx">${g.icon} ${kw.ctx?kw.ctx.slice(0,30)+'…':''}</div>
+      </div>
+      ${kw.en?`<button class="wb-speak" onclick="speakWord('${kw.en.replace(/'/g,"\\'")}')">🔊 聞く</button>`:''}
+    </div>`;
+  }).join('');
+}
+
+// ===== 学びログ一覧 =====
+function renderManabiLogList(){
+  const logs=(D.manabiLog||[]).filter(l=>l.child===manabiChild);
+  const wrap=document.getElementById('manabilog-wrap');
+  const list=document.getElementById('manabilog-list');
+  if(!logs.length){wrap.style.display='none';return;}
+  wrap.style.display='block';
+  list.innerHTML=logs.slice(0,20).map(l=>{
+    const g=MANABI_GENRES.find(x=>x.id===l.subject)||MANABI_GENRES[0];
+    const d=new Date(l.date);
+    const dstr=`${d.getMonth()+1}/${d.getDate()}`;
+    const quizHTML=l.quiz?`<div style="margin-top:4px;background:#F3F0FF;border-radius:8px;padding:6px 10px;font-size:11px">
+      <b>Q:</b> ${l.quiz.q}<br><b>A:</b> ${l.quiz.a}</div>`:'';
+    const kwHTML=(l.keywords||[]).length?`<div style="margin-top:4px">${l.keywords.map(kw=>
+      `<span class="kw-chip">${kw.ja}→<b>${kw.en}</b><button onclick="speakWord('${kw.en.replace(/'/g,"\\'")}')">🔊</button></span>`
+    ).join('')}</div>`:'';
+    return `<div class="log-item">
+      <div class="log-item-head">
+        <span class="log-genre-tag" style="background:${g.color}">${g.icon} ${g.id}</span>
+        <span style="font-size:11px;color:var(--muted)">${dstr}</span>
+      </div>
+      <div style="font-size:13px">${l.text}</div>
+      ${kwHTML}${quizHTML}
+    </div>`;
+  }).join('');
+}
+
+// ===== 音声入力 =====
+let activeRecognition=null;
+function startVoice(lang,targetId){
+  const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SpeechRecognition){alert('このブラウザは音声入力に対応していません。Chromeをお試しください。');return;}
+  if(activeRecognition){activeRecognition.stop();activeRecognition=null;return;}
+  const rec=new SpeechRecognition();
+  rec.lang=lang;rec.interimResults=false;rec.maxAlternatives=1;
+  const btnId=lang==='ja-JP'?'mlog-mic-ja':'mlog-mic-en';
+  const btn=document.getElementById(btnId);
+  if(btn)btn.classList.add('listening');
+  activeRecognition=rec;
+  rec.onresult=e=>{
+    const t=e.results[0][0].transcript;
+    const el=document.getElementById(targetId);
+    if(el.tagName==='TEXTAREA')el.value+=(el.value?'\n':'')+t;
+    else el.value=t;
+  };
+  rec.onend=()=>{if(btn)btn.classList.remove('listening');activeRecognition=null;};
+  rec.onerror=()=>{if(btn)btn.classList.remove('listening');activeRecognition=null;};
+  rec.start();
+}
+
+// ===== 英語読み上げ =====
+function speakWord(text){
+  if(!text||!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='en-US';u.rate=0.85;
+  window.speechSynthesis.speak(u);
+}
+
+// ===== エクスポート／インポート =====
+function exportData(){
+  const json=JSON.stringify(D,null,2);
+  const blob=new Blob([json],{type:'application/json'});
+  const a=document.createElement('a');
+  const date=new Date();
+  const fname=`yuuki-hiroki-${date.getFullYear()}${pad(date.getMonth()+1)}${pad(date.getDate())}.json`;
+  a.href=URL.createObjectURL(blob);
+  a.download=fname;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+function importData(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      const imported=JSON.parse(ev.target.result);
+      if(!imported.events&&!imported.chk){alert('このファイルは正しくないようです');return;}
+      if(!confirm('データを読み込みます。現在のデータは上書きされます。よろしいですか？'))return;
+      Object.assign(D,imported);
+      save();
+      location.reload();
+    }catch(err){alert('読み込みに失敗しました');}
+  };
+  reader.readAsText(file);
+  e.target.value='';
+}
+
+// ===== 英語まとめ =====
+const ENG_CAT={beach:'the beach',pool:'swimming',trip:'an outing',nature:'nature exploration',
+  study:'studying',event:'a special event',sport:'sports',cook:'cooking',other:'activities'};
+const ENG_PLACE={
+  '上板橋科学館':'the science museum','地元 海':'the local beach','芦ヶ久保':'Ashigakubo nature trail',
+  '蓮沼ウォーターパーク':'Hasunuma Water Park','ExPLORE夏合宿':'ExPLORE summer camp',
+  'マルベリーサマースクール':'Mulberry Summer School','ドルフィン':'the dolphin aquarium',
+};
+
+function openEngModal(){
+  const text=generateEnglish();
+  document.getElementById('eng-text').textContent=text;
+  document.getElementById('copy-ok').style.display='none';
+  document.getElementById('eng-overlay').classList.add('open');
+}
+function closeEngModal(){document.getElementById('eng-overlay').classList.remove('open');}
+function copyEngText(){
+  navigator.clipboard.writeText(document.getElementById('eng-text').textContent).then(()=>{
+    const ok=document.getElementById('copy-ok');ok.style.display='block';
+    setTimeout(()=>ok.style.display='none',2000);
+  });
+}
+
+function generateEnglish(){
+  const places=[];
+  const activities=new Set();
+  // カレンダーから場所・活動を収集
+  Object.entries(D.events).sort().forEach(([dk,evs])=>{
+    evs.filter(e=>e._fixed&&e.cat!=='event'||!e._fixed).forEach(e=>{
+      const cat=CATS.find(c=>c.id===e.cat);
+      // 場所マッピング
+      for(const [jp,en] of Object.entries(ENG_PLACE)){
+        if(e.name.includes(jp)){places.push(en);break;}
+      }
+      if(cat&&cat.id!=='other')activities.add(ENG_CAT[cat.id]||cat.id);
+    });
+  });
+  // おもいでから
+  const memoLines=D.memos.map(m=>{
+    const d=m.date.replace(/-/g,'/');
+    return `  • ${m.title||'A wonderful day'} (${d})${m.body?' — '+m.body.slice(0,60)+(m.body.length>60?'...':''):''}`;
+  });
+
+  const uniquePlaces=[...new Set(places)];
+  const actList=[...activities].slice(0,5);
+  const total=Math.round((new Date(2026,7,31)-new Date(2026,6,17))/(1000*60*60*24));
+
+  let text=`🌻 Yuki & Hiroki's Summer 2026 🌻\n`;
+  text+=`${'='.repeat(36)}\n\n`;
+  text+=`Our summer vacation was ${total} days long — July 17 to August 31!\n\n`;
+
+  if(uniquePlaces.length){
+    text+=`🗺️ Places we went:\n`;
+    uniquePlaces.forEach(p=>text+=`  • ${p}\n`);
+    text+='\n';
+  }
+  if(actList.length){
+    text+=`⭐ Things we enjoyed:\n`;
+    actList.forEach(a=>text+=`  • ${a}\n`);
+    text+='\n';
+  }
+  if(memoLines.length){
+    text+=`📸 Our memories:\n`;
+    text+=memoLines.join('\n')+'\n\n';
+  } else {
+    text+=`📸 We haven't written our memories yet — let's add some!\n\n`;
+  }
+
+  // 習い事
+  const knames=(D.keiko||[]).map(k=>k.name);
+  if(knames.length){
+    text+=`🎵 Our regular activities this summer:\n`;
+    knames.forEach(k=>text+=`  • ${k}\n`);
+    text+='\n';
+  }
+
+  text+=`We learned so much and had so much fun! 🌈\n`;
+  text+=`— Yuki (Grade 1) & Hiroki (Grade 3)`;
+  return text;
+}
+
+// ===== 初期化 =====
+buildCatGrid();buildHints();buildStamps();buildGoalEmojiRow();
+renderCal();renderMemos();renderSchedule();renderKeiko();renderChk();renderTodayView();
+
+document.getElementById('memo-date').value=new Date().toISOString().split('T')[0];
+
+// カウントダウン
+const shugyo=new Date(2026,6,17);
+const natsuEnd=new Date(2026,7,31);
+const natsuDays=Math.round((natsuEnd-shugyo)/(1000*60*60*24));
+const today=new Date();
+const toShugyo=Math.ceil((shugyo-today)/(1000*60*60*24));
+const toEnd=Math.ceil((natsuEnd-today)/(1000*60*60*24));
+const elapsed=Math.floor((today-shugyo)/(1000*60*60*24));
+const pct=Math.min(100,Math.max(0,Math.round(elapsed/natsuDays*100)));
+let subMsg;
+if(toShugyo>0) subMsg=`終業式まであと <b>${toShugyo}</b> 日！夏休みは ${natsuDays} 日間 🌟`;
+else if(toEnd>=0) subMsg=`夏休み ${elapsed+1} 日め！残り <b>${toEnd}</b> 日 (${pct}%) 🏖️`;
+else subMsg='2026年の夏休みのきろく 🌻';
+document.getElementById('hd-sub').innerHTML=subMsg;
+</script>
+</body>
+</html>
