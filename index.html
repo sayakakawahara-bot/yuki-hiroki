@@ -208,12 +208,21 @@ body{font-family:'Hiragino Maru Gothic ProN','Hiragino Kaku Gothic ProN','Meiryo
 .cal-cell.today{border-color:#FFB347;background:#FFFBF0;}
 .cal-cell.empty{background:transparent;border-color:transparent;cursor:default;pointer-events:none;}
 .cal-cell.sun .dn{color:#E85D75;} .cal-cell.sat .dn{color:#6B7FD4;}
+.cal-cell.holiday{background:#FFF0F0;} .cal-cell.holiday .dn{color:#E85D75;}
+.cal-cell.natsu{background:#FFFDE7;}
+.cal-cell.holiday.natsu{background:#FFE8E0;}
+.holiday-badge{font-size:7px;background:#FFB3B3;color:#C0392B;border-radius:4px;padding:1px 4px;
+  margin-left:2px;vertical-align:middle;font-weight:bold;}
+.natsu-badge{font-size:7px;background:#FFE082;color:#8B6F00;border-radius:4px;padding:1px 4px;display:block;margin-bottom:2px;font-weight:bold;}
 .dn{font-size:12px;font-weight:bold;margin-bottom:2px;position:relative;}
 .today-badge{font-size:8px;background:#FFB347;color:white;border-radius:5px;padding:1px 3px;
   margin-left:2px;vertical-align:middle;}
 .ev-chip{display:block;font-size:9px;font-weight:bold;padding:2px 4px;border-radius:5px;
   margin:1px 0;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.4;}
 .ev-chip.has-m::after{content:'✦';margin-left:1px;font-size:7px;}
+.ev-chip.yuki{background:linear-gradient(90deg,#FF85A2,#FF6BA8);}
+.ev-chip.hiroki{background:linear-gradient(90deg,#FFB347,#FFA500);}
+.ev-chip.both{background:linear-gradient(90deg,#FF85A2,#FFB347);}
 
 /* ドロワー */
 .drawer-overlay{display:none;position:fixed;inset:0;background:rgba(61,50,80,.38);z-index:200;
@@ -823,6 +832,22 @@ let curY=2026,curM=7,calChild='all',currentDateKey=null;
 function todayKey(){const t=new Date();return `${t.getFullYear()}-${pad(t.getMonth()+1)}-${pad(t.getDate())}`;}
 function pad(n){return String(n).padStart(2,'0');}
 
+// 祝日リスト（年-月-日: 祝日名）
+const HOLIDAYS={
+  '2026-01-01':'元日','2026-01-12':'成人の日','2026-02-11':'建国記念日',
+  '2026-02-23':'天皇誕生日','2026-03-20':'春分の日','2026-04-29':'昭和の日',
+  '2026-05-03':'憲法記念日','2026-05-04':'みどりの日','2026-05-05':'こどもの日',
+  '2026-05-06':'振替休日','2026-07-20':'海の日','2026-08-11':'山の日',
+  '2026-09-21':'敬老の日','2026-09-22':'国民の休日','2026-09-23':'秋分の日',
+  '2026-10-12':'スポーツの日','2026-11-03':'文化の日','2026-11-23':'勤労感謝の日',
+};
+// 夏休み期間
+function isNatsu(y,m,d){
+  if(y===2026&&m===7&&d>=17)return true;
+  if(y===2026&&m===8&&d<=31)return true;
+  return false;
+}
+
 function chMonth(d){curM+=d;if(curM>12){curM=1;curY++;}if(curM<1){curM=12;curY--;}renderCal();}
 
 function renderCal(){
@@ -840,17 +865,34 @@ function renderCal(){
     const dk=`${curY}-${pad(curM)}-${pad(d)}`;
     const isToday=(today.getFullYear()===curY&&today.getMonth()+1===curM&&today.getDate()===d);
     if(isToday)el.classList.add('today');
-    let html=`<div class="dn">${d}${isToday?'<span class="today-badge">今日</span>':''}</div>`;
+    const holiday=HOLIDAYS[dk]||null;
+    const natsu=isNatsu(curY,curM,d);
+    if(holiday)el.classList.add('holiday');
+    if(natsu)el.classList.add('natsu');
+    let html='';
+    if(natsu&&d===17&&curM===7)html+=`<span class="natsu-badge">🌻 夏休みスタート</span>`;
+    else if(natsu&&d===1&&curM===8)html+=`<span class="natsu-badge">☀️ 8月</span>`;
+    html+=`<div class="dn">${d}${isToday?'<span class="today-badge">今日</span>':''}${holiday?`<span class="holiday-badge">${holiday}</span>`:''}</div>`;
     const evs=(D.events[dk]||[]).filter(e=>calChild==='all'||e.child==='all'||e.child===calChild);
-    // 習い事をカレンダーに表示
     const keikoToday=(D.keiko||[]).filter(k=>{
       if(calChild!=='all'&&k.child!=='all'&&k.child!==calChild)return false;
       return(k.days||[]).includes(String(dow));
     });
-    const allEvs=[...evs,...keikoToday.map(k=>({name:k.name,cat:'other',color:'#C7CEEA',_keiko:true}))];
+    const allEvs=[...evs,...keikoToday.map(k=>({name:k.name,cat:'other',_keiko:true,child:k.child}))];
     allEvs.slice(0,2).forEach(e=>{
       const cat=CATS.find(c=>c.id===e.cat)||CATS[8];
-      html+=`<span class="ev-chip${e.manabu?' has-m':''}" style="background:${e._keiko?'#C7CEEA':cat.color}">${e._keiko?'🎵':''}${e.name}</span>`;
+      let chipClass='ev-chip'+(e.manabu?' has-m':'');
+      let chipStyle='';
+      if(e._keiko){
+        if(e.child==='1')chipClass+=' yuki';
+        else if(e.child==='2')chipClass+=' hiroki';
+        else chipClass+=' both';
+      } else {
+        if(e.child==='1')chipClass+=' yuki';
+        else if(e.child==='2')chipClass+=' hiroki';
+        else chipStyle=`background:${cat.color}`;
+      }
+      html+=`<span class="${chipClass}" ${chipStyle?`style="${chipStyle}"`:''}>${e._keiko?'🎵':''}${e.name}</span>`;
     });
     if(allEvs.length>2)html+=`<span style="font-size:8px;color:var(--muted);padding:0 3px">+${allEvs.length-2}</span>`;
     el.innerHTML=html;
