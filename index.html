@@ -223,6 +223,109 @@ body{font-family:'Hiragino Maru Gothic ProN','Hiragino Kaku Gothic ProN','Meiryo
 .ev-chip.yuki{background:linear-gradient(90deg,#FF85A2,#FF6BA8);}
 .ev-chip.hiroki{background:linear-gradient(90deg,#FFB347,#FFA500);}
 .ev-chip.both{background:linear-gradient(90deg,#FF85A2,#FFB347);}
+.ev-chip.cancelled{background:#ccc;text-decoration:line-through;opacity:.7;}
+/* 成長記録・月次まとめ */
+.growth-card{background:white;border-radius:var(--r);padding:16px 18px;box-shadow:0 4px 18px rgba(0,0,0,.07);margin-bottom:12px;}
+.growth-month-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+.growth-month-tab{padding:6px 13px;border-radius:20px;border:2px solid #eee;background:white;font-size:12px;font-weight:bold;cursor:pointer;font-family:inherit;color:var(--muted);transition:all .2s;}
+.growth-month-tab.on{border-color:#FF6BA8;background:#FFF0F6;color:#FF6BA8;}
+.growth-child-tabs{display:flex;gap:6px;margin-bottom:12px;}
+.growth-stat-row{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+.growth-stat{flex:1;min-width:80px;background:#F8F4FF;border-radius:12px;padding:10px 12px;text-align:center;}
+.growth-stat-num{font-size:22px;font-weight:900;color:#FF6BA8;}
+.growth-stat-num.hiroki{color:#FFB347;}
+.growth-stat-label{font-size:10px;color:var(--muted);margin-top:2px;}
+.growth-section-title{font-size:11px;font-weight:bold;color:var(--muted);margin:10px 0 6px;}
+.growth-enjoy-list{display:flex;flex-direction:column;gap:5px;margin-bottom:10px;}
+.growth-enjoy-item{font-size:12px;background:#FFF8F0;border-left:3px solid #FFB347;border-radius:0 8px 8px 0;padding:6px 10px;line-height:1.5;color:var(--text);}
+.growth-enjoy-item.yuki{border-color:#FF85A2;background:#FFF0F6;}
+.growth-coach-item{font-size:12px;background:#F0F8FF;border-left:3px solid #5B9BD5;border-radius:0 8px 8px 0;padding:6px 10px;line-height:1.5;color:var(--text);margin-bottom:4px;}
+.growth-copy-btn{width:100%;padding:11px;border-radius:12px;border:none;background:linear-gradient(135deg,#FF6BA8,#A29BFE);color:white;font-size:13px;font-weight:900;cursor:pointer;font-family:inherit;margin-top:10px;}
+.growth-copy-done{text-align:center;font-size:12px;color:#5CB87A;margin-top:6px;display:none;}
+
+/* 朝・夜コーチングカード */
+.coach-card{border-radius:var(--r);padding:16px 18px;box-shadow:0 4px 18px rgba(0,0,0,.07);margin-bottom:12px;}
+.coach-card.morning{background:linear-gradient(135deg,#FFF8E7,#FFF0F8);}
+.coach-card.evening{background:linear-gradient(135deg,#F0F8FF,#F8F0FF);}
+.coach-theme-badge{display:inline-block;font-size:10px;font-weight:bold;padding:3px 9px;border-radius:20px;margin-bottom:8px;}
+.coach-q{font-size:14px;font-weight:bold;color:var(--text);margin-bottom:7px;line-height:1.5;}
+.coach-q-sub{font-size:11px;color:var(--muted);margin-bottom:6px;line-height:1.5;}
+.coach-inp{width:100%;border:2px solid #F0E8FF;border-radius:12px;padding:9px 12px;font-size:13px;font-family:inherit;resize:none;outline:none;color:var(--text);background:white;}
+.coach-inp:focus{border-color:#FFB347;}
+.coach-save-row{display:flex;align-items:center;gap:8px;margin-top:6px;}
+.coach-save-btn{padding:6px 14px;border-radius:10px;border:none;font-size:12px;font-weight:bold;cursor:pointer;font-family:inherit;color:white;}
+.coach-saved{font-size:11px;color:#5CB87A;display:none;}
+.coach-ans-wrap{margin-bottom:10px;padding-bottom:10px;border-bottom:1px dashed #F0E8FF;}
+.coach-ans-wrap:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.coach-ans-prev{font-size:12px;color:var(--muted);font-style:italic;background:#F8F4FF;border-radius:8px;padding:6px 10px;margin-top:4px;line-height:1.5;}
+
+/* 週目標カード */
+.wgoal-card{background:white;border-radius:var(--r);padding:16px 18px;box-shadow:0 4px 18px rgba(0,0,0,.07);margin-bottom:12px;border-top:4px solid #FFB347;}
+.wgoal-card[data-child="1"]{border-top-color:#FF85A2;}
+.wgoal-card[data-child="2"]{border-top-color:#FFB347;}
+.wgoal-week-label{font-size:10px;font-weight:bold;color:var(--muted);margin-bottom:4px;}
+.wgoal-title{font-size:16px;font-weight:900;margin-bottom:12px;}
+.wgoal-setup-btn{width:100%;padding:13px;border-radius:14px;border:none;color:white;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;letter-spacing:.5px;}
+.wgoal-wants{margin-bottom:12px;}
+.wgoal-wants-title{font-size:11px;font-weight:bold;color:var(--muted);margin-bottom:6px;}
+.wgoal-want-item{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid #F8F4FF;}
+.wgoal-want-item:last-child{border-bottom:none;}
+.wgoal-want-check{width:22px;height:22px;border-radius:50%;border:2.5px solid #ddd;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .2s;}
+.wgoal-want-check.done{background:#FFB347;border-color:#FFB347;color:white;}
+.wgoal-want-check[data-c="1"].done{background:#FF85A2;border-color:#FF85A2;}
+.wgoal-want-text{font-size:13px;color:var(--text);flex:1;}
+.wgoal-want-text.done{text-decoration:line-through;color:var(--muted);}
+.wgoal-challenge-box{background:linear-gradient(135deg,#FFF8F0,#FFF0F8);border:1.5px solid #FFD3DE;border-radius:12px;padding:12px 14px;margin-bottom:10px;}
+.wgoal-challenge-box[data-c="2"]{background:linear-gradient(135deg,#FFFDE7,#FFF8F0);border-color:#FFE082;}
+.wgoal-challenge-label{font-size:10px;font-weight:bold;color:var(--muted);margin-bottom:4px;}
+.wgoal-challenge-text{font-size:13px;font-weight:bold;color:var(--text);margin-bottom:8px;line-height:1.5;}
+.wgoal-reflect-inp{width:100%;border:2px solid #F0E8FF;border-radius:10px;padding:7px 10px;font-size:12px;font-family:inherit;outline:none;resize:none;color:var(--text);}
+.wgoal-reflect-inp:focus{border-color:#FF85A2;}
+.wgoal-reflect-save{margin-top:5px;padding:6px 14px;border-radius:10px;border:none;background:#FF85A2;color:white;font-size:12px;font-weight:bold;cursor:pointer;font-family:inherit;}
+.wgoal-reflect-save[data-c="2"]{background:#FFB347;}
+.wgoal-reflect-done{font-size:11px;color:#5CB87A;margin-top:4px;display:none;}
+.wgoal-sunday-btn{width:100%;padding:10px;border-radius:12px;border:2px solid #FFD3DE;background:#FFF0F8;color:#FF6BA8;font-size:13px;font-weight:bold;cursor:pointer;font-family:inherit;margin-top:6px;}
+/* 週目標セットアップモーダル */
+.wsetup-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:250;display:none;align-items:flex-end;justify-content:center;}
+.wsetup-overlay.open{display:flex;}
+.wsetup-modal{background:white;border-radius:24px 24px 0 0;padding:20px 18px 36px;width:100%;max-width:600px;max-height:92vh;overflow-y:auto;}
+.wsetup-handle{width:36px;height:4px;background:#E0D8F0;border-radius:4px;margin:0 auto 14px;}
+.wsetup-step{font-size:10px;font-weight:bold;color:var(--muted);margin-bottom:4px;}
+.wsetup-q{font-size:15px;font-weight:900;color:var(--text);margin-bottom:12px;line-height:1.4;}
+.wsetup-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px;}
+.wsetup-chip{padding:7px 13px;border-radius:20px;border:2px solid #eee;background:white;font-size:12px;font-weight:bold;cursor:pointer;font-family:inherit;color:var(--text);transition:all .2s;}
+.wsetup-chip.on{border-color:#FF85A2;background:#FFF0F6;color:#FF6BA8;}
+.wsetup-chip.on[data-c="2"]{border-color:#FFB347;background:#FFFDE7;color:#8B6F00;}
+.wsetup-other-row{display:flex;gap:6px;margin-top:6px;}
+.wsetup-other-inp{flex:1;border:2px solid #F0E8FF;border-radius:10px;padding:7px 10px;font-size:12px;font-family:inherit;outline:none;}
+.wsetup-other-inp:focus{border-color:#FF85A2;}
+.wsetup-other-add{padding:7px 12px;border-radius:10px;border:none;background:#FF85A2;color:white;font-size:12px;font-weight:bold;cursor:pointer;font-family:inherit;}
+.wsetup-other-add[data-c="2"]{background:#FFB347;}
+.wsetup-divider{height:1px;background:#F0E8FF;margin:16px 0;}
+.wsetup-next-btn{width:100%;padding:13px;border-radius:14px;border:none;color:white;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;margin-top:10px;}
+/* 振り返りモーダル（週末） */
+.wreflect-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:250;display:none;align-items:flex-end;justify-content:center;}
+.wreflect-overlay.open{display:flex;}
+.wreflect-modal{background:white;border-radius:24px 24px 0 0;padding:20px 18px 36px;width:100%;max-width:600px;max-height:88vh;overflow-y:auto;}
+
+/* 習い事キャンセル・振替UI */
+.keiko-ex-row{display:flex;gap:5px;margin-top:4px;}
+.keiko-ex-btn{padding:3px 9px;border-radius:8px;border:none;font-size:10px;font-weight:bold;cursor:pointer;font-family:inherit;}
+.keiko-ex-btn.cancel{background:#FFE8E8;color:#E85D75;}
+.keiko-ex-btn.furikae{background:#E8F0FF;color:#5B9BD5;}
+.keiko-ex-btn.undo{background:#F0FFF4;color:#3D7A5A;}
+.keiko-cancelled-label{font-size:10px;color:#E85D75;font-weight:bold;background:#FFE8E8;padding:2px 7px;border-radius:7px;}
+.keiko-furikae-label{font-size:10px;color:#5B9BD5;font-weight:bold;background:#E8F0FF;padding:2px 7px;border-radius:7px;}
+/* 振替モーダル */
+.furikae-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;display:none;align-items:center;justify-content:center;}
+.furikae-overlay.open{display:flex;}
+.furikae-modal{background:white;border-radius:20px;padding:22px 20px 24px;width:90%;max-width:360px;}
+.furikae-title{font-size:15px;font-weight:900;margin-bottom:14px;}
+.furikae-inp{width:100%;border:2px solid #EEE9FF;border-radius:11px;padding:10px 13px;font-size:14px;font-family:inherit;color:var(--text);outline:none;}
+.furikae-inp:focus{border-color:#5B9BD5;}
+.furikae-btns{display:flex;gap:8px;margin-top:14px;}
+.furikae-ok{flex:1;padding:10px;border-radius:12px;border:none;background:#5B9BD5;color:white;font-size:13px;font-weight:bold;cursor:pointer;font-family:inherit;}
+.furikae-cancel{flex:1;padding:10px;border-radius:12px;border:2px solid #eee;background:white;font-size:13px;font-weight:bold;cursor:pointer;font-family:inherit;color:var(--muted);}
 
 /* ドロワー */
 .drawer-overlay{display:none;position:fixed;inset:0;background:rgba(61,50,80,.38);z-index:200;
@@ -440,15 +543,15 @@ textarea.form-inp{resize:vertical;min-height:58px;}
 </div>
 
 <nav class="nav">
-  <button class="nav-btn on" data-t="cal" onclick="showPage('cal',this)"><span class="ni">📅</span>よてい</button>
-  <button class="nav-btn" data-t="mainichi" onclick="showPage('mainichi',this)"><span class="ni">☀️</span>まいにち</button>
-  <button class="nav-btn" data-t="shukudai" onclick="showPage('shukudai',this)"><span class="ni">📚</span>しゅくだい</button>
-  <button class="nav-btn" data-t="memo" onclick="showPage('memo',this)"><span class="ni">📸</span>おもいで</button>
+  <button class="nav-btn on" data-t="mainichi" onclick="showPage('mainichi',this)"><span class="ni">☀️</span>まいにち</button>
+  <button class="nav-btn" data-t="cal" onclick="showPage('cal',this)"><span class="ni">📅</span>よてい</button>
   <button class="nav-btn" data-t="manabi" onclick="showPage('manabi',this)"><span class="ni">🌱</span>まなび</button>
+  <button class="nav-btn" data-t="memo" onclick="showPage('memo',this)"><span class="ni">📸</span>おもいで</button>
+  <button class="nav-btn" data-t="shukudai" onclick="showPage('shukudai',this)"><span class="ni">📚</span>しゅくだい</button>
 </nav>
 
 <!-- ===== よていページ ===== -->
-<div id="page-cal" class="page on">
+<div id="page-cal" class="page">
   <div class="child-row" id="cal-child-row">
     <button class="cb on" data-c="all" onclick="selCalChild('all',this)">🌈 みんな</button>
     <button class="cb" data-c="1" onclick="selCalChild('1',this)">🌸 ゆうき</button>
@@ -474,7 +577,7 @@ textarea.form-inp{resize:vertical;min-height:58px;}
 </div>
 
 <!-- ===== まいにちページ ===== -->
-<div id="page-mainichi" class="page">
+<div id="page-mainichi" class="page on">
 
   <!-- 今日のようす -->
   <div class="today-view" id="today-view">
@@ -487,13 +590,19 @@ textarea.form-inp{resize:vertical;min-height:58px;}
     <div class="timeline" id="today-timeline"></div>
   </div>
 
+  <!-- 朝のコーチング -->
+  <div id="coach-morning-area"></div>
+
+  <!-- 週目標 -->
+  <div id="wgoal-area"></div>
+
   <!-- 毎日チェックリスト -->
   <div class="card">
     <div class="section-head" style="border-color:#4ECDC4;">✅ まいにちチェック</div>
     <div class="child-row" id="chk-child-row">
-      <button class="cb on" data-c="all" onclick="selChkChild('all',this)">🌈 みんな</button>
-      <button class="cb" data-c="1" onclick="selChkChild('1',this)">🌸 ゆうき</button>
+      <button class="cb on" data-c="1" onclick="selChkChild('1',this)">🌸 ゆうき</button>
       <button class="cb" data-c="2" onclick="selChkChild('2',this)">🌻 ひろき</button>
+      <button class="cb" data-c="all" onclick="selChkChild('all',this)">🌈 みんな</button>
     </div>
     <div id="chk-list"></div>
     <div class="add-row" style="margin-top:8px">
@@ -539,6 +648,9 @@ textarea.form-inp{resize:vertical;min-height:58px;}
       </div>
     </details>
   </div>
+
+  <!-- 夜の振り返り -->
+  <div id="coach-evening-area"></div>
 
 </div>
 
@@ -650,6 +762,35 @@ textarea.form-inp{resize:vertical;min-height:58px;}
   <div id="manabi-cards"></div>
 </div>
 
+<!-- 週目標セットアップモーダル -->
+<div class="wsetup-overlay" id="wsetup-overlay">
+  <div class="wsetup-modal">
+    <div class="wsetup-handle"></div>
+    <div id="wsetup-body"></div>
+  </div>
+</div>
+
+<!-- 週末振り返りモーダル -->
+<div class="wreflect-overlay" id="wreflect-overlay">
+  <div class="wreflect-modal">
+    <div class="wsetup-handle"></div>
+    <div id="wreflect-body"></div>
+  </div>
+</div>
+
+<!-- 振替モーダル -->
+<div class="furikae-overlay" id="furikae-overlay" onclick="if(event.target===this)closeFurikae()">
+  <div class="furikae-modal">
+    <div class="furikae-title">📅 振替日を選ぶ</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:8px" id="furikae-label"></div>
+    <input type="date" class="furikae-inp" id="furikae-date">
+    <div class="furikae-btns">
+      <button class="furikae-cancel" onclick="closeFurikae()">キャンセル</button>
+      <button class="furikae-ok" onclick="saveFurikae()">振替登録</button>
+    </div>
+  </div>
+</div>
+
 <!-- 学び記録モーダル -->
 <div class="mlog-overlay" id="mlog-overlay" onclick="if(event.target===this)closeManabiLog()">
   <div class="mlog-modal">
@@ -692,6 +833,18 @@ textarea.form-inp{resize:vertical;min-height:58px;}
 
 <!-- ===== おもいでページ ===== -->
 <div id="page-memo" class="page">
+
+  <!-- 成長記録・月次まとめ -->
+  <div class="growth-card">
+    <div class="balance-title">🌱 成長記録</div>
+    <div class="growth-child-tabs" id="growth-child-tabs">
+      <button class="cb on" onclick="selGrowthChild('1',this)">🌸 ゆうき</button>
+      <button class="cb" onclick="selGrowthChild('2',this)">🌻 ひろき</button>
+    </div>
+    <div class="growth-month-tabs" id="growth-month-tabs"></div>
+    <div id="growth-summary"></div>
+  </div>
+
   <div class="card">
     <div class="section-head" style="border-color:#FF6BA8;">📸 おもいでをかこう</div>
     <div class="stamp-row" id="stamp-row"></div>
@@ -878,12 +1031,26 @@ function renderCal(){
       if(calChild!=='all'&&k.child!=='all'&&k.child!==calChild)return false;
       return(k.days||[]).includes(String(dow));
     });
-    const allEvs=[...evs,...keikoToday.map(k=>({name:k.name,cat:'other',_keiko:true,child:k.child}))];
+    const keikoMapped=keikoToday.map(k=>{
+      const exKey=`${dk}_${k.name}_${k.child}`;
+      const ex=(D.keikoEx||{})[exKey];
+      return{name:k.name,cat:'other',_keiko:true,child:k.child,_cancelled:ex==='cancel',_furikae:ex&&ex!=='cancel'?ex:null};
+    });
+    // 振替で追加されたものを表示
+    const furikaeEvs=[];
+    Object.entries(D.keikoEx||{}).forEach(([key,val])=>{
+      if(val&&val!=='cancel'&&val===dk){
+        const parts=key.split('_');
+        furikaeEvs.push({name:'↩'+parts.slice(1,-1).join('_'),cat:'other',_keiko:true,child:parts[parts.length-1],_isFurikaeTarget:true});
+      }
+    });
+    const allEvs=[...evs,...keikoMapped,...furikaeEvs];
     allEvs.slice(0,2).forEach(e=>{
       const cat=CATS.find(c=>c.id===e.cat)||CATS[8];
       let chipClass='ev-chip'+(e.manabu?' has-m':'');
       let chipStyle='';
-      if(e._keiko){
+      if(e._cancelled)chipClass+=' cancelled';
+      else if(e._keiko||e._isFurikaeTarget){
         if(e.child==='1')chipClass+=' yuki';
         else if(e.child==='2')chipClass+=' hiroki';
         else chipClass+=' both';
@@ -925,12 +1092,30 @@ function showDayDetail(dk){
     list.innerHTML='<p style="font-size:12px;color:var(--muted);padding:5px 0">まだよていがありません ✨</p>';
   } else {
     list.innerHTML='';
-    keikoToday.forEach(k=>{
+    keikoToday.forEach((k,ki)=>{
+      const exKey=`${dk}_${k.name}_${k.child}`;
+      const ex=(D.keikoEx||{})[exKey];
+      const isCancelled=ex==='cancel';
+      const isFurikae=ex&&ex!=='cancel';
+      const dotColor=k.child==='1'?'#FF85A2':k.child==='2'?'#FFB347':'#C7CEEA';
       const el=document.createElement('div');
       el.className='ev-row';
-      el.innerHTML=`<div class="ev-dot" style="background:#C7CEEA"></div>
-        <div class="ev-info"><div class="ev-name">🎵 ${k.name}</div></div>
-        <span style="font-size:11px;color:var(--muted)">ならいごと</span>`;
+      el.style.flexWrap='wrap';
+      let statusHTML='';
+      if(isCancelled) statusHTML=`<span class="keiko-cancelled-label">✕ 休み</span>`;
+      else if(isFurikae) statusHTML=`<span class="keiko-furikae-label">↩ 振替: ${ex}</span>`;
+      el.innerHTML=`<div class="ev-dot" style="background:${dotColor}"></div>
+        <div class="ev-info" style="${isCancelled?'opacity:.5;text-decoration:line-through':''}">
+          <div class="ev-name">🎵 ${k.name}${k.time?` <span style="font-size:10px;color:var(--muted)">${k.time}</span>`:''}</div>
+        </div>
+        ${statusHTML}
+        <div class="keiko-ex-row" style="width:100%;padding-left:22px">
+          ${(isCancelled||isFurikae)
+            ?`<button class="keiko-ex-btn undo" onclick="undoKeikoEx('${exKey}','${dk}')">↩ 戻す</button>`
+            :`<button class="keiko-ex-btn cancel" onclick="cancelKeiko('${exKey}','${dk}')">✕ 休み</button>
+               <button class="keiko-ex-btn furikae" onclick="openFurikae('${exKey}','${dk}','${k.name}')">📅 振替</button>`
+          }
+        </div>`;
       list.appendChild(el);
     });
     evs.forEach((e,i)=>{
@@ -952,6 +1137,34 @@ function showDayDetail(dk){
 
 function delEvent(dk,i){
   D.events[dk].splice(i,1);save();renderCal();showDayDetail(dk);
+}
+
+// 習い事 休み・振替
+let _furikaeKey='',_furikaeFrom='';
+function cancelKeiko(exKey,dk){
+  if(!D.keikoEx)D.keikoEx={};
+  D.keikoEx[exKey]='cancel';
+  save();renderCal();showDayDetail(dk);
+}
+function openFurikae(exKey,dk,name){
+  _furikaeKey=exKey;_furikaeFrom=dk;
+  document.getElementById('furikae-label').textContent=`「${name}」の振替日を選んでください`;
+  document.getElementById('furikae-date').value='';
+  document.getElementById('furikae-overlay').classList.add('open');
+}
+function closeFurikae(){
+  document.getElementById('furikae-overlay').classList.remove('open');
+}
+function saveFurikae(){
+  const date=document.getElementById('furikae-date').value;
+  if(!date){alert('日付を選んでください');return;}
+  if(!D.keikoEx)D.keikoEx={};
+  D.keikoEx[_furikaeKey]=date;
+  save();closeFurikae();renderCal();showDayDetail(_furikaeFrom);
+}
+function undoKeikoEx(exKey,dk){
+  if(D.keikoEx)delete D.keikoEx[exKey];
+  save();renderCal();showDayDetail(dk);
 }
 
 // ===== ドロワー =====
@@ -1004,7 +1217,7 @@ function saveEvent(){
 }
 
 // ===== まいにち：チェックリスト =====
-let chkChild='all';
+let chkChild='1';
 function selChkChild(c,btn){
   chkChild=c;
   document.querySelectorAll('#chk-child-row .cb').forEach(b=>b.classList.remove('on'));
@@ -1364,6 +1577,150 @@ function renderMemos(){
 }
 function delMemo(id){D.memos=D.memos.filter(m=>m.id!==id);save();renderMemos();}
 
+// ===== 成長記録・月次まとめ =====
+let growthChild='1', growthMonth='';
+
+function selGrowthChild(c,btn){
+  growthChild=c;
+  document.querySelectorAll('#growth-child-tabs .cb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderGrowthSummary();
+}
+
+function renderGrowthMonthTabs(){
+  const tabs=document.getElementById('growth-month-tabs');
+  if(!tabs)return;
+  // dailyCoachに記録がある月を収集
+  const months=new Set();
+  const now=new Date();
+  // 今月と過去3ヶ月は常に表示
+  for(let i=0;i<4;i++){
+    const d=new Date(now.getFullYear(), now.getMonth()-i, 1);
+    months.add(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`);
+  }
+  Object.keys(D.dailyCoach||{}).forEach(dk=>{
+    months.add(dk.slice(0,7));
+  });
+  const sorted=[...months].sort().reverse().slice(0,6);
+  if(!growthMonth||!sorted.includes(growthMonth)) growthMonth=sorted[0];
+  tabs.innerHTML=sorted.map(m=>{
+    const [y,mo]=m.split('-');
+    return `<button class="growth-month-tab${m===growthMonth?' on':''}" onclick="selGrowthMonth('${m}',this)">${y}年${parseInt(mo)}月</button>`;
+  }).join('');
+}
+
+function selGrowthMonth(m,btn){
+  growthMonth=m;
+  document.querySelectorAll('.growth-month-tab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderGrowthSummary();
+}
+
+function renderGrowthSummary(){
+  renderGrowthMonthTabs();
+  const el=document.getElementById('growth-summary');
+  if(!el)return;
+  const c=growthChild;
+  const m=growthMonth;
+  if(!m){el.innerHTML='';return;}
+
+  const [y,mo]=m.split('-').map(Number);
+  const daysInMonth=new Date(y,mo,0).getDate();
+  const coach=D.dailyCoach||{};
+
+  // 日々のデータ収集
+  const enjoys=[];
+  const morningQs=[];
+  let coachDays=0;
+
+  for(let d=1;d<=daysInMonth;d++){
+    const dk=`${y}-${String(mo).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const day=coach[dk]&&coach[dk][c];
+    if(!day)continue;
+    if(day.evening){enjoys.push({date:`${mo}/${d}`,text:day.evening});}
+    if(day.q1||day.q2){
+      coachDays++;
+      if(day.q1)morningQs.push({date:`${mo}/${d}`,text:day.q1});
+      if(day.q2)morningQs.push({date:`${mo}/${d}`,text:day.q2});
+    }
+  }
+
+  // チェックリスト完了率
+  const chkItems=getMergedItems(c);
+  let totalDone=0, totalDays=0;
+  const chkDone=D.chk[c]?.done||{};
+  Object.entries(chkDone).forEach(([dk,ids])=>{
+    if(dk.slice(0,7)===m){
+      totalDays++;
+      totalDone+=ids.length;
+    }
+  });
+  const rate=totalDays>0?Math.round(totalDone/(totalDays*chkItems.length)*100):0;
+
+  // 学びログ
+  const manabiLogs=(D.manabiLog||[]).filter(l=>{
+    const d=new Date(l.date);
+    return l.child===c&&d.getFullYear()===y&&d.getMonth()+1===mo;
+  });
+  const genreCounts={};
+  manabiLogs.forEach(l=>{genreCounts[l.subject]=(genreCounts[l.subject]||0)+1;});
+  const topGenre=Object.entries(genreCounts).sort((a,b)=>b[1]-a[1])[0];
+
+  const nameLabel=c==='1'?'ゆうき':'ひろき';
+  const isYuki=c==='1';
+
+  const statsHTML=`<div class="growth-stat-row">
+    <div class="growth-stat">
+      <div class="growth-stat-num${isYuki?'':' hiroki'}">${coachDays}日</div>
+      <div class="growth-stat-label">朝の記録</div>
+    </div>
+    <div class="growth-stat">
+      <div class="growth-stat-num${isYuki?'':' hiroki'}">${enjoys.length}日</div>
+      <div class="growth-stat-label">夜の振り返り</div>
+    </div>
+    <div class="growth-stat">
+      <div class="growth-stat-num${isYuki?'':' hiroki'}">${manabiLogs.length}回</div>
+      <div class="growth-stat-label">学び記録</div>
+    </div>
+    <div class="growth-stat">
+      <div class="growth-stat-num${isYuki?'':' hiroki'}">${rate}%</div>
+      <div class="growth-stat-label">チェック率</div>
+    </div>
+  </div>`;
+
+  const enjoysHTML=enjoys.length?`
+    <div class="growth-section-title">🌙 楽しかったこと（${enjoys.length}日分）</div>
+    <div class="growth-enjoy-list">
+      ${enjoys.slice(0,5).map(e=>`<div class="growth-enjoy-item${isYuki?' yuki':''}">${e.date} ${e.text}</div>`).join('')}
+      ${enjoys.length>5?`<div style="font-size:11px;color:var(--muted);padding:4px">他 ${enjoys.length-5}件…</div>`:''}
+    </div>`:'<div style="font-size:12px;color:var(--muted);padding:4px 0">まだ夜の振り返りがありません</div>';
+
+  const coachHTML=morningQs.length?`
+    <div class="growth-section-title">☀️ 朝のことば（気になる回答）</div>
+    ${morningQs.slice(0,4).map(q=>`<div class="growth-coach-item">${q.date} ${q.text}</div>`).join('')}`:'';
+
+  const genreHTML=topGenre?`<div class="growth-section-title">📚 一番多かった学び：<b>${topGenre[0]}（${topGenre[1]}回）</b></div>`:'';
+
+  // クロードに送るテキスト生成
+  const copyText=`【${y}年${mo}月 ${nameLabel}の成長記録】\n\n`+
+    `■ 記録日数\n朝のコーチング：${coachDays}日 / 夜の振り返り：${enjoys.length}日 / 学び記録：${manabiLogs.length}回 / チェック完了率：${rate}%\n\n`+
+    (topGenre?`■ 一番多かった学びのジャンル：${topGenre[0]}（${topGenre[1]}回）\n\n`:'')+
+    (enjoys.length?`■ 楽しかったこと\n${enjoys.map(e=>`・${e.date} ${e.text}`).join('\n')}\n\n`:'')+
+    (morningQs.length?`■ 朝のコーチング回答\n${morningQs.map(q=>`・${q.date} ${q.text}`).join('\n')}\n\n`:'')+
+    `この記録をもとに${nameLabel}の成長について気づいたこと、来月意識するとよいことをアドバイスしてください。`;
+
+  el.innerHTML=statsHTML+enjoysHTML+coachHTML+genreHTML+
+    `<button class="growth-copy-btn" onclick="copyGrowthText(${JSON.stringify(copyText).replace(/</g,'\\u003c')})">📋 クロードに分析してもらう（コピー）</button>
+     <div class="growth-copy-done" id="growth-copy-done">✅ コピーしました！クロードに貼り付けてください</div>`;
+}
+
+function copyGrowthText(text){
+  navigator.clipboard.writeText(text).then(()=>{
+    const el=document.getElementById('growth-copy-done');
+    if(el){el.style.display='block';setTimeout(()=>el.style.display='none',3000);}
+  });
+}
+
 // ===== タブ =====
 function showPage(name,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
@@ -1372,10 +1729,10 @@ function showPage(name,btn){
   btn.classList.add('on');
   const fab=document.getElementById('fab');
   fab.style.display=name==='cal'?'flex':'none';
-  if(name==='mainichi'){renderTodayView();renderChk();renderSchedule();renderKeiko();}
+  if(name==='mainichi'){renderTodayView();renderCoachMorning();renderWgoalArea();renderChk();renderSchedule();renderKeiko();renderCoachEvening();}
   if(name==='shukudai'){renderGoals();renderSdCats();renderShukudai();}
   if(name==='manabi'){renderManabiPage();}
-  if(name==='memo')renderMemos();
+  if(name==='memo'){renderGrowthSummary();renderMemos();}
 }
 
 // ===== カレンダーから読み取ったイベント一括登録 =====
@@ -1448,6 +1805,9 @@ chkMigrate('2',213,'💡 七田式 ちえ');
 chkMigrate('2',214,'📝 七田式 ことば');
 if(!D.outings)D.outings={};
 if(!D.myWords)D.myWords=[];
+if(!D.keikoEx)D.keikoEx={};
+if(!D.weeklyGoals)D.weeklyGoals={};
+if(!D.dailyCoach)D.dailyCoach={};
 save();
 
 // 時間データがない、またはレッスン名が古いケイコデータはリセット
@@ -1747,6 +2107,429 @@ function selTodayChild(c,btn){
   document.querySelectorAll('#today-child-row .cb').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   renderTimeline();
+}
+
+// ===== 朝夜コーチング =====
+const COACH_QS={
+  '1':{ // ゆうき
+    themes:[
+      { badge:'🎯 今日の計画', color:'#FFB347', bg:'#FFF8E7',
+        qs:[
+          {q:'今日、どんな自分でいたいかな？',sub:'勉強？あそび？やさしさ？なんでもOK'},
+          {q:'今日のゴールを一つ決めよう！',sub:'小さなことでもいいよ'},
+        ]},
+      { badge:'🤝 まわりの人', color:'#FF85A2', bg:'#FFF0F8',
+        qs:[
+          {q:'今日、だれかのためにできそうなことある？',sub:'家族・友達・だれでも'},
+          {q:'家族や友達に、どんな声をかけたい？',sub:'ありがとう・いってらっしゃい・なんでも'},
+        ]},
+      { badge:'💪 自分の課題', color:'#5B9BD5', bg:'#F0F6FF',
+        qs:[
+          {q:'今日、自分でやり切ることは何？',sub:'「これは自分がやること」と決めてみよう'},
+          {q:'うまくいかないことがあっても、どうする？',sub:'自分なりの方法を考えてみよう'},
+        ]},
+    ],
+    evening:'今日いちばん楽しかったことは何かな？',
+    eveningSub:'どんな小さなことでもいいよ',
+  },
+  '2':{ // ひろき
+    themes:[
+      { badge:'🎯 今日の計画', color:'#FFB347', bg:'#FFFDE7',
+        qs:[
+          {q:'今日、どんな一日にしたい？',sub:'たのしい？がんばる？のんびり？'},
+          {q:'今日いちばんやりたいことは？',sub:'なんでもOKだよ'},
+        ]},
+      { badge:'🤝 まわりのひと', color:'#5CB87A', bg:'#F0FFF4',
+        qs:[
+          {q:'だれかに、やさしくできそう？',sub:'家族・友達・だれかに'},
+          {q:'「ありがとう」って言える場面、あるかな？',sub:'小さなことでもOK'},
+        ]},
+      { badge:'💪 じぶんのこと', color:'#8B6FD4', bg:'#F8F0FF',
+        qs:[
+          {q:'今日、じぶんでできることは何？',sub:'自分でやってみよう！'},
+          {q:'こまったときはどうする？',sub:'じぶんで考えてみよう'},
+        ]},
+    ],
+    evening:'今日たのしかったことは何？',
+    eveningSub:'どんな小さなことでもいいよ ⭐',
+  },
+};
+
+function coachDateKey(){
+  const t=new Date();
+  return `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`;
+}
+
+function getCoachData(child){
+  const dk=coachDateKey();
+  if(!D.dailyCoach)D.dailyCoach={};
+  if(!D.dailyCoach[dk])D.dailyCoach[dk]={};
+  if(!D.dailyCoach[dk][child])D.dailyCoach[dk][child]={q1:'',q2:'',evening:''};
+  return D.dailyCoach[dk][child];
+}
+
+function renderCoachMorning(){
+  const area=document.getElementById('coach-morning-area');
+  if(!area)return;
+  const dow=new Date().getDay(); // 0=日
+  const children=['1','2'];
+  const names={'1':'🌸 ゆうき','2':'🌻 ひろき'};
+
+  area.innerHTML=children.map(c=>{
+    const conf=COACH_QS[c];
+    const themeIdx=dow===0?2:dow===1||dow===4?0:dow===2||dow===5?1:2;
+    const theme=conf.themes[themeIdx];
+    const data=getCoachData(c);
+
+    const qBlocks=theme.qs.map((q,i)=>{
+      const key=i===0?'q1':'q2';
+      const saved=data[key];
+      return `<div class="coach-ans-wrap">
+        <div class="coach-q">${q.q}</div>
+        <div class="coach-q-sub">${q.sub}</div>
+        ${saved
+          ?`<div class="coach-ans-prev">${saved}</div>
+            <button onclick="clearCoachAns('${c}','${key}')" style="margin-top:4px;font-size:10px;color:var(--muted);background:none;border:none;cursor:pointer;font-family:inherit">✏️ 書き直す</button>`
+          :`<textarea class="coach-inp" id="coach-${c}-${key}" rows="2" placeholder="じゆうに書いてみよう…"></textarea>
+            <div class="coach-save-row">
+              <button class="coach-save-btn" style="background:${theme.color}" onclick="saveCoachAns('${c}','${key}')">保存</button>
+              <span class="coach-saved" id="coach-${c}-${key}-saved">✅</span>
+            </div>`
+        }
+      </div>`;
+    }).join('');
+
+    return `<div class="coach-card morning">
+      <span class="coach-theme-badge" style="background:${theme.bg};color:${theme.color};border:1.5px solid ${theme.color}">${theme.badge}</span>
+      <div style="font-size:13px;font-weight:bold;color:var(--muted);margin-bottom:10px">${names[c]}へ・今日の朝</div>
+      ${qBlocks}
+    </div>`;
+  }).join('');
+}
+
+function saveCoachAns(child,key){
+  const inp=document.getElementById(`coach-${child}-${key}`);
+  if(!inp||!inp.value.trim())return;
+  const data=getCoachData(child);
+  data[key]=inp.value.trim();
+  save();
+  renderCoachMorning();
+}
+
+function clearCoachAns(child,key){
+  const data=getCoachData(child);
+  data[key]='';
+  save();
+  renderCoachMorning();
+}
+
+function renderCoachEvening(){
+  const area=document.getElementById('coach-evening-area');
+  if(!area)return;
+  const children=['1','2'];
+  const names={'1':'🌸 ゆうき','2':'🌻 ひろき'};
+
+  area.innerHTML=children.map(c=>{
+    const conf=COACH_QS[c];
+    const data=getCoachData(c);
+    const saved=data.evening;
+    return `<div class="coach-card evening">
+      <span class="coach-theme-badge" style="background:#F0F8FF;color:#5B9BD5;border:1.5px solid #AED8F0">🌙 今日のおわりに</span>
+      <div style="font-size:13px;font-weight:bold;color:var(--muted);margin-bottom:10px">${names[c]}へ</div>
+      <div class="coach-q">${conf.evening}</div>
+      <div class="coach-q-sub">${conf.eveningSub}</div>
+      ${saved
+        ?`<div class="coach-ans-prev">${saved}</div>
+          <button onclick="clearCoachEvening('${c}')" style="margin-top:4px;font-size:10px;color:var(--muted);background:none;border:none;cursor:pointer;font-family:inherit">✏️ 書き直す</button>`
+        :`<textarea class="coach-inp" id="coach-${c}-ev" rows="2" placeholder="どんな小さなことでもいいよ…" style="border-color:#AED8F0"></textarea>
+          <div class="coach-save-row">
+            <button class="coach-save-btn" style="background:#5B9BD5" onclick="saveCoachEvening('${c}')">保存</button>
+            <span class="coach-saved" id="coach-${c}-ev-saved">✅</span>
+          </div>`
+      }
+    </div>`;
+  }).join('');
+}
+
+function saveCoachEvening(child){
+  const inp=document.getElementById(`coach-${child}-ev`);
+  if(!inp||!inp.value.trim())return;
+  const data=getCoachData(child);
+  data.evening=inp.value.trim();
+  save();
+  renderCoachEvening();
+}
+
+function clearCoachEvening(child){
+  const data=getCoachData(child);
+  data.evening='';
+  save();
+  renderCoachEvening();
+}
+
+// ===== 週目標 =====
+const WGOAL_WANTS={
+  '1':['英検サイトをやる','ピアノを練習する','英語の本を読む','なぞなぞ・パズルをする',
+       '図書館に行く','お出かけする','工作・絵を描く','料理のお手伝い','友達と遊ぶ','公園で遊ぶ'],
+  '2':['図書館に行く','お出かけする','工作・絵を描く','料理のお手伝い','友達と遊ぶ',
+       '公園で遊ぶ','お絵かきする','じてんしゃに乗る','プールで泳ぐ','体操を頑張る'],
+};
+const WGOAL_CHALLENGES={
+  '1':['友達に自分から話しかける','気持ちをことばで伝える','相手の話をよく聞く',
+       '順番やルールを守る','困ったとき自分で考える','ありがとう・ごめんを言う',
+       '最後まであきらめない','自分でやることを決める'],
+  '2':['ありがとうを言う','じぶんでやってみる','やさしくする',
+       '最後までやりきる','自分から手伝う','新しいことに挑戦する',
+       'きめたことをやりとげる'],
+};
+
+function wgoalWeekKey(){
+  const d=new Date();
+  const thu=new Date(d);
+  thu.setDate(d.getDate()-(d.getDay()+6)%7+3);
+  const y=thu.getFullYear();
+  const w=Math.ceil((((thu-new Date(y,0,4))/(86400000))+1)/7);
+  return `${y}-W${String(w).padStart(2,'0')}`;
+}
+
+function getWgoal(child){
+  const wk=wgoalWeekKey();
+  if(!D.weeklyGoals)D.weeklyGoals={};
+  if(!D.weeklyGoals[wk])D.weeklyGoals[wk]={};
+  if(!D.weeklyGoals[wk][child])D.weeklyGoals[wk][child]={wants:[],challenge:'',wantsDone:[],reflections:{},weekReflection:''};
+  return D.weeklyGoals[wk][child];
+}
+
+function renderWgoalArea(){
+  const area=document.getElementById('wgoal-area');
+  if(!area)return;
+  const children=['1','2'];
+  const names={'1':'🌸 ゆうき','2':'🌻 ひろき'};
+  const colors={'1':'#FF85A2','2':'#FFB347'};
+  const now=new Date();
+  const dow=now.getDay(); // 0=日,1=月
+  const todayStr=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+  const wk=wgoalWeekKey();
+
+  area.innerHTML=children.map(c=>{
+    const g=getWgoal(c);
+    const col=colors[c];
+    const hasGoal=g.wants.length>0||g.challenge;
+
+    if(!hasGoal){
+      // 未セットアップ
+      return `<div class="wgoal-card" data-child="${c}">
+        <div class="wgoal-week-label">📅 今週の目標 ${wk}</div>
+        <div class="wgoal-title">${names[c]}の今週</div>
+        <button class="wgoal-setup-btn" style="background:linear-gradient(135deg,${col},${col}CC)"
+          onclick="openWsetup('${c}')">✏️ 今週の目標をセットしよう！</button>
+      </div>`;
+    }
+
+    // やりたいことリスト
+    const wantsHTML=g.wants.length?`
+      <div class="wgoal-wants">
+        <div class="wgoal-wants-title">🎯 今週やりたいこと</div>
+        ${g.wants.map((w,i)=>{
+          const done=(g.wantsDone||[]).includes(i);
+          return `<div class="wgoal-want-item">
+            <div class="wgoal-want-check${done?' done':''}" data-c="${c}" onclick="toggleWantDone('${c}',${i})">
+              ${done?'✓':''}
+            </div>
+            <span class="wgoal-want-text${done?' done':''}">${w}</span>
+          </div>`;
+        }).join('')}
+      </div>`:'';
+
+    // チャレンジ
+    const todayReflect=g.reflections[todayStr]||'';
+    const challengeHTML=g.challenge?`
+      <div class="wgoal-challenge-box" data-c="${c}">
+        <div class="wgoal-challenge-label">💪 今週のチャレンジ</div>
+        <div class="wgoal-challenge-text">「${g.challenge}」</div>
+        ${dow!==0?`
+          <div style="font-size:11px;color:var(--muted);margin-bottom:4px">今日どうだった？</div>
+          <textarea class="wgoal-reflect-inp" id="reflect-${c}-inp" rows="2" placeholder="一言メモ…">${todayReflect}</textarea>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:5px">
+            <button class="wgoal-reflect-save" data-c="${c}" onclick="saveReflect('${c}','${todayStr}')">保存</button>
+            <span class="wgoal-reflect-done" id="reflect-${c}-done">✅ 保存しました</span>
+          </div>`
+        :`<div style="font-size:12px;color:#5CB87A;font-weight:bold">🌟 今週おつかれさま！振り返りをしよう</div>`}
+      </div>`:'';
+
+    // 日曜は振り返りボタン
+    const sundayBtn=dow===0?`<button class="wgoal-sunday-btn" onclick="openWreflect('${c}')">📝 今週の振り返りをする</button>`:'';
+
+    return `<div class="wgoal-card" data-child="${c}">
+      <div class="wgoal-week-label">📅 今週の目標 ${wk}</div>
+      <div class="wgoal-title">${names[c]}の今週</div>
+      ${wantsHTML}
+      ${challengeHTML}
+      ${sundayBtn}
+      <div style="display:flex;gap:6px;margin-top:8px">
+        <button onclick="openWsetup('${c}')" style="flex:1;padding:7px;border-radius:10px;border:2px solid #F0E8FF;background:white;font-size:11px;font-weight:bold;cursor:pointer;font-family:inherit;color:var(--muted)">✏️ 目標を変える</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleWantDone(child,idx){
+  const g=getWgoal(child);
+  if(!g.wantsDone)g.wantsDone=[];
+  const i=g.wantsDone.indexOf(idx);
+  if(i>=0)g.wantsDone.splice(i,1);
+  else{g.wantsDone.push(idx);playCheckSound(g.wantsDone.length===g.wants.length);}
+  save();renderWgoalArea();
+}
+
+function saveReflect(child,dateStr){
+  const inp=document.getElementById(`reflect-${child}-inp`);
+  if(!inp)return;
+  const g=getWgoal(child);
+  g.reflections[dateStr]=inp.value;
+  save();
+  const done=document.getElementById(`reflect-${child}-done`);
+  if(done){done.style.display='inline';setTimeout(()=>done.style.display='none',2000);}
+}
+
+// セットアップモーダル
+let _wsetupChild='',_wsetupSelWants=[],_wsetupChallenge='';
+
+function openWsetup(child){
+  _wsetupChild=child;
+  const g=getWgoal(child);
+  _wsetupSelWants=[...g.wants];
+  _wsetupChallenge=g.challenge||'';
+  renderWsetupModal();
+  document.getElementById('wsetup-overlay').classList.add('open');
+}
+
+function closeWsetup(){
+  document.getElementById('wsetup-overlay').classList.remove('open');
+}
+
+function renderWsetupModal(){
+  const c=_wsetupChild;
+  const col=c==='1'?'#FF85A2':'#FFB347';
+  const name=c==='1'?'🌸 ゆうき':'🌻 ひろき';
+  const wants=WGOAL_WANTS[c]||[];
+  const challenges=WGOAL_CHALLENGES[c]||[];
+
+  const wantsChips=wants.map(w=>{
+    const on=_wsetupSelWants.includes(w);
+    return `<button class="wsetup-chip${on?' on':''}" data-c="${c}" onclick="toggleWsetupWant('${w}',this)">${w}</button>`;
+  }).join('');
+
+  const customWants=_wsetupSelWants.filter(w=>!wants.includes(w));
+  const customChips=customWants.map(w=>
+    `<button class="wsetup-chip on" data-c="${c}" onclick="toggleWsetupWant('${w}',this)">${w} ✕</button>`
+  ).join('');
+
+  const challengeChips=challenges.map(ch=>{
+    const on=_wsetupChallenge===ch;
+    return `<button class="wsetup-chip${on?' on':''}" data-c="${c}" onclick="selWsetupChallenge('${ch}',this)">${ch}</button>`;
+  }).join('');
+
+  const customCh=_wsetupChallenge&&!challenges.includes(_wsetupChallenge);
+
+  document.getElementById('wsetup-body').innerHTML=`
+    <div style="font-size:16px;font-weight:900;margin-bottom:16px">${name}の今週の目標</div>
+
+    <div class="wsetup-step">STEP 1 / 2</div>
+    <div class="wsetup-q">🎯 今週やりたいことを選ぼう（いくつでもOK）</div>
+    <div class="wsetup-chips">${wantsChips}${customChips}</div>
+    <div class="wsetup-other-row">
+      <input class="wsetup-other-inp" id="wsetup-want-inp" placeholder="その他…">
+      <button class="wsetup-other-add" data-c="${c}" onclick="addWsetupWant()">追加</button>
+    </div>
+
+    <div class="wsetup-divider"></div>
+
+    <div class="wsetup-step">STEP 2 / 2</div>
+    <div class="wsetup-q">💪 今週チャレンジすることを1つ選ぼう</div>
+    <div class="wsetup-chips">${challengeChips}</div>
+    ${customCh?`<button class="wsetup-chip on" data-c="${c}" onclick="selWsetupChallenge('',null)">${_wsetupChallenge} ✕</button>`:''}
+    <div class="wsetup-other-row">
+      <input class="wsetup-other-inp" id="wsetup-ch-inp" placeholder="自分で決める…" value="${customCh?_wsetupChallenge:''}">
+      <button class="wsetup-other-add" data-c="${c}" onclick="setWsetupCustomChallenge()">決定</button>
+    </div>
+
+    <button class="wsetup-next-btn" style="background:linear-gradient(135deg,${col},${col}CC)"
+      onclick="saveWsetup()">✅ 今週の目標をセット！</button>
+    <button onclick="closeWsetup()" style="width:100%;padding:10px;border-radius:12px;border:none;background:transparent;color:var(--muted);font-size:13px;cursor:pointer;font-family:inherit;margin-top:6px">キャンセル</button>
+  `;
+}
+
+function toggleWsetupWant(w,btn){
+  const i=_wsetupSelWants.indexOf(w);
+  if(i>=0){_wsetupSelWants.splice(i,1);btn.classList.remove('on');}
+  else{_wsetupSelWants.push(w);btn.classList.add('on');}
+}
+
+function addWsetupWant(){
+  const inp=document.getElementById('wsetup-want-inp');
+  const v=inp.value.trim();
+  if(!v)return;
+  if(!_wsetupSelWants.includes(v))_wsetupSelWants.push(v);
+  inp.value='';
+  renderWsetupModal();
+}
+
+function selWsetupChallenge(ch,btn){
+  _wsetupChallenge=ch;
+  document.querySelectorAll('#wsetup-body .wsetup-chip').forEach(b=>{
+    if(b.onclick&&b.onclick.toString().includes('selWsetupChallenge'))b.classList.remove('on');
+  });
+  if(btn)btn.classList.add('on');
+}
+
+function setWsetupCustomChallenge(){
+  const inp=document.getElementById('wsetup-ch-inp');
+  const v=inp.value.trim();
+  if(!v)return;
+  _wsetupChallenge=v;
+  renderWsetupModal();
+}
+
+function saveWsetup(){
+  const g=getWgoal(_wsetupChild);
+  g.wants=[..._wsetupSelWants];
+  g.challenge=_wsetupChallenge;
+  g.wantsDone=[];
+  g.reflections=g.reflections||{};
+  save();closeWsetup();renderWgoalArea();
+}
+
+// 週末振り返り
+function openWreflect(child){
+  const g=getWgoal(child);
+  const name=child==='1'?'🌸 ゆうき':'🌻 ひろき';
+  const col=child==='1'?'#FF85A2':'#FFB347';
+  document.getElementById('wreflect-body').innerHTML=`
+    <div style="font-size:16px;font-weight:900;margin-bottom:6px">🌟 ${name}の今週の振り返り</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:14px">チャレンジ：「${g.challenge||'なし'}」</div>
+    <div class="wsetup-step">Q1</div>
+    <div class="wsetup-q" style="font-size:14px">今週やってみてどうだった？</div>
+    <textarea class="wgoal-reflect-inp" id="wreflect-q1" rows="3" placeholder="感じたことを自由に…">${g.weekReflection||''}</textarea>
+    <div class="wsetup-step" style="margin-top:12px">Q2</div>
+    <div class="wsetup-q" style="font-size:14px">むずかしかったことはどうやって乗り越えた？</div>
+    <textarea class="wgoal-reflect-inp" id="wreflect-q2" rows="3" placeholder=""></textarea>
+    <button style="width:100%;padding:12px;border-radius:14px;border:none;background:linear-gradient(135deg,${col},${col}CC);color:white;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;margin-top:14px"
+      onclick="saveWreflect('${child}')">💾 振り返りを保存</button>
+    <button onclick="document.getElementById('wreflect-overlay').classList.remove('open')"
+      style="width:100%;padding:10px;border-radius:12px;border:none;background:transparent;color:var(--muted);font-size:13px;cursor:pointer;font-family:inherit;margin-top:6px">閉じる</button>
+  `;
+  document.getElementById('wreflect-overlay').classList.add('open');
+}
+
+function saveWreflect(child){
+  const g=getWgoal(child);
+  const q1=document.getElementById('wreflect-q1').value;
+  const q2=document.getElementById('wreflect-q2').value;
+  g.weekReflection=q1+(q2?('\n\n乗り越え方：'+q2):'');
+  save();
+  document.getElementById('wreflect-overlay').classList.remove('open');
+  renderWgoalArea();
 }
 
 // ===== まなび =====
@@ -2542,6 +3325,7 @@ function generateEnglish(){
 // ===== 初期化 =====
 buildCatGrid();buildHints();buildStamps();buildGoalEmojiRow();
 renderCal();renderMemos();renderSchedule();renderKeiko();renderChk();renderTodayView();
+renderCoachMorning();renderWgoalArea();renderCoachEvening();
 
 document.getElementById('memo-date').value=new Date().toISOString().split('T')[0];
 
