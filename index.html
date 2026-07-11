@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌱 ゆうきひろきの成長記録</title>
+<title>☀️ ゆうきひろきのなつやすみ 2026</title>
 <style>
 :root {
   --pink:#FFB7C5; --mint:#B5EAD7; --lav:#C7CEEA; --yellow:#FFDAC1; --sky:#AED8F0;
@@ -224,6 +224,32 @@ body{font-family:'Hiragino Maru Gothic ProN','Hiragino Kaku Gothic ProN','Meiryo
 .ev-chip.hiroki{background:linear-gradient(90deg,#FFB347,#FFA500);}
 .ev-chip.both{background:linear-gradient(90deg,#FF85A2,#FFB347);}
 .ev-chip.cancelled{background:#ccc;text-decoration:line-through;opacity:.7;}
+/* 時計クイズ */
+.clock-level-row{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+.clock-level-btn{padding:6px 13px;border-radius:20px;border:2px solid #eee;background:white;font-size:12px;font-weight:bold;cursor:pointer;font-family:inherit;color:var(--muted);transition:all .2s;}
+.clock-level-btn.on{border-color:#FFB347;background:#FFFDE7;color:#8B6F00;}
+.clock-face-wrap{display:flex;justify-content:center;margin:10px 0 16px;}
+.clock-inp-row{display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:12px;}
+.clock-inp{width:64px;height:48px;border:2.5px solid #F0E8FF;border-radius:12px;font-size:22px;font-weight:bold;text-align:center;font-family:inherit;outline:none;color:var(--text);}
+.clock-inp:focus{border-color:#FFB347;}
+.clock-inp-label{font-size:14px;font-weight:bold;color:var(--muted);}
+.clock-ans-btn{padding:10px 24px;border-radius:12px;border:none;background:#FFB347;color:white;font-size:14px;font-weight:bold;cursor:pointer;font-family:inherit;}
+.clock-result{text-align:center;font-size:18px;font-weight:bold;padding:8px;border-radius:12px;margin-bottom:10px;}
+.clock-result.ok{background:#F0FFF4;color:#3D7A5A;}
+.clock-result.ng{background:#FFF0F4;color:#E85D75;}
+.clock-score{font-size:12px;color:var(--muted);text-align:center;margin-bottom:10px;}
+.clock-next-btn{width:100%;padding:10px;border-radius:12px;border:none;background:linear-gradient(135deg,#FFB347,#FF85A2);color:white;font-size:13px;font-weight:bold;cursor:pointer;font-family:inherit;}
+/* 漢字クイズ */
+.kanji-display{font-size:72px;font-weight:900;text-align:center;padding:16px 0 8px;color:var(--text);line-height:1;}
+.kanji-choices{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0;}
+.kanji-choice{padding:12px;border-radius:12px;border:2.5px solid #F0E8FF;background:white;font-size:15px;font-weight:bold;cursor:pointer;font-family:inherit;color:var(--text);transition:all .2s;text-align:center;}
+.kanji-choice.ok{border-color:#5CB87A;background:#F0FFF4;color:#3D7A5A;}
+.kanji-choice.ng{border-color:#E85D75;background:#FFF0F4;color:#E85D75;}
+.kanji-choice.show-ans{border-color:#5CB87A;background:#F0FFF4;color:#3D7A5A;}
+.kanji-meaning{font-size:12px;color:var(--muted);text-align:center;margin-bottom:10px;min-height:18px;}
+.kanji-score{font-size:12px;color:var(--muted);text-align:center;margin:6px 0;}
+.kanji-next-btn{width:100%;padding:10px;border-radius:12px;border:none;background:linear-gradient(135deg,#5B9BD5,#A29BFE);color:white;font-size:13px;font-weight:bold;cursor:pointer;font-family:inherit;margin-top:6px;}
+
 /* 成長記録・月次まとめ */
 .growth-card{background:white;border-radius:var(--r);padding:16px 18px;box-shadow:0 4px 18px rgba(0,0,0,.07);margin-bottom:12px;}
 .growth-month-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
@@ -537,8 +563,8 @@ textarea.form-inp{resize:vertical;min-height:58px;}
 <body>
 
 <div class="hd">
-  <div class="hd-clouds">☀️ ⛅ 🌈</div>
-  <h1>ゆうきひろきの 成長記録</h1>
+  <div class="hd-clouds">☀️ 🌊 🍉</div>
+  <h1>ゆうきひろきの なつやすみ</h1>
   <p class="hd-sub" id="hd-sub">2026年の夏をたのしくまなぼう</p>
 </div>
 
@@ -721,6 +747,22 @@ textarea.form-inp{resize:vertical;min-height:58px;}
     <div class="balance-title">📊 最近2週間のバランス</div>
     <div id="balance-alert"></div>
     <div id="balance-bars"></div>
+  </div>
+
+  <!-- 時計クイズ（ひろきのみ） -->
+  <div id="clock-quiz-section" style="display:none">
+    <div class="balance-card">
+      <div class="balance-title">🕐 とけいクイズ</div>
+      <div id="clock-quiz-area"></div>
+    </div>
+  </div>
+
+  <!-- 漢字クイズ（ゆうきのみ） -->
+  <div id="kanji-quiz-section" style="display:none">
+    <div class="balance-card">
+      <div class="balance-title">🈳 漢字読みクイズ（3年生）</div>
+      <div id="kanji-quiz-area"></div>
+    </div>
   </div>
 
   <!-- 学校復習カード（ゆうきのみ） -->
@@ -1229,16 +1271,28 @@ function getChkBucket(key){
 }
 function getChkData(){return getChkBucket(chkChild);}
 
+// 夏休み中は学校系チェック項目を非表示（給食袋・手紙・明日の準備）
+const SCHOOL_ONLY_IDS=[107,108,109,207,208,209];
+function isNatsuPeriod(){
+  const n=new Date();
+  const start=new Date(2026,6,17); // 7/17
+  const end=new Date(2026,7,31);   // 8/31
+  return n>=start&&n<=end;
+}
+
 // 表示アイテムを返す（子どもタブでは自分のアイテム＋みんなアイテムを合わせる）
-function getMergedItems(){
+function getMergedItems(overrideChild){
+  const child=overrideChild||chkChild;
   const today=todayKey();
-  const own=getChkBucket(chkChild);
-  if(chkChild==='all'){
-    return own.items.map(it=>({...it,src:'all',done:(own.done[today]||[]).includes(it.id)}));
+  const own=getChkBucket(child==='all'?'all':child);
+  const natsu=isNatsuPeriod();
+  const filter=it=>!(natsu&&SCHOOL_ONLY_IDS.includes(it.id));
+  if(child==='all'){
+    return own.items.filter(filter).map(it=>({...it,src:'all',done:(own.done[today]||[]).includes(it.id)}));
   }
   const shared=getChkBucket('all');
-  const ownItems=own.items.map(it=>({...it,src:chkChild,done:(own.done[today]||[]).includes(it.id)}));
-  const sharedItems=shared.items.map(it=>({...it,src:'all',done:(shared.done[today]||[]).includes(it.id),shared:true}));
+  const ownItems=own.items.filter(filter).map(it=>({...it,src:child,done:(own.done[today]||[]).includes(it.id)}));
+  const sharedItems=shared.items.filter(filter).map(it=>({...it,src:'all',done:(shared.done[today]||[]).includes(it.id),shared:true}));
   return [...ownItems,...sharedItems];
 }
 
@@ -2113,45 +2167,45 @@ function selTodayChild(c,btn){
 const COACH_QS={
   '1':{ // ゆうき
     themes:[
-      { badge:'🎯 今日の計画', color:'#FFB347', bg:'#FFF8E7',
+      { badge:'☀️ 今日の夏', color:'#FFB347', bg:'#FFF8E7',
         qs:[
-          {q:'今日、どんな自分でいたいかな？',sub:'勉強？あそび？やさしさ？なんでもOK'},
-          {q:'今日のゴールを一つ決めよう！',sub:'小さなことでもいいよ'},
+          {q:'今日、どんな夏の一日にしたい？',sub:'冒険？のんびり？発見？なんでもOK！'},
+          {q:'今日チャレンジしてみたいこと、一つ決めよう！',sub:'小さなことでいい。やってみることが大事'},
         ]},
       { badge:'🤝 まわりの人', color:'#FF85A2', bg:'#FFF0F8',
         qs:[
-          {q:'今日、だれかのためにできそうなことある？',sub:'家族・友達・だれでも'},
-          {q:'家族や友達に、どんな声をかけたい？',sub:'ありがとう・いってらっしゃい・なんでも'},
+          {q:'今日、家族や友達のためにできそうなことある？',sub:'自分から動いてみよう'},
+          {q:'だれかに「ありがとう」や「いっしょにやろう」って言えそう？',sub:'ことばにすると気持ちが伝わるよ'},
         ]},
-      { badge:'💪 自分の課題', color:'#5B9BD5', bg:'#F0F6FF',
+      { badge:'💪 自分を知る', color:'#5B9BD5', bg:'#F0F6FF',
         qs:[
-          {q:'今日、自分でやり切ることは何？',sub:'「これは自分がやること」と決めてみよう'},
-          {q:'うまくいかないことがあっても、どうする？',sub:'自分なりの方法を考えてみよう'},
+          {q:'今日、自分でやると決めることは何？',sub:'「これは自分がやること」と決めると気持ちいいよ'},
+          {q:'うまくいかないことがあったら、どうする？',sub:'人のせいにせず、自分で考えてみよう'},
         ]},
     ],
-    evening:'今日いちばん楽しかったことは何かな？',
-    eveningSub:'どんな小さなことでもいいよ',
+    evening:'今日いちばん楽しかったこと・うれしかったことは？',
+    eveningSub:'どんな小さなことでもいいよ。夏の思い出になるよ🌻',
   },
   '2':{ // ひろき
     themes:[
-      { badge:'🎯 今日の計画', color:'#FFB347', bg:'#FFFDE7',
+      { badge:'☀️ 今日の夏', color:'#FFB347', bg:'#FFFDE7',
         qs:[
-          {q:'今日、どんな一日にしたい？',sub:'たのしい？がんばる？のんびり？'},
-          {q:'今日いちばんやりたいことは？',sub:'なんでもOKだよ'},
+          {q:'今日、何をしてあそびたい？',sub:'やりたいこと、おしえて！'},
+          {q:'今日いちばん楽しみなことは？',sub:'なんでもOKだよ🌻'},
         ]},
       { badge:'🤝 まわりのひと', color:'#5CB87A', bg:'#F0FFF4',
         qs:[
-          {q:'だれかに、やさしくできそう？',sub:'家族・友達・だれかに'},
-          {q:'「ありがとう」って言える場面、あるかな？',sub:'小さなことでもOK'},
+          {q:'今日、だれかにやさしくできそう？',sub:'家族・友達・だれかに'},
+          {q:'「いっしょにやろう」って言ってみよう！',sub:'さそうのって楽しいよ'},
         ]},
-      { badge:'💪 じぶんのこと', color:'#8B6FD4', bg:'#F8F0FF',
+      { badge:'💪 じぶんでやってみる', color:'#8B6FD4', bg:'#F8F0FF',
         qs:[
-          {q:'今日、じぶんでできることは何？',sub:'自分でやってみよう！'},
-          {q:'こまったときはどうする？',sub:'じぶんで考えてみよう'},
+          {q:'今日、じぶんでやってみることは何？',sub:'できたらすごい！やってみよう'},
+          {q:'むずかしいことがあっても、どうする？',sub:'じぶんで考えてみよう'},
         ]},
     ],
-    evening:'今日たのしかったことは何？',
-    eveningSub:'どんな小さなことでもいいよ ⭐',
+    evening:'今日いちばんたのしかったことは？',
+    eveningSub:'どんな小さなことでもいいよ ⭐ 夏のおもいでになるよ',
   },
 };
 
@@ -2753,11 +2807,220 @@ function saveManabiLog(){
 
 function renderManabiPage(){
   renderBalance();
+  renderDrillSections();
   renderCurriSection();
   renderOutings();
   renderWordBank();
   renderManabiLogList();
   renderManabiCards();
+}
+
+// ===== 時計クイズ =====
+let clockLevel=1, clockH=0, clockM=0, clockAnswered=false, clockScore={ok:0,total:0};
+
+function renderClockQuiz(){
+  const el=document.getElementById('clock-quiz-area');
+  if(!el)return;
+  const levels=[
+    {label:'🌱 〇時ちょうど',lv:1},
+    {label:'🌿 〇時半',lv:2},
+    {label:'🌳 5分きざみ',lv:3},
+  ];
+  const levelHTML=`<div class="clock-level-row">${levels.map(l=>
+    `<button class="clock-level-btn${clockLevel===l.lv?' on':''}" onclick="setClockLevel(${l.lv})">${l.label}</button>`
+  ).join('')}</div>`;
+
+  // ランダムな時刻を生成
+  if(!clockAnswered){
+    clockH=Math.floor(Math.random()*12);
+    if(clockLevel===1) clockM=0;
+    else if(clockLevel===2) clockM=30;
+    else clockM=Math.floor(Math.random()*12)*5;
+  }
+
+  const svg=makeClockSVG(clockH,clockM);
+  const resultEl=document.getElementById('clock-result-msg');
+  el.innerHTML=levelHTML+
+    `<div class="clock-face-wrap">${svg}</div>`+
+    `<div class="clock-score">⭕️ ${clockScore.ok} / ${clockScore.total} 問</div>`+
+    (clockAnswered
+      ?`<div class="clock-result ${clockAnswered}" id="clock-result-msg">${clockAnswered==='ok'?'🎉 せいかい！':'❌ ざんねん！　こたえは <b>${clockH===0?12:clockH}時${clockM===0?'ちょうど':clockM+'分'}</b> だよ'}</div>
+         <button class="clock-next-btn" onclick="nextClockQ()">つぎの問題 ▶</button>`
+      :`<div class="clock-inp-row">
+          <input class="clock-inp" id="clock-h-inp" type="number" min="1" max="12" placeholder="時">
+          <span class="clock-inp-label">時</span>
+          ${clockLevel>1?`<input class="clock-inp" id="clock-m-inp" type="number" min="0" max="59" placeholder="分"><span class="clock-inp-label">分</span>`:''}
+        </div>
+        <button class="clock-ans-btn" onclick="checkClockAns()">こたえる！</button>`
+    );
+}
+
+function makeClockSVG(h,m){
+  const cx=100,cy=100,r=90;
+  const mAngle=(m/60)*360-90;
+  const hAngle=((h%12)/12)*360+(m/60)*30-90;
+  const toXY=(ang,len)=>[cx+Math.cos(ang*Math.PI/180)*len, cy+Math.sin(ang*Math.PI/180)*len];
+  const [hx,hy]=toXY(hAngle,52);
+  const [mx,my]=toXY(mAngle,72);
+  const ticks=Array.from({length:12},(_,i)=>{
+    const a=(i/12)*360-90;
+    const [x1,y1]=toXY(a,80);const [x2,y2]=toXY(a,90);
+    return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#3D3250" stroke-width="3" stroke-linecap="round"/>`;
+  }).join('');
+  const nums=Array.from({length:12},(_,i)=>{
+    const n=i+1;const a=((i+1)/12)*360-90;
+    const [x,y]=toXY(a,68);
+    return `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="bold" fill="#3D3250" font-family="sans-serif">${n}</text>`;
+  }).join('');
+  return `<svg width="200" height="200" viewBox="0 0 200 200">
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="white" stroke="#E0D8F0" stroke-width="4"/>
+    <circle cx="${cx}" cy="${cy}" r="${r-2}" fill="#FAFAFE"/>
+    ${ticks}${nums}
+    <line x1="${cx}" y1="${cy}" x2="${hx}" y2="${hy}" stroke="#3D3250" stroke-width="5" stroke-linecap="round"/>
+    <line x1="${cx}" y1="${cy}" x2="${mx}" y2="${my}" stroke="#FF6BA8" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="${cx}" cy="${cy}" r="5" fill="#3D3250"/>
+  </svg>`;
+}
+
+function setClockLevel(lv){clockLevel=lv;clockAnswered=false;clockScore={ok:0,total:0};renderClockQuiz();}
+
+function checkClockAns(){
+  const hi=document.getElementById('clock-h-inp');
+  const mi=document.getElementById('clock-m-inp');
+  if(!hi||!hi.value)return;
+  const ansH=parseInt(hi.value);
+  const ansM=mi?parseInt(mi.value||0):0;
+  const correctH=clockH===0?12:clockH;
+  clockScore.total++;
+  if(ansH===correctH&&ansM===clockM){
+    clockScore.ok++;clockAnswered='ok';playCheckSound(false);
+  } else {
+    clockAnswered='ng';
+  }
+  renderClockQuiz();
+}
+
+function nextClockQ(){clockAnswered=false;renderClockQuiz();}
+
+// ===== 漢字クイズ =====
+const KANJI3=[
+  {k:'悪',r:'あく',ex:'悪い'},{k:'安',r:'あん',ex:'安心'},{k:'暗',r:'あん',ex:'暗い'},
+  {k:'医',r:'い',ex:'医者'},{k:'意',r:'い',ex:'意味'},{k:'育',r:'いく',ex:'育てる'},
+  {k:'運',r:'うん',ex:'運動'},{k:'泳',r:'えい',ex:'水泳'},{k:'駅',r:'えき',ex:'駅'},
+  {k:'横',r:'おう',ex:'横断'},{k:'温',r:'おん',ex:'温度'},{k:'荷',r:'に',ex:'荷物'},
+  {k:'界',r:'かい',ex:'世界'},{k:'開',r:'かい',ex:'開く'},{k:'階',r:'かい',ex:'階段'},
+  {k:'寒',r:'かん',ex:'寒い'},{k:'感',r:'かん',ex:'感じる'},{k:'漢',r:'かん',ex:'漢字'},
+  {k:'館',r:'かん',ex:'図書館'},{k:'岸',r:'きし',ex:'海岸'},{k:'期',r:'き',ex:'期間'},
+  {k:'急',r:'きゅう',ex:'急ぐ'},{k:'球',r:'きゅう',ex:'地球'},{k:'去',r:'きょ',ex:'去年'},
+  {k:'橋',r:'はし',ex:'橋'},{k:'業',r:'ぎょう',ex:'授業'},{k:'曲',r:'きょく',ex:'曲がる'},
+  {k:'銀',r:'ぎん',ex:'銀行'},{k:'苦',r:'く',ex:'苦しい'},{k:'君',r:'くん',ex:'君'},
+  {k:'係',r:'かかり',ex:'係'},{k:'決',r:'けつ',ex:'決める'},{k:'研',r:'けん',ex:'研究'},
+  {k:'県',r:'けん',ex:'県'},{k:'湖',r:'こ',ex:'湖'},{k:'向',r:'こう',ex:'向く'},
+  {k:'幸',r:'こう',ex:'幸せ'},{k:'港',r:'こう',ex:'港'},{k:'根',r:'こん',ex:'根'},
+  {k:'祭',r:'まつり',ex:'祭り'},{k:'死',r:'し',ex:'死ぬ'},{k:'使',r:'し',ex:'使う'},
+  {k:'始',r:'し',ex:'始まる'},{k:'指',r:'し',ex:'指'},{k:'詩',r:'し',ex:'詩'},
+  {k:'持',r:'じ',ex:'持つ'},{k:'実',r:'じつ',ex:'実は'},{k:'写',r:'しゃ',ex:'写真'},
+  {k:'者',r:'しゃ',ex:'医者'},{k:'主',r:'しゅ',ex:'主人'},{k:'取',r:'とる',ex:'取る'},
+  {k:'受',r:'じゅ',ex:'受ける'},{k:'集',r:'しゅう',ex:'集める'},{k:'住',r:'じゅう',ex:'住む'},
+  {k:'重',r:'じゅう',ex:'重い'},{k:'所',r:'しょ',ex:'場所'},{k:'暑',r:'しょ',ex:'暑い'},
+  {k:'助',r:'じょ',ex:'助ける'},{k:'消',r:'しょう',ex:'消える'},{k:'商',r:'しょう',ex:'商店'},
+  {k:'勝',r:'しょう',ex:'勝つ'},{k:'乗',r:'じょう',ex:'乗る'},{k:'植',r:'しょく',ex:'植物'},
+  {k:'身',r:'み',ex:'身体'},{k:'神',r:'かみ',ex:'神様'},{k:'深',r:'ふか',ex:'深い'},
+  {k:'進',r:'しん',ex:'進む'},{k:'整',r:'せい',ex:'整理'},{k:'全',r:'ぜん',ex:'全員'},
+  {k:'想',r:'そう',ex:'想像'},{k:'速',r:'そく',ex:'速い'},{k:'族',r:'ぞく',ex:'家族'},
+  {k:'対',r:'たい',ex:'対する'},{k:'待',r:'ま',ex:'待つ'},{k:'代',r:'だい',ex:'時代'},
+  {k:'短',r:'たん',ex:'短い'},{k:'談',r:'だん',ex:'相談'},{k:'着',r:'ちゃく',ex:'着る'},
+  {k:'注',r:'ちゅう',ex:'注意'},{k:'調',r:'ちょう',ex:'調べる'},{k:'鉄',r:'てつ',ex:'鉄'},
+  {k:'転',r:'てん',ex:'転ぶ'},{k:'都',r:'と',ex:'都会'},{k:'度',r:'ど',ex:'温度'},
+  {k:'島',r:'しま',ex:'島'},{k:'登',r:'のぼ',ex:'登る'},{k:'動',r:'どう',ex:'運動'},
+  {k:'農',r:'のう',ex:'農業'},{k:'配',r:'くば',ex:'配る'},{k:'倍',r:'ばい',ex:'倍'},
+  {k:'発',r:'はつ',ex:'発見'},{k:'反',r:'はん',ex:'反対'},{k:'皮',r:'かわ',ex:'皮'},
+  {k:'悲',r:'ひ',ex:'悲しい'},{k:'美',r:'び',ex:'美しい'},{k:'筆',r:'ふで',ex:'筆'},
+  {k:'氷',r:'こおり',ex:'氷'},{k:'表',r:'ひょう',ex:'発表'},{k:'病',r:'びょう',ex:'病気'},
+  {k:'負',r:'まけ',ex:'負ける'},{k:'服',r:'ふく',ex:'服'},{k:'物',r:'もの',ex:'物'},
+  {k:'平',r:'へい',ex:'平和'},{k:'返',r:'かえ',ex:'返す'},{k:'勉',r:'べん',ex:'勉強'},
+  {k:'放',r:'ほう',ex:'放す'},{k:'味',r:'み',ex:'味'},{k:'命',r:'いのち',ex:'命'},
+  {k:'問',r:'もん',ex:'問題'},{k:'役',r:'やく',ex:'役に立つ'},{k:'薬',r:'くすり',ex:'薬'},
+  {k:'由',r:'ゆ',ex:'理由'},{k:'油',r:'あぶら',ex:'石油'},{k:'遊',r:'ゆう',ex:'遊ぶ'},
+  {k:'葉',r:'は',ex:'葉っぱ'},{k:'落',r:'おち',ex:'落ちる'},{k:'流',r:'なが',ex:'流れる'},
+  {k:'旅',r:'りょ',ex:'旅行'},{k:'緑',r:'みどり',ex:'緑'},{k:'礼',r:'れい',ex:'礼儀'},
+  {k:'練',r:'れん',ex:'練習'},{k:'路',r:'ろ',ex:'道路'},{k:'和',r:'わ',ex:'平和'},
+];
+
+let kanjiQueue=[],kanjiIdx=0,kanjiAnswered=false,kanjiScore={ok:0,total:0};
+
+function startKanjiQuiz(){
+  kanjiQueue=[...KANJI3].sort(()=>Math.random()-.5);
+  kanjiIdx=0;kanjiAnswered=false;kanjiScore={ok:0,total:0};
+  renderKanjiQuiz();
+}
+
+function renderKanjiQuiz(){
+  const el=document.getElementById('kanji-quiz-area');
+  if(!el)return;
+  if(!kanjiQueue.length){
+    el.innerHTML=`<button class="kanji-next-btn" onclick="startKanjiQuiz()">🎴 クイズをはじめる（${KANJI3.length}問）</button>`;
+    return;
+  }
+  if(kanjiIdx>=kanjiQueue.length){
+    el.innerHTML=`<div style="text-align:center;padding:16px">
+      🎉 全問おわり！<br>
+      <span style="font-size:24px;font-weight:900;display:block;margin:8px 0">⭕️${kanjiScore.ok} / ${kanjiScore.total}問</span>
+      <button class="kanji-next-btn" onclick="startKanjiQuiz()">もう一度！</button>
+    </div>`;
+    playCheckSound(kanjiScore.ng===0);
+    return;
+  }
+  const q=kanjiQueue[kanjiIdx];
+  // 4択生成（正解＋ランダム3つ）
+  const wrongs=KANJI3.filter(k=>k.r!==q.r).sort(()=>Math.random()-.5).slice(0,3);
+  const choices=[q,...wrongs].sort(()=>Math.random()-.5);
+
+  el.innerHTML=`
+    <div class="kanji-score">⭕️ ${kanjiScore.ok} / ${kanjiScore.total}問 ｜ のこり ${kanjiQueue.length-kanjiIdx}問</div>
+    <div class="kanji-display">${q.k}</div>
+    <div class="kanji-meaning" id="kanji-meaning">${kanjiAnswered?`例：${q.ex}`:''}</div>
+    <div class="kanji-choices" id="kanji-choices">
+      ${choices.map(c=>{
+        let cls='kanji-choice';
+        if(kanjiAnswered){
+          if(c.r===q.r) cls+=' show-ans';
+        }
+        return `<button class="${cls}" onclick="checkKanji('${c.r}','${q.r}')" ${kanjiAnswered?'disabled':''}>${c.r}</button>`;
+      }).join('')}
+    </div>
+    ${kanjiAnswered?`<button class="kanji-next-btn" onclick="nextKanji()">つぎへ ▶</button>`:''}
+  `;
+}
+
+function checkKanji(ans,correct){
+  kanjiScore.total++;
+  const ok=ans===correct;
+  if(ok){kanjiScore.ok++;playCheckSound(false);}
+  kanjiAnswered=true;
+  // ボタンに色付け
+  document.querySelectorAll('.kanji-choice').forEach(b=>{
+    const r=b.textContent.trim();
+    if(r===correct)b.className='kanji-choice show-ans';
+    else if(r===ans&&!ok)b.className='kanji-choice ng';
+    b.disabled=true;
+  });
+  document.getElementById('kanji-meaning').textContent=`例：${KANJI3.find(k=>k.r===correct&&k.k===kanjiQueue[kanjiIdx].k)?.ex||''}`;
+  const nextBtn=document.createElement('button');
+  nextBtn.className='kanji-next-btn';nextBtn.textContent='つぎへ ▶';
+  nextBtn.style.marginTop='6px';nextBtn.onclick=nextKanji;
+  document.getElementById('kanji-quiz-area').appendChild(nextBtn);
+}
+
+function nextKanji(){kanjiIdx++;kanjiAnswered=false;renderKanjiQuiz();}
+
+function renderDrillSections(){
+  const clkSec=document.getElementById('clock-quiz-section');
+  const knjSec=document.getElementById('kanji-quiz-section');
+  if(clkSec) clkSec.style.display=manabiChild==='2'?'block':'none';
+  if(knjSec) knjSec.style.display=manabiChild==='1'?'block':'none';
+  if(manabiChild==='2') renderClockQuiz();
+  if(manabiChild==='1'&&!kanjiQueue.length) renderKanjiQuiz();
 }
 
 // ===== 学習要領カード =====
