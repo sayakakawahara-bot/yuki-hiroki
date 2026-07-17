@@ -285,6 +285,27 @@ body{font-family:'Hiragino Maru Gothic ProN','Hiragino Kaku Gothic ProN','Meiryo
 .tt-text.done{text-decoration:line-through;color:var(--muted);}
 .tt-del{background:none;border:none;color:#ddd;cursor:pointer;font-size:14px;padding:0 3px;}
 .tt-empty{font-size:12px;color:var(--muted);text-align:center;padding:10px 0;}
+/* 時計クイズ 選択式 */
+.clock-choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;}
+.clock-choice-btn{padding:14px 8px;border-radius:12px;border:2px solid var(--border);background:var(--card);color:var(--text);font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s;}
+.clock-choice-btn:active{transform:scale(.96);}
+.clock-choice-btn.correct{background:#5CB87A;border-color:#5CB87A;color:#fff;}
+.clock-choice-btn.wrong{background:#FF6B6B;border-color:#FF6B6B;color:#fff;opacity:.6;}
+.clock-choice-btn[disabled]{cursor:default;}
+/* ひろきのなつチャレンジ */
+.hir-ch-card{background:var(--card);border-radius:16px;padding:14px 16px;margin:12px 0;box-shadow:0 2px 8px rgba(0,0,0,.08);}
+.hir-ch-title{font-weight:700;font-size:15px;margin-bottom:10px;}
+.hir-ch-progress-wrap{height:8px;background:var(--border);border-radius:4px;margin-bottom:4px;}
+.hir-ch-progress-bar{height:8px;background:linear-gradient(90deg,#FFB347,#FF85A2);border-radius:4px;transition:.3s;}
+.hir-ch-progress-label{font-size:11px;color:var(--muted);text-align:right;margin-bottom:10px;}
+.hir-ch-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);}
+.hir-ch-item:last-child{border-bottom:none;}
+.hir-ch-emoji{font-size:20px;flex-shrink:0;}
+.hir-ch-info{flex:1;}
+.hir-ch-text{font-size:13px;font-weight:600;}
+.hir-ch-stars{font-size:12px;letter-spacing:1px;margin-top:2px;}
+.hir-ch-cnt{font-size:12px;color:var(--muted);min-width:32px;text-align:center;}
+.hir-ch-btn{background:#FFB347;color:#fff;border:none;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;}
 /* タスク追加モーダル */
 .ttadd-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:250;display:none;align-items:flex-end;justify-content:center;}
 .ttadd-overlay.open{display:flex;}
@@ -772,6 +793,9 @@ textarea.form-inp{resize:vertical;min-height:58px;}
 <!-- ===== しゅくだいページ ===== -->
 <div id="page-shukudai" class="page">
 
+  <!-- なつのしゅくだいまとめ -->
+  <div id="summer-tasks-area"></div>
+
   <!-- 目標 -->
   <div class="card">
     <div class="section-head" style="border-color:#FF6BA8;">🌟 もくひょう</div>
@@ -844,6 +868,11 @@ textarea.form-inp{resize:vertical;min-height:58px;}
       <div class="balance-title">🕐 とけいクイズ</div>
       <div id="clock-quiz-area"></div>
     </div>
+  </div>
+
+  <!-- なつチャレンジ（ひろきのみ） -->
+  <div id="hir-challenge-section" style="display:none">
+    <div id="hir-challenge-area"></div>
   </div>
 
   <!-- 漢字クイズ（ゆうきのみ） -->
@@ -1579,6 +1608,48 @@ function selGoalChild(c,btn){
   document.querySelectorAll('#goal-child-row .cb').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');renderGoals();
 }
+function renderSummerTasks(){
+  const el=document.getElementById('summer-tasks-area');
+  if(!el)return;
+  const tasks=D.tasks||[];
+  const DOW_LABEL={'毎日':'まいにち','1':'月','2':'火','3':'水','4':'木','5':'金','6':'土','0':'日'};
+  const DAY_PRESETS={
+    '毎日':'まいにち',
+    '1,2,3,4,5':'月〜金',
+    '1,2,3,4,5,6':'月〜土',
+    '1,3,5':'月・水・金',
+    '2,4':'火・木',
+    '2,4,6':'火・木・土',
+    '6':'土（週末）',
+    '0':'日',
+  };
+  const daysLabel=days=>{
+    const key=[...days].sort().join(',');
+    return DAY_PRESETS[key]||days.map(d=>DOW_LABEL[d]||d).join('・');
+  };
+
+  const children=[{id:'1',label:'🌸 ゆうき',color:'#FF85A2'},{id:'2',label:'🌻 ひろき',color:'#FFB347'}];
+  let html=`<div class="card" style="padding-bottom:4px">
+    <div class="section-head" style="border-color:#FFB347;">☀️ なつのしゅくだい まとめ</div>`;
+
+  children.forEach(ch=>{
+    const ct=tasks.filter(t=>t.child===ch.id);
+    if(!ct.length)return;
+    html+=`<div style="margin-bottom:14px">
+      <div style="font-weight:700;font-size:13px;color:${ch.color};margin-bottom:6px">${ch.label}</div>
+      <table style="width:100%;border-collapse:collapse;font-size:13px">`;
+    ct.forEach(t=>{
+      html+=`<tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:6px 4px;width:60%">${t.text}</td>
+        <td style="padding:6px 4px;color:var(--muted);text-align:right">${daysLabel(t.days)}</td>
+      </tr>`;
+    });
+    html+=`</table></div>`;
+  });
+  html+=`</div>`;
+  el.innerHTML=html;
+}
+
 function renderGoals(){
   const g=document.getElementById('goal-cards');
   const filtered=(D.goals||[]).filter(goal=>goal.child===goalChild);
@@ -1873,7 +1944,7 @@ function showPage(name,btn){
   const fab=document.getElementById('fab');
   fab.style.display=name==='cal'?'flex':'none';
   if(name==='mainichi'){renderTodayView();renderTodayTasks();renderCoachMorning();renderWgoalArea();renderChk();renderSchedule();renderKeiko();renderCoachEvening();}
-  if(name==='shukudai'){renderGoals();renderSdCats();renderShukudai();}
+  if(name==='shukudai'){renderSummerTasks();renderGoals();renderSdCats();renderShukudai();}
   if(name==='manabi'){renderManabiPage();}
   if(name==='memo'){renderGrowthSummary();renderMemos();}
 }
@@ -1953,19 +2024,27 @@ if(!D.weeklyGoals)D.weeklyGoals={};
 if(!D.dailyCoach)D.dailyCoach={};
 if(!D.weekTasks)D.weekTasks={};
 if(!D.tasks)D.tasks=[];
-if(!D.tasksSeeded){seedTasks();}
-// ひろきのチャレンジをチェックリストに追加
-chkMigrate('2',215,'🍽 しょくじのもりつけ');
-chkMigrate('2',216,'🧹 テーブルをふく');
-chkMigrate('2',217,'🍽 しょっきをかたづける');
-chkMigrate('2',218,'👨‍🍳 りょうりのてつだい');
-chkMigrate('2',219,'🧹 へやをかたづける');
-chkMigrate('2',220,'👕 せんたくものをたたむ');
-chkMigrate('2',221,'👕 せんたくものをしまう');
-chkMigrate('2',222,'👗 よくふくをじゅんびする');
-chkMigrate('2',223,'⏰ じぶんでおきる');
-chkMigrate('2',224,'🎀 ちょうちょむすびれんしゅう');
-chkMigrate('2',225,'🔤 かたかなをよむ');
+if(!D.tasksSeeded||D.tasksV!==3){seedTasks();}
+if(!D.eventsSeeded){seedCalEvents();}
+if(!D.hirChallenge){
+  D.hirChallenge=[
+    {id:'hc1',text:'しょくじのもりつけをする',emoji:'🍽',count:0},
+    {id:'hc2',text:'テーブルをふく',emoji:'🧹',count:0},
+    {id:'hc3',text:'しょっきをかたづける',emoji:'🍽',count:0},
+    {id:'hc4',text:'りょうりのてつだいをする',emoji:'🍳',count:0},
+    {id:'hc5',text:'へやをかたづける',emoji:'🧹',count:0},
+    {id:'hc6',text:'せんたくものをたたむ',emoji:'👕',count:0},
+    {id:'hc7',text:'せんたくものをしまう',emoji:'👕',count:0},
+    {id:'hc8',text:'つぎのひのふくをじゅんびする',emoji:'👗',count:0},
+    {id:'hc9',text:'じぶんでおきる',emoji:'⏰',count:0},
+    {id:'hc11',text:'ちょうちょむすびをれんしゅうする',emoji:'🎀',count:0},
+    {id:'hc12',text:'かたかなをみつけてよむ',emoji:'🔤',count:0},
+  ];
+}
+// チャレンジをチェックリストから削除（別セクションに移動済み）
+[215,216,217,218,219,220,221,222,223,224,225].forEach(id=>{
+  if(D.chk&&D.chk['2']){D.chk['2'].items=D.chk['2'].items.filter(i=>i.id!==id);}
+});
 save();
 
 // 時間データがない、またはレッスン名が古いケイコデータはリセット
@@ -2337,10 +2416,67 @@ function getWeekKey(){
   return `${y}-W${String(wn).padStart(2,'0')}`;
 }
 
+function seedCalEvents(){
+  const add=(date,name,time,child)=>{
+    if(!D.events[date])D.events[date]=[];
+    if(!D.events[date].find(e=>e.name===name))
+      D.events[date].push({id:'seed_'+date+'_'+name,name,time:time||'',child:child||'all'});
+  };
+  // 7/17 体操振替
+  add('2026-07-17','体操（振替）','','all');
+  // 7/18〜23 ラジオ体操
+  ['2026-07-18','2026-07-19','2026-07-20','2026-07-21','2026-07-22','2026-07-23'].forEach(d=>add(d,'ラジオ体操','6:30','all'));
+  // 7/18 夏祭り
+  add('2026-07-18','おやじの会 夏祭り','17:30','all');
+  // 7/19
+  add('2026-07-19','合宿合同練習','10:00','all');
+  add('2026-07-19','みっちゃんとランチ','11:00','all');
+  // 7/20
+  add('2026-07-20','夫とプール＆サッカー観戦','','all');
+  // 7/22
+  add('2026-07-22','かずくんとプール','13:00','all');
+  // 7/26 上野特別展（ワークショップから変更）
+  add('2026-07-26','上野 特別展🎨','','all');
+  // 7/27 スイミング振替→7/31
+  if(!D.keikoEx)D.keikoEx={};
+  if(!D.keikoEx['2026-07-27_スイミング_2'])D.keikoEx['2026-07-27_スイミング_2']='2026-07-31';
+  // 7/29 ゆうきピアノ
+  add('2026-07-29','ゆうきピアノ','10:25','1');
+  // 8/2
+  add('2026-08-02','なっちゃんと遊ぶ','','all');
+  // 8/3〜4 IKIDS
+  add('2026-08-03','IKIDS（1日め）','','all');
+  add('2026-08-04','IKIDS（2日め）','','all');
+  // 8/5 夏休み保育園
+  add('2026-08-05','夏休み保育園','','all');
+  // 8/9
+  add('2026-08-09','かんねんと遊ぶ','','all');
+  // 8/10 ゆうきTGG・習い事お休み
+  add('2026-08-10','ゆうき TGG','','1');
+  add('2026-08-10','習い事お休み','','all');
+  add('2026-08-11','習い事お休み','','all');
+  add('2026-08-12','習い事お休み','','all');
+  // 8/12 上野の科博
+  add('2026-08-12','はるちゃん・あおちゃんと上野 科博🦕','','all');
+  // 8/20 ゆうき漢検
+  add('2026-08-20','ゆうき 漢検📝','','1');
+  // 8/22
+  add('2026-08-22','大我・りなと遊ぶ','','all');
+  // 8/23
+  add('2026-08-23','K先生','','all');
+  // 8/29
+  add('2026-08-29','焼肉キング🥩','','all');
+  // 8/30
+  add('2026-08-30','イブたちと花火🎆','','all');
+  // 8/31
+  add('2026-08-31','ドルフィンのみんなとナンジャタウン🎡','','all');
+  D.eventsSeeded=true;
+}
+
 function seedTasks(){
   const t=(id,text,child,days)=>({id,text,child,days,done:{}});
   D.tasks=[
-    // ゆうき
+    // ゆうき（3年生）
     t('y_eigo','📖 英語の本','1',['毎日']),
     t('y_shichida','📝 七田式','1',['1','2','3','4','5','6']),
     t('y_summer','📒 サマースキル 3ページ','1',['1','2','3','4','5','6']),
@@ -2349,19 +2485,21 @@ function seedTasks(){
     t('y_piano','🎹 ピアノ','1',['1','2','3','4','5']),
     t('y_typing','⌨️ タイピング','1',['2','4']),
     t('y_nawatobi','🪢 なわとび','1',['1','3','5']),
-    t('y_hosen','🌸 ホウセンカの観察','1',['1','3','5']),
-    t('y_dokusho','📚 読書','1',['毎日']),
-    t('y_jiyuu','🔬 自由研究','1',['6']),
-    t('y_kansou','📝 読書感想文カード','1',['6']),
-    // ひろき
-    t('h_eigo','📖 英語の本（多読）','2',['毎日']),
-    t('h_shichida','📝 七田式（かず・ちえ・ことば）','2',['1','3','5']),
-    t('h_work','📒 国語・算数ワーク','2',['2','4','6']),
-    t('h_summer','📗 夏のワーク 3〜4ページ','2',['1','2','3','4','5','6']),
-    t('h_sansuu','➕ 足し算引き算 1分テスト','2',['1','3','5']),
-    t('h_asagao','🌺 朝顔の世話','2',['毎日']),
+    t('y_hosen','🌸 ホウセンカのかんさつ','1',['1','3','5']),
+    t('y_dokusho','📚 どくしょ','1',['毎日']),
+    t('y_jiyuu','🔬 じゆうけんきゅう','1',['6']),
+    t('y_kansou','📝 どくしょかんそうカード','1',['6']),
+    // ひろき（1年生）— ひらがなで
+    t('h_eigo','📖 えいごのほん（たどく）','2',['毎日']),
+    t('h_ondoku','📖 きょうかしょ おんどく','2',['1','2','3','4','5']),
+    t('h_shichida','📝 しちだしき（かず・ちえ・ことば）','2',['1','3','5']),
+    t('h_work','📒 こくご・さんすうワーク','2',['2','4','6']),
+    t('h_summer','📗 なつのワーク 3〜4ページ','2',['1','2','3','4','5','6']),
+    t('h_sansuu','➕ たしざんひきざん 1ぷんテスト','2',['1','3','5']),
+    t('h_asagao','🌺 あさがおのせわ','2',['毎日']),
   ];
   D.tasksSeeded=true;
+  D.tasksV=3;
 }
 
 function renderTodayTasks(){
@@ -3062,45 +3200,85 @@ function renderManabiPage(){
   renderManabiCards();
 }
 
-// ===== 時計クイズ =====
+// ===== 時計クイズ（選択式）=====
 let clockLevel=1, clockH=0, clockM=0, clockAnswered=false, clockScore={ok:0,total:0};
+let _clockChoices=[];
+
+function clockTimeStr(h,m){
+  if(m===0) return h+'じ ちょうど';
+  if(m===30) return h+'じ はん';
+  return h+'じ '+m+'ふん';
+}
+
+function genClockChoices(h,m){
+  const ch=h===0?12:h;
+  const correct={h:ch,m};
+  const choices=[correct];
+  const used=new Set([ch+':'+m]);
+  while(choices.length<4){
+    let rh=Math.ceil(Math.random()*12), rm=0;
+    if(clockLevel===2) rm=30;
+    else if(clockLevel===3) rm=Math.floor(Math.random()*12)*5;
+    const k=rh+':'+rm;
+    if(!used.has(k)){used.add(k);choices.push({h:rh,m:rm});}
+  }
+  for(let i=choices.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [choices[i],choices[j]]=[choices[j],choices[i]];
+  }
+  return choices;
+}
 
 function renderClockQuiz(){
   const el=document.getElementById('clock-quiz-area');
   if(!el)return;
   const levels=[
-    {label:'🌱 〇時ちょうど',lv:1},
-    {label:'🌿 〇時半',lv:2},
-    {label:'🌳 5分きざみ',lv:3},
+    {label:'🌱 〇じ ちょうど',lv:1},
+    {label:'🌿 〇じ はん',lv:2},
+    {label:'🌳 5ふん きざみ',lv:3},
   ];
   const levelHTML=`<div class="clock-level-row">${levels.map(l=>
     `<button class="clock-level-btn${clockLevel===l.lv?' on':''}" onclick="setClockLevel(${l.lv})">${l.label}</button>`
   ).join('')}</div>`;
 
-  // ランダムな時刻を生成
   if(!clockAnswered){
     clockH=Math.floor(Math.random()*12);
     if(clockLevel===1) clockM=0;
     else if(clockLevel===2) clockM=30;
     else clockM=Math.floor(Math.random()*12)*5;
+    _clockChoices=genClockChoices(clockH,clockM);
   }
 
   const svg=makeClockSVG(clockH,clockM);
-  const wrongMsg='❌ ざんねん！　こたえは <b>'+(clockH===0?12:clockH)+'時'+(clockM===0?'ちょうど':clockM+'分')+'</b> だよ';
-  const resultEl=document.getElementById('clock-result-msg');
+  const correctH=clockH===0?12:clockH;
+
+  let choiceHTML;
+  if(!clockAnswered){
+    choiceHTML=`<div class="clock-choices">${_clockChoices.map(c=>
+      `<button class="clock-choice-btn" onclick="checkClockChoice(${c.h},${c.m})">${clockTimeStr(c.h,c.m)}</button>`
+    ).join('')}</div>`;
+  } else {
+    const wrongMsg='❌ ざんねん！　こたえは <b>'+clockTimeStr(correctH,clockM)+'</b> だよ';
+    choiceHTML=`<div class="clock-choices">${_clockChoices.map(c=>{
+      const isCorr=(c.h===correctH&&c.m===clockM);
+      return `<button class="clock-choice-btn${isCorr?' correct':(!isCorr&&clockAnswered==='ng'?' wrong':'')}" disabled>${clockTimeStr(c.h,c.m)}</button>`;
+    }).join('')}</div>
+    <div class="clock-result ${clockAnswered}">${clockAnswered==='ok'?'🎉 せいかい！':wrongMsg}</div>
+    <button class="clock-next-btn" onclick="nextClockQ()">つぎの もんだい ▶</button>`;
+  }
+
   el.innerHTML=levelHTML+
     `<div class="clock-face-wrap">${svg}</div>`+
-    `<div class="clock-score">⭕️ ${clockScore.ok} / ${clockScore.total} 問</div>`+
-    (clockAnswered
-      ?`<div class="clock-result ${clockAnswered}" id="clock-result-msg">${clockAnswered==='ok'?'🎉 せいかい！':wrongMsg}</div>
-         <button class="clock-next-btn" onclick="nextClockQ()">つぎの問題 ▶</button>`
-      :`<div class="clock-inp-row">
-          <input class="clock-inp" id="clock-h-inp" type="number" min="1" max="12" placeholder="時">
-          <span class="clock-inp-label">時</span>
-          ${clockLevel>1?`<input class="clock-inp" id="clock-m-inp" type="number" min="0" max="59" placeholder="分"><span class="clock-inp-label">分</span>`:''}
-        </div>
-        <button class="clock-ans-btn" onclick="checkClockAns()">こたえる！</button>`
-    );
+    `<div class="clock-score">⭕️ ${clockScore.ok} / ${clockScore.total} もん</div>`+
+    choiceHTML;
+}
+
+function checkClockChoice(h,m){
+  const correctH=clockH===0?12:clockH;
+  clockScore.total++;
+  if(h===correctH&&m===clockM){clockScore.ok++;clockAnswered='ok';playCheckSound(false);}
+  else{clockAnswered='ng';}
+  renderClockQuiz();
 }
 
 function makeClockSVG(h,m){
@@ -3131,23 +3309,6 @@ function makeClockSVG(h,m){
 }
 
 function setClockLevel(lv){clockLevel=lv;clockAnswered=false;clockScore={ok:0,total:0};renderClockQuiz();}
-
-function checkClockAns(){
-  const hi=document.getElementById('clock-h-inp');
-  const mi=document.getElementById('clock-m-inp');
-  if(!hi||!hi.value)return;
-  const ansH=parseInt(hi.value);
-  const ansM=mi?parseInt(mi.value||0):0;
-  const correctH=clockH===0?12:clockH;
-  clockScore.total++;
-  if(ansH===correctH&&ansM===clockM){
-    clockScore.ok++;clockAnswered='ok';playCheckSound(false);
-  } else {
-    clockAnswered='ng';
-  }
-  renderClockQuiz();
-}
-
 function nextClockQ(){clockAnswered=false;renderClockQuiz();}
 
 // ===== 漢字クイズ =====
@@ -3265,10 +3426,49 @@ function nextKanji(){kanjiIdx++;kanjiAnswered=false;renderKanjiQuiz();}
 function renderDrillSections(){
   const clkSec=document.getElementById('clock-quiz-section');
   const knjSec=document.getElementById('kanji-quiz-section');
+  const chSec=document.getElementById('hir-challenge-section');
   if(clkSec) clkSec.style.display=manabiChild==='2'?'block':'none';
   if(knjSec) knjSec.style.display=manabiChild==='1'?'block':'none';
-  if(manabiChild==='2') renderClockQuiz();
+  if(chSec) chSec.style.display=manabiChild==='2'?'block':'none';
+  if(manabiChild==='2'){renderClockQuiz();renderHirChallenge();}
   if(manabiChild==='1'&&!kanjiQueue.length) renderKanjiQuiz();
+}
+
+// ===== ひろきのなつチャレンジ =====
+function renderHirChallenge(){
+  const el=document.getElementById('hir-challenge-area');
+  if(!el)return;
+  const list=D.hirChallenge||[];
+  const total=list.reduce((s,c)=>s+Math.min(c.count,5),0);
+  const max=list.length*5;
+  let html=`<div class="hir-ch-card">
+    <div class="hir-ch-title">🌟 ひろきの なつチャレンジ</div>
+    <div class="hir-ch-progress-wrap">
+      <div class="hir-ch-progress-bar" style="width:${Math.round(total/max*100)}%"></div>
+    </div>
+    <div class="hir-ch-progress-label">${total} / ${max} ほし</div>`;
+  list.forEach(c=>{
+    const stars=Math.min(c.count,5);
+    const starStr='⭐'.repeat(stars)+'☆'.repeat(5-stars);
+    html+=`<div class="hir-ch-item">
+      <span class="hir-ch-emoji">${c.emoji}</span>
+      <div class="hir-ch-info">
+        <div class="hir-ch-text">${c.text}</div>
+        <div class="hir-ch-stars">${starStr}</div>
+      </div>
+      <div class="hir-ch-cnt">${c.count}かい</div>
+      <button class="hir-ch-btn" onclick="addHirChallenge('${c.id}')">やった！</button>
+    </div>`;
+  });
+  html+=`</div>`;
+  el.innerHTML=html;
+}
+
+function addHirChallenge(id){
+  const c=(D.hirChallenge||[]).find(x=>x.id===id);
+  if(!c)return;
+  c.count=(c.count||0)+1;
+  save();renderHirChallenge();
 }
 
 // ===== 学習要領カード =====
