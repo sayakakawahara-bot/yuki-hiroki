@@ -3086,12 +3086,13 @@ function renderClockQuiz(){
   }
 
   const svg=makeClockSVG(clockH,clockM);
+  const wrongMsg='❌ ざんねん！　こたえは <b>'+(clockH===0?12:clockH)+'時'+(clockM===0?'ちょうど':clockM+'分')+'</b> だよ';
   const resultEl=document.getElementById('clock-result-msg');
   el.innerHTML=levelHTML+
     `<div class="clock-face-wrap">${svg}</div>`+
     `<div class="clock-score">⭕️ ${clockScore.ok} / ${clockScore.total} 問</div>`+
     (clockAnswered
-      ?`<div class="clock-result ${clockAnswered}" id="clock-result-msg">${clockAnswered==='ok'?'🎉 せいかい！':'❌ ざんねん！　こたえは <b>${clockH===0?12:clockH}時${clockM===0?'ちょうど':clockM+'分'}</b> だよ'}</div>
+      ?`<div class="clock-result ${clockAnswered}" id="clock-result-msg">${clockAnswered==='ok'?'🎉 せいかい！':wrongMsg}</div>
          <button class="clock-next-btn" onclick="nextClockQ()">つぎの問題 ▶</button>`
       :`<div class="clock-inp-row">
           <input class="clock-inp" id="clock-h-inp" type="number" min="1" max="12" placeholder="時">
