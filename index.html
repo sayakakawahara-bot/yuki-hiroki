@@ -299,6 +299,34 @@ body{font-family:'Hiragino Maru Gothic ProN','Hiragino Kaku Gothic ProN','Meiryo
 .ttadd-day.on{border-color:#4ECDC4;background:#EDFAF8;color:#2A9D8F;}
 .ttadd-ok{width:100%;padding:12px;border-radius:14px;border:none;background:linear-gradient(135deg,#4ECDC4,#2A9D8F);color:white;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;margin-top:14px;}
 
+/* 今日やること */
+.today-tasks-card{background:var(--card);border-radius:16px;padding:14px 16px;margin:12px 0;box-shadow:0 2px 8px rgba(0,0,0,.08);}
+.today-tasks-title{display:flex;align-items:center;justify-content:space-between;font-weight:700;font-size:15px;margin-bottom:10px;}
+.today-tasks-add-btn{background:var(--accent);color:#fff;border:none;border-radius:20px;padding:4px 14px;font-size:13px;font-weight:600;cursor:pointer;}
+.tt-child-block{margin-bottom:8px;}
+.tt-child-label{font-size:12px;font-weight:700;margin-bottom:4px;}
+.tt-item{display:flex;align-items:center;gap:8px;padding:6px 4px;border-bottom:1px solid var(--border);}
+.tt-item:last-child{border-bottom:none;}
+.tt-check{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;flex-shrink:0;transition:.15s;}
+.tt-check.done{background:var(--accent);border-color:var(--accent);color:#fff;}
+.tt-text{flex:1;font-size:14px;}
+.tt-done{text-decoration:line-through;color:var(--muted);}
+.tt-del{background:none;border:none;font-size:16px;cursor:pointer;opacity:.4;padding:2px 4px;}
+.tt-empty{text-align:center;color:var(--muted);font-size:14px;padding:8px 0;}
+/* タスク追加モーダル */
+.ttadd-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:.2s;}
+.ttadd-overlay.open{opacity:1;pointer-events:all;}
+.ttadd-modal{background:var(--card);border-radius:20px 20px 0 0;padding:16px 20px 32px;width:100%;max-height:80vh;overflow-y:auto;transform:translateY(40px);transition:.2s;}
+.ttadd-overlay.open .ttadd-modal{transform:translateY(0);}
+.ttadd-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 14px;}
+.ttadd-title{font-weight:700;font-size:16px;margin-bottom:12px;}
+.ttadd-lbl{font-size:12px;color:var(--muted);font-weight:600;margin:10px 0 4px;}
+.ttadd-inp{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;background:var(--bg);color:var(--text);box-sizing:border-box;}
+.ttadd-days{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px;}
+.ttadd-day{padding:6px 0;width:40px;text-align:center;border:1.5px solid var(--border);border-radius:8px;background:none;color:var(--text);font-size:13px;cursor:pointer;}
+.ttadd-day.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700;}
+.ttadd-ok{width:100%;margin-top:16px;padding:12px;background:var(--accent);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;}
+
 /* 朝・夜コーチングカード */
 .coach-card{border-radius:var(--r);padding:16px 18px;box-shadow:0 4px 18px rgba(0,0,0,.07);margin-bottom:12px;}
 .coach-card.morning{background:linear-gradient(135deg,#FFF8E7,#FFF0F8);}
@@ -1924,6 +1952,20 @@ if(!D.keikoEx)D.keikoEx={};
 if(!D.weeklyGoals)D.weeklyGoals={};
 if(!D.dailyCoach)D.dailyCoach={};
 if(!D.weekTasks)D.weekTasks={};
+if(!D.tasks)D.tasks=[];
+if(!D.tasksSeeded){seedTasks();}
+// ひろきのチャレンジをチェックリストに追加
+chkMigrate('2',215,'🍽 しょくじのもりつけ');
+chkMigrate('2',216,'🧹 テーブルをふく');
+chkMigrate('2',217,'🍽 しょっきをかたづける');
+chkMigrate('2',218,'👨‍🍳 りょうりのてつだい');
+chkMigrate('2',219,'🧹 へやをかたづける');
+chkMigrate('2',220,'👕 せんたくものをたたむ');
+chkMigrate('2',221,'👕 せんたくものをしまう');
+chkMigrate('2',222,'👗 よくふくをじゅんびする');
+chkMigrate('2',223,'⏰ じぶんでおきる');
+chkMigrate('2',224,'🎀 ちょうちょむすびれんしゅう');
+chkMigrate('2',225,'🔤 かたかなをよむ');
 save();
 
 // 時間データがない、またはレッスン名が古いケイコデータはリセット
@@ -2295,20 +2337,40 @@ function getWeekKey(){
   return `${y}-W${String(wn).padStart(2,'0')}`;
 }
 
-function getWTasks(){
-  const wk=getWeekKey();
-  if(!D.weekTasks[wk])D.weekTasks[wk]={tasks:[]};
-  return D.weekTasks[wk].tasks;
+function seedTasks(){
+  const t=(id,text,child,days)=>({id,text,child,days,done:{}});
+  D.tasks=[
+    // ゆうき
+    t('y_eigo','📖 英語の本','1',['毎日']),
+    t('y_shichida','📝 七田式','1',['1','2','3','4','5','6']),
+    t('y_summer','📒 サマースキル 3ページ','1',['1','2','3','4','5','6']),
+    t('y_kanji','✏️ 漢字プリント','1',['1','3','5']),
+    t('y_recorder','🎵 リコーダー','1',['2','4']),
+    t('y_piano','🎹 ピアノ','1',['1','2','3','4','5']),
+    t('y_typing','⌨️ タイピング','1',['2','4']),
+    t('y_nawatobi','🪢 なわとび','1',['1','3','5']),
+    t('y_hosen','🌸 ホウセンカの観察','1',['1','3','5']),
+    t('y_dokusho','📚 読書','1',['毎日']),
+    t('y_jiyuu','🔬 自由研究','1',['6']),
+    t('y_kansou','📝 読書感想文カード','1',['6']),
+    // ひろき
+    t('h_eigo','📖 英語の本（多読）','2',['毎日']),
+    t('h_shichida','📝 七田式（かず・ちえ・ことば）','2',['1','3','5']),
+    t('h_work','📒 国語・算数ワーク','2',['2','4','6']),
+    t('h_summer','📗 夏のワーク 3〜4ページ','2',['1','2','3','4','5','6']),
+    t('h_sansuu','➕ 足し算引き算 1分テスト','2',['1','3','5']),
+    t('h_asagao','🌺 朝顔の世話','2',['毎日']),
+  ];
+  D.tasksSeeded=true;
 }
 
 function renderTodayTasks(){
   const el=document.getElementById('today-tasks-area');
   if(!el)return;
-  const tasks=getWTasks();
-  const todayDow=String(new Date().getDay()); // 0=日,1=月,...
+  const tasks=D.tasks||[];
+  const todayDow=String(new Date().getDay());
   const dk=dateKey();
   const todayTasks=tasks.filter(t=>t.days.includes('毎日')||t.days.includes(todayDow));
-  if(todayTasks.length===0&&tasks.length===0){el.innerHTML='';return;}
 
   const children=['1','2','0'];
   const childLabel={'1':'ゆうき','2':'ひろき','0':'ふたり'};
@@ -2326,22 +2388,19 @@ function renderTodayTasks(){
     children.forEach(c=>{
       const ct=todayTasks.filter(t=>t.child===c);
       if(ct.length===0)return;
+      const done_c=ct.filter(t=>!!(t.done&&t.done[dk])).length;
       html+=`<div class="tt-child-block">
-        <div class="tt-child-label" style="color:${childColor[c]}">● ${childLabel[c]}</div>`;
+        <div class="tt-child-label" style="color:${childColor[c]}">● ${childLabel[c]} <span style="font-size:11px;font-weight:normal;color:var(--muted)">${done_c}/${ct.length}</span></div>`;
       ct.forEach(t=>{
         const done=!!(t.done&&t.done[dk]);
         html+=`<div class="tt-item">
-          <div class="tt-check${done?' done':''}" data-c="${t.child}" onclick="toggleTTDone('${t.id}','${dk}')">${done?'✓':''}</div>
-          <div class="tt-text${done?' done':''}">${t.text}</div>
+          <div class="tt-check${done?' done':''}" onclick="toggleTTDone('${t.id}','${dk}')">${done?'✓':''}</div>
+          <div class="tt-text${done?' tt-done':''}">${t.text}</div>
           <button class="tt-del" onclick="delTTTask('${t.id}')">🗑</button>
         </div>`;
       });
       html+=`</div>`;
     });
-  }
-
-  if(tasks.length>0&&todayTasks.length<tasks.length){
-    html+=`<div style="font-size:11px;color:var(--muted);margin-top:6px;text-align:center">今週のタスク ${tasks.length}件 / 今日は${todayTasks.length}件</div>`;
   }
   html+=`</div>`;
   el.innerHTML=html;
@@ -2391,14 +2450,13 @@ function saveTTTask(){
   const text=document.getElementById('ttadd-text').value.trim();
   if(!text){alert('やることを入力してください');return;}
   if(_ttDays.length===0){alert('曜日を選んでください');return;}
-  const tasks=getWTasks();
-  tasks.push({id:Date.now().toString(),text,child:_ttChild,days:[..._ttDays],done:{}});
+  if(!D.tasks)D.tasks=[];
+  D.tasks.push({id:Date.now().toString(),text,child:_ttChild,days:[..._ttDays],done:{}});
   save();closeTTModal();renderTodayTasks();
 }
 
 function toggleTTDone(id,dk){
-  const tasks=getWTasks();
-  const t=tasks.find(x=>x.id===id);
+  const t=(D.tasks||[]).find(x=>x.id===id);
   if(!t)return;
   if(!t.done)t.done={};
   t.done[dk]=!t.done[dk];
@@ -2406,9 +2464,8 @@ function toggleTTDone(id,dk){
 }
 
 function delTTTask(id){
-  const wk=getWeekKey();
-  if(!D.weekTasks[wk])return;
-  D.weekTasks[wk].tasks=D.weekTasks[wk].tasks.filter(t=>t.id!==id);
+  if(!D.tasks)return;
+  D.tasks=D.tasks.filter(t=>t.id!==id);
   save();renderTodayTasks();
 }
 
